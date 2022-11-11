@@ -800,7 +800,7 @@ select Old_TBL.[ReadyToCloseTTs], Old_TBL.[RNC],  Old_TBL.Date, New_TBL.NewTT fr
                 if (VIP_Data[k + 1, 14] != null)
                 {
                     RESPONSIBLE = VIP_Data[k + 1, 14].ToString();
-                }
+                } 
 
 
 
