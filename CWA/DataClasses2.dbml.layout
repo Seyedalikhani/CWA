@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ordesignerObjectsDiagram dslVersion="1.0.0.0" absoluteBounds="0, 0, 11, 8.5" name="DataClasses2">
+  <DataContextMoniker Name="/DataClasses2DataContext" />
+  <nestedChildShapes>
+    <classShape Id="fe21a6c4-b9cc-40d6-82fc-07564c670f22" absoluteBounds="1.125, 1.625, 2, 6.3861311848958326">
+      <DataClassMoniker Name="/DataClasses2DataContext/ARAS_SMART_MAP1" />
+      <nestedChildShapes>
+        <elementListCompartment Id="77a61eac-40a3-4cea-9562-72b481580021" absoluteBounds="1.1400000000000001, 2.085, 1.9700000000000002, 5.826131184895833" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+  </nestedChildShapes>
+</ordesignerObjectsDiagram>

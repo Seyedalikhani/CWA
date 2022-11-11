@@ -1,0 +1,36 @@
+﻿<?xml version="1.0" encoding="utf-8"?><Database Name="Performance_NAK" Class="DataClasses1DataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
+  <Connection Mode="AppSettings" ConnectionString="Data Source=172.26.7.159;Initial Catalog=Performance_NAK;User ID=cwpcApp" SettingsObjectName="CWA.Properties.Settings" SettingsPropertyName="Performance_NAKConnectionString1" Provider="System.Data.SqlClient" />
+  <Table Name="dbo.ARAS_SMART_MAP" Member="ARAS_SMART_MAPs">
+    <Type Name="ARAS_SMART_MAP">
+      <Column Name="REGION" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
+      <Column Name="[REGION EN]" Member="REGION_EN" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
+      <Column Name="PROVINCE" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
+      <Column Name="[PROVINCE EN]" Member="PROVINCE_EN" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
+      <Column Name="[CITY ON COUNTRY DIVISIONS]" Member="CITY_ON_COUNTRY_DIVISIONS" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
+      <Column Name="[CITY EN]" Member="CITY_EN" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
+      <Column Name="SITENAME" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
+      <Column Name="CELLNAME" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
+      <Column Name="LOCATION" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
+      <Column Name="LAC" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Column Name="[WLL/MCI]" Member="WLL_MCI" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
+      <Column Name="CELLID" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Column Name="LATITUDE" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Column Name="LONGITUDE" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Column Name="GSM_CELL_TYPE" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
+      <Column Name="AZIMUTH" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Column Name="ADDRESS" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
+      <Column Name="ANTENNAHEIGHT" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Column Name="MECHANICALTILT" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Column Name="ELECTRICALTILT" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Column Name="ANTENNATYPEID" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
+      <Column Name="GAIN" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
+      <Column Name="[SECTOR COVERAGE]" Member="SECTOR_COVERAGE" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
+      <Column Name="LOSS" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
+      <Column Name="H_BEAMWIDTH" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
+      <Column Name="V_BEAMWIDTH" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
+      <Column Name="FRONTBACKRATIO" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
+      <Column Name="COVERAGE_TYPE_OPTIMIZATION" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
+      <Column Name="SEGMENTATION_OPTIMIZATION" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
+    </Type>
+  </Table>
+</Database>
