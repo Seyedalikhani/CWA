@@ -108,7 +108,7 @@ namespace CWA
         }
 
 
-        // Method of Quaery Execution with Output
+        // Method of Query Execution with Output
         public DataTable Query_Execution_Table_Output(String Query)
         {
             string Quary_String = Query;
@@ -121,7 +121,7 @@ namespace CWA
             return Output_Table;
         }
 
-        // Method of Quaery Execution without Output
+        // Method of Query Execution without Output
         void Query_Execution(String Query)
         {
             string Quary_String = Query;
@@ -141,6 +141,8 @@ namespace CWA
             ConnectionString = @"Server=" + Server_Name + "; Database=" + DataBase_Name + "; User ID=cwpcApp;Password=cwpcApp@830625#Ahmad";
             connection = new SqlConnection(ConnectionString);
             connection.Open();
+
+
 
 
             // Last Date
@@ -163,6 +165,12 @@ namespace CWA
             // RNC Table
             string RNC_Quary = @"Select Distinct RNC from Tehran_CC_Maintable where substring(RNC,1,1)='R'";
             DataTable RNC_Table= Query_Execution_Table_Output(RNC_Quary);
+
+
+
+            // TT Table
+            string TT_Quary = @"Select Distinct [TT Code] from Tehran_CC_Maintable where cast(Date as Date)>='2022-07-31'";                        // From mBegining
+            DataTable TT_Table = Query_Execution_Table_Output(TT_Quary);
 
 
             // We define them beacuse we must fill 0 in cases that data is null
@@ -192,7 +200,6 @@ namespace CWA
 
 
 
-
             // شاخصای اینکامینگ و ردی تو کلوز چون به گذشته و حال مربوط میشوند فقط در تاریخهای جدید به روز میشوند 
             //اما در شاخص کلوز چون به زمان آینده مربوط میشود هر بار از ابتدا نیاز به انجام محاسبات است
 
@@ -200,7 +207,7 @@ namespace CWA
             // Date of Incoming Table
             string Incoming_Date_Quary = @"Select Distinct Date from Tehran_CC_Remain where cast(Date as Date)>='2022-07-31' order by Date";
             DataTable Incoming_Date_Table = Query_Execution_Table_Output(Incoming_Date_Quary);
-            DateTime Last_Updated_Date_Incoming = Convert.ToDateTime((Incoming_Date_Table.Rows[Incoming_Date_Table.Rows.Count-1]).ItemArray[0]);
+            DateTime Last_Updated_Date_Incoming = Convert.ToDateTime((Incoming_Date_Table.Rows[Incoming_Date_Table.Rows.Count - 1]).ItemArray[0]);
             // اگر تاریخی در جدول اصلی باشد که در ریمن نباشد فقط برای آن جدول تمام صفر را را ایجاد میکنیم
             int New_Incoming_candidate_date = 0;
             //DateTime candidate_date_Incoming = Last_Updated_Date;
@@ -211,13 +218,13 @@ namespace CWA
                 for (int i = 0; i < Incoming_Date_Table.Rows.Count; i++)
                 {
                     DateTime candidate_date_Incoming = Convert.ToDateTime((Incoming_Date_Table.Rows[i]).ItemArray[0]);
-                    if (candidate_date== candidate_date_Incoming)
+                    if (candidate_date == candidate_date_Incoming)
                     {
                         New_Incoming_candidate_date++;
                     }
 
                 }
-                if (New_Incoming_candidate_date==0)
+                if (New_Incoming_candidate_date == 0)
                 {
                     for (int j = 0; j < RNC_Table.Rows.Count; j++)
                     {
@@ -233,7 +240,6 @@ namespace CWA
             objbulk_Remain.ColumnMappings.Add("RNC", "RNC");
             objbulk_Remain.ColumnMappings.Add("NewTTs", "NewTTs");
             objbulk_Remain.WriteToServer(RemainTTs_Table_Default);
-
 
 
 
@@ -276,16 +282,13 @@ namespace CWA
             objbulk_ReadyToClose.WriteToServer(ReadyToCloseTTs_Table_Default);
 
 
-
-
-
             for (int k = 0; k < Date_Table.Rows.Count; k++)
             {
                 for (int j = 0; j < RNC_Table.Rows.Count; j++)
                 {
                     DateTime Date1 = Convert.ToDateTime((Date_Table.Rows[k]).ItemArray[0]);
                     string RNC = Convert.ToString((RNC_Table.Rows[j]).ItemArray[0]);
-                    // RemainTTs_Table_Default.Rows.Add(Date1, RNC, 0);
+                    //RemainTTs_Table_Default.Rows.Add(Date1, RNC, 0);
                     //ReadyToCloseTTs_Table_Default.Rows.Add(Date1, RNC, 0);
                     CloseTTs_Table_Default.Rows.Add(Date1, RNC, 0);
                     CloseTTsRemovePark_Table_Default.Rows.Add(Date1, RNC, 0);
@@ -293,13 +296,15 @@ namespace CWA
             }
 
 
-            //// Truncate [Tehran_CC_Remain]
-            ////string Truncate_Tehran_CC_Remain_Quary = "Truncate table [Tehran_CC_Remain]";
-            ////Query_Execution(Truncate_Tehran_CC_Remain_Quary);
+            // for run from begining these lines run from 299 till 324
 
-            //// Truncate [Tehran_CC_Remain_Detail]
-            ////string Truncate_Tehran_CC_Remain_Detail_Quary = "Truncate table [Tehran_CC_Remain_Detail]";
-            ////Query_Execution(Truncate_Tehran_CC_Remain_Detail_Quary);
+            //// Truncate [Tehran_CC_Remain]
+            //string Truncate_Tehran_CC_Remain_Quary = "Truncate table [Tehran_CC_Remain]";
+            //Query_Execution(Truncate_Tehran_CC_Remain_Quary);
+
+            ////Truncate[Tehran_CC_Remain_Detail]
+            //string Truncate_Tehran_CC_Remain_Detail_Quary = "Truncate table [Tehran_CC_Remain_Detail]";
+            //Query_Execution(Truncate_Tehran_CC_Remain_Detail_Quary);
 
             //// **********************************
 
@@ -343,7 +348,9 @@ namespace CWA
             string Truncate_Tehran_CC_CloseNIExcluded_Detail_Quary = "Truncate table [Tehran_CC_CloseNIExcluded_Detail]";
             Query_Execution(Truncate_Tehran_CC_CloseNIExcluded_Detail_Quary);
 
-
+            // Truncate [Tehran_CC_Generated]
+            string Truncate_Tehran_CC_Generated_Quary = "Truncate table [Tehran_CC_Generated]";
+            Query_Execution(Truncate_Tehran_CC_Generated_Quary);
 
             // Insert Zero Values to Defulat Tables
 
@@ -361,6 +368,39 @@ namespace CWA
             objbulk_CloseRemovePark.ColumnMappings.Add("RNC", "RNC");
             objbulk_CloseRemovePark.ColumnMappings.Add("CloseTTs", "CloseTTs");
             objbulk_CloseRemovePark.WriteToServer(CloseTTsRemovePark_Table_Default);
+
+
+            // Generated TTs (Remove duplicated on TTs with ordered Date)
+            string Tehran_CC_Generated_Quary = @"select [TT Code] as 'GeneratedTTs', '' as 'GeneratedDate', RNC,	Date
+ from (
+select distinct [TT Code],  RNC , Date, 
+RN = ROW_NUMBER()OVER(PARTITION BY [TT Code] ORDER BY [TT Code] )
+from Tehran_CC_Maintable  ) tbl where RN=1 ORDER BY Date desc";
+            DataTable Generated_Table = Query_Execution_Table_Output(Tehran_CC_Generated_Quary);
+
+            for (int n = 0; n < Generated_Table.Rows.Count; n++)
+            {
+                string String_TT = Convert.ToString((Generated_Table.Rows[n]).ItemArray[0]);
+                string String_Date = String_TT.Substring(0, 8);
+                DateTime Date = Convert.ToDateTime(String_TT.Substring(0, 4) + "-" + String_TT.Substring(4, 2) + "-" + String_TT.Substring(6, 2));
+                DateTime Date_of_File = Convert.ToDateTime((Generated_Table.Rows[n]).ItemArray[3]);
+                string RNC_Name = Convert.ToString((Generated_Table.Rows[n]).ItemArray[2]);
+                Generated_Table.Rows[n][1] = Date;
+                //Generated_Table.Rows.Add(String_TT, Date, RNC_Name, Date_of_File);
+            }
+
+            SqlBulkCopy objbulk_Generated = new SqlBulkCopy(connection);
+            objbulk_Generated.DestinationTableName = "Tehran_CC_Generated";
+            objbulk_Generated.ColumnMappings.Add("GeneratedTTs", "GeneratedTTs");
+            objbulk_Generated.ColumnMappings.Add("GeneratedDate", "GeneratedDate");
+            objbulk_Generated.ColumnMappings.Add("RNC", "RNC");
+            objbulk_Generated.ColumnMappings.Add("Date", "Date");
+            objbulk_Generated.WriteToServer(Generated_Table);
+
+
+
+
+
 
 
             // Remain (Incoming) Tickets
