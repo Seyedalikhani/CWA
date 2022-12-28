@@ -252,6 +252,7 @@
             // button6
             // 
             this.button6.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
+            this.button6.Enabled = false;
             this.button6.Location = new System.Drawing.Point(132, 157);
             this.button6.Name = "button6";
             this.button6.Size = new System.Drawing.Size(86, 23);
@@ -290,7 +291,6 @@
             this.comboBox1.Items.AddRange(new object[] {
             "2G",
             "3G",
-            "3G-MCI",
             "4G"});
             this.comboBox1.Location = new System.Drawing.Point(132, 91);
             this.comboBox1.Name = "comboBox1";

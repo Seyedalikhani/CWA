@@ -1824,7 +1824,11 @@ namespace CWA
             //************ BICC Utilization Huawei ****************
 
             // load H_BICC_INCOMING_MSS
-            string H_BICC_INCOMING_MSS_Quary_String = "select [Start Time], [NE Name], [BICC Office], [BICC Utilization (%)] , [Number of Available Circuits (piece)],  [Seizure Traffic (Erl)] from [H_BICC_INCOMING_MSS] where CAST([Start Time] AS DATE)>='" + start_date + "' and CAST([Start Time] AS DATE)<'" + end_date + "'";
+            string H_BICC_INCOMING_MSS_Quary1_String = "Delete from [H_BICC_INCOMING_MSS] where ([BICC Utilization (%)]='NIL' or [Seizure Traffic (Erl)] is null) and CAST([Start Time] AS DATE)>='" + start_date + "' and CAST([Start Time] AS DATE)<'" + end_date + "'";
+            SqlCommand H_BICC_INCOMING_MSS_Quary1 = new SqlCommand(H_BICC_INCOMING_MSS_Quary1_String, connection);
+            H_BICC_INCOMING_MSS_Quary1.CommandTimeout = 0;
+            H_BICC_INCOMING_MSS_Quary1.ExecuteNonQuery();
+            string H_BICC_INCOMING_MSS_Quary_String = "select [Start Time], [NE Name], [BICC Office], cast([BICC Utilization (%)] as float) as 'BICC Utilization (%)' , [Number of Available Circuits (piece)],  [Seizure Traffic (Erl)] from [H_BICC_INCOMING_MSS] where CAST([Start Time] AS DATE)>='" + start_date + "' and CAST([Start Time] AS DATE)<'" + end_date + "'";
             SqlCommand H_BICC_INCOMING_MSS_Quary = new SqlCommand(H_BICC_INCOMING_MSS_Quary_String, connection);
             H_BICC_INCOMING_MSS_Quary.CommandTimeout = 0;
             H_BICC_INCOMING_MSS_Quary.ExecuteNonQuery();
@@ -1853,8 +1857,8 @@ namespace CWA
                                  Date = pd.Field<DateTime>("Start Time"),
                                  NE = pd.Field<string>("NE Name"),
                                  BICC_Office = pd.Field<string>("BICC Office"),
-                                 Utilization = pd.Field<string>("BICC Utilization (%)"),
-                                 //Utilization = (pd != null ? pd.Field<string>("BICC Utilization (%)") : "NA"),
+                                 //Utilization = pd.Field<string>("BICC Utilization (%)"),
+                                 Utilization = (pd != null ? pd.Field<Double>("BICC Utilization (%)") : 0),
                                  TOTAL_Available_Circuits = (pd != null ? pd.Field<Double>("Number of Available Circuits (piece)") : 0),
                                  Used_Traffic = (pd != null ? pd.Field<Double>("Seizure Traffic (Erl)") : 0) + (new_od != null ? new_od.Field<Double>("Seizure Traffic (Erl)") : 0),
                              }).ToList();

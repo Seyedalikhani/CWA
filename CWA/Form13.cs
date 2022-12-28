@@ -399,10 +399,6 @@ from Tehran_CC_Maintable  ) tbl where RN=1 ORDER BY Date desc";
 
 
 
-
-
-
-
             // Remain (Incoming) Tickets
             for (int i = 0; i < Date_Table.Rows.Count; i++)
             {

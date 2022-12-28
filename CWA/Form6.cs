@@ -13,7 +13,7 @@ using System.Text.RegularExpressions;
 using ClosedXML.Excel;
 using Excel = Microsoft.Office.Interop.Excel;
 using System.Threading;
-
+using System.Reflection;
 
 namespace CWA
 {
@@ -46,6 +46,7 @@ namespace CWA
         public DataTable Data_Table_3G_CS = new DataTable();
         public DataTable Data_Table_3G_PS = new DataTable();
         public DataTable Data_Table_3G = new DataTable();
+        public DataTable  Data_Table_3G_SectorAgg = new DataTable();
         public DataTable Site_Data_Table_3G = new DataTable();
         public DataTable Data_Table_4G = new DataTable();
         public DataTable Site_Data_Table_4G = new DataTable();
@@ -56,18 +57,88 @@ namespace CWA
         public Excel.Application xlApp { get; set; }
         public Excel.Workbook xlWorkBook { get; set; }
         public Excel.Worksheet Sheet { get; set; }
+        public Excel.Worksheet Sheet_3GCS { get; set; }
+        public Excel.Worksheet Sheet_3GPS { get; set; }
+
+
+
+
+        public DataTable ConvertToDataTable<T>(IEnumerable<T> varlist)
+        {
+            DataTable dtReturn = new DataTable();
+
+            // column names   
+            PropertyInfo[] oProps = null;
+
+            if (varlist == null) return dtReturn;
+
+            foreach (T rec in varlist)
+            {
+                // Use reflection to get property names, to create table, Only first time, others will follow   
+                if (oProps == null)
+                {
+                    oProps = ((Type)rec.GetType()).GetProperties();
+                    foreach (PropertyInfo pi in oProps)
+                    {
+                        Type colType = pi.PropertyType;
+
+                        if ((colType.IsGenericType) && (colType.GetGenericTypeDefinition() == typeof(Nullable<>)))
+                        {
+                            colType = colType.GetGenericArguments()[0];
+                        }
+
+                        dtReturn.Columns.Add(new DataColumn(pi.Name, colType));
+                    }
+                }
+
+                DataRow dr = dtReturn.NewRow();
+
+                foreach (PropertyInfo pi in oProps)
+                {
+                    dr[pi.Name] = pi.GetValue(rec, null) == null ? DBNull.Value : pi.GetValue
+                    (rec, null);
+                }
+
+                dtReturn.Rows.Add(dr);
+            }
+            return dtReturn;
+        }
+
+
+
+
+        //public double Average_func(double[] arr)
+        //{
+        //    int size = arr.Length;
+        //    double sum = 0;
+        //    double average = 0;
+        //    int count = 0;
+
+        //    for (int i = 0; i < size; i++)
+        //    {
+        //        if (arr[i] != null && arr[i] != "")
+        //        {
+        //            sum = sum + arr[i];
+        //            count = count + 1;
+        //        }
+
+        //    }
+
+        //    average = sum / count; // sum divided by total elements in array
+        //    return average;
+
+
+        //}
 
 
 
 
         private void Form6_Load(object sender, EventArgs e)
         {
+            //string [] arr = { "10", "20", "", "8",null };
+            //double av = sumAverageElements(arr);
 
 
-            //string Server_Name = @"NAKPRG-NB1243\" + "AHMAD";
-            //string DataBase_Name = "Dashboards";
-
-            //ConnectionString = @"Server=" + Server_Name + "; Database=" + DataBase_Name + "; Trusted_Connection=True;";
 
             ConnectionString = @"Server=" + Server_Name + "; Database=" + DataBase_Name + "; User ID=cwpcApp;Password=cwpcApp@830625#Ahmad";
             connection = new SqlConnection(ConnectionString);
@@ -3169,6 +3240,939 @@ inner join (SELECT [Datetime]
 
 
 
+
+            if (Input_Type == "FARAZ" && Technology == "3G")
+            {
+                Technology = "3G-MCI";
+
+
+
+                Data_Table_3G = new DataTable();
+
+                Data_Table_3G.Columns.Add("Day", typeof(DateTime));
+                Data_Table_3G.Columns.Add("RNC", typeof(string));
+                Data_Table_3G.Columns.Add("Sector", typeof(string));
+                Data_Table_3G.Columns.Add("CS RRC SR, TH=95", typeof(double));
+                Data_Table_3G.Columns.Add("CS RAB Establish, TH=95", typeof(double));
+                Data_Table_3G.Columns.Add("Voice Drop Rate, TH=4", typeof(double));
+                Data_Table_3G.Columns.Add("Cell Availability, TH=99", typeof(double));
+                Data_Table_3G.Columns.Add("BH CS Traffic (Erlang), TH=0", typeof(double));
+                Data_Table_3G.Columns.Add("PS RRC SR, TH=95", typeof(double));
+                Data_Table_3G.Columns.Add("PS Drop Rate, TH=4", typeof(double));
+                Data_Table_3G.Columns.Add("RSSI (dBm), TH=-90", typeof(double));
+                Data_Table_3G.Columns.Add("HS User Throughput (Mbps), TH=1", typeof(double));
+                Data_Table_3G.Columns.Add("Daily PS Traffic (GB), TH=0", typeof(double));
+
+                Data_Table_3G.Columns.Add("CS RRC SR Score", typeof(int));
+                Data_Table_3G.Columns.Add("CS RAB Establish Score", typeof(int));
+                Data_Table_3G.Columns.Add("Voice Drop Rate Score", typeof(int));
+                Data_Table_3G.Columns.Add("Cell Availability Score", typeof(int));
+                Data_Table_3G.Columns.Add("CS Traffic Score", typeof(int));
+
+                Data_Table_3G.Columns.Add("PS RRC SR Score", typeof(int));
+                Data_Table_3G.Columns.Add("PS Drop Rate Score", typeof(int));
+                Data_Table_3G.Columns.Add("RSSI Score", typeof(int));
+                Data_Table_3G.Columns.Add("THR Score", typeof(int));
+                Data_Table_3G.Columns.Add("PS Traffic Score", typeof(int));
+
+                Data_Table_3G.Columns.Add("Cell Score", typeof(double));
+                Data_Table_3G.Columns.Add("Site", typeof(string));
+
+
+                Data_Table_3G_SectorAgg = new DataTable();
+                Data_Table_3G_SectorAgg.Columns.Add("Day", typeof(DateTime));
+                Data_Table_3G_SectorAgg.Columns.Add("RNC", typeof(string));
+                Data_Table_3G_SectorAgg.Columns.Add("Sector", typeof(string));
+                Data_Table_3G_SectorAgg.Columns.Add("CS RRC SR, TH=95", typeof(double));
+                Data_Table_3G_SectorAgg.Columns.Add("CS RAB Establish, TH=95", typeof(double));
+                Data_Table_3G_SectorAgg.Columns.Add("Voice Drop Rate, TH=4", typeof(double));
+                Data_Table_3G_SectorAgg.Columns.Add("Cell Availability, TH=99", typeof(double));
+                Data_Table_3G_SectorAgg.Columns.Add("BH CS Traffic (Erlang), TH=0", typeof(double));
+                Data_Table_3G_SectorAgg.Columns.Add("PS RRC SR, TH=95", typeof(double));
+                Data_Table_3G_SectorAgg.Columns.Add("PS Drop Rate, TH=4", typeof(double));
+                Data_Table_3G_SectorAgg.Columns.Add("RSSI (dBm), TH=-90", typeof(double));
+                Data_Table_3G_SectorAgg.Columns.Add("HS User Throughput (Mbps), TH=1", typeof(double));
+                Data_Table_3G_SectorAgg.Columns.Add("Daily PS Traffic (GB), TH=0", typeof(double));
+
+                Data_Table_3G_SectorAgg.Columns.Add("CS RRC SR Score", typeof(int));
+                Data_Table_3G_SectorAgg.Columns.Add("CS RAB Establish Score", typeof(int));
+                Data_Table_3G_SectorAgg.Columns.Add("Voice Drop Rate Score", typeof(int));
+                Data_Table_3G_SectorAgg.Columns.Add("Cell Availability Score", typeof(int));
+                Data_Table_3G_SectorAgg.Columns.Add("CS Traffic Score", typeof(int));
+
+                Data_Table_3G_SectorAgg.Columns.Add("PS RRC SR Score", typeof(int));
+                Data_Table_3G_SectorAgg.Columns.Add("PS Drop Rate Score", typeof(int));
+                Data_Table_3G_SectorAgg.Columns.Add("RSSI Score", typeof(int));
+                Data_Table_3G_SectorAgg.Columns.Add("THR Score", typeof(int));
+                Data_Table_3G_SectorAgg.Columns.Add("PS Traffic Score", typeof(int));
+
+                Data_Table_3G_SectorAgg.Columns.Add("Cell Score", typeof(double));
+                Data_Table_3G_SectorAgg.Columns.Add("Site", typeof(string));
+
+
+
+                Site_Data_Table_3G = new DataTable();
+                Site_Data_Table_3G.Columns.Add("Site", typeof(string));
+                Site_Data_Table_3G.Columns.Add("KPI Zero Status", typeof(string));
+                Site_Data_Table_3G.Columns.Add("Rejected Cell List", typeof(string));
+
+
+
+                //dataGridView1.ColumnCount = 14;
+                dataGridView1.Invoke(new Action(() => dataGridView1.ColumnCount = 15));
+
+                // dataGridView1.Rows.Clear();
+                dataGridView1.Invoke(new Action(() => dataGridView1.Rows.Clear()));
+                //dataGridView1.RowCount = Data_Table_3G_CS.Rows.Count + 1;
+                dataGridView1.Invoke(new Action(() => dataGridView1.RowCount = Data_Table_3G_CS.Rows.Count + 1));
+
+
+                //dataGridView1.Invoke(new Action(() => dataGridView1.Rows[0].Cells[0].Value = "Date")); dataGridView1.Invoke(new Action(() => dataGridView1.Columns[0].Width = 100));
+                //dataGridView1.Invoke(new Action(() => dataGridView1.Rows[0].Cells[1].Value = "RNC")); dataGridView1.Invoke(new Action(() => dataGridView1.Columns[1].Width = 100));
+                //dataGridView1.Invoke(new Action(() => dataGridView1.Rows[0].Cells[2].Value = "Site")); dataGridView1.Invoke(new Action(() => dataGridView1.Columns[2].Width = 100));
+                //dataGridView1.Invoke(new Action(() => dataGridView1.Rows[0].Cells[3].Value = "Sector")); dataGridView1.Invoke(new Action(() => dataGridView1.Columns[3].Width = 100));
+                //dataGridView1.Invoke(new Action(() => dataGridView1.Rows[0].Cells[4].Value = "CS RRC SR")); dataGridView1.Invoke(new Action(() => dataGridView1.Columns[4].Width = 100));
+                //dataGridView1.Invoke(new Action(() => dataGridView1.Rows[0].Cells[5].Value = "CS RAB Establish")); dataGridView1.Invoke(new Action(() => dataGridView1.Columns[5].Width = 100));
+                //dataGridView1.Invoke(new Action(() => dataGridView1.Rows[0].Cells[6].Value = "Voice Drop Rate")); dataGridView1.Invoke(new Action(() => dataGridView1.Columns[6].Width = 100));
+                //dataGridView1.Invoke(new Action(() => dataGridView1.Rows[0].Cells[7].Value = "Cell Availability")); dataGridView1.Invoke(new Action(() => dataGridView1.Columns[7].Width = 100));
+                //dataGridView1.Invoke(new Action(() => dataGridView1.Rows[0].Cells[8].Value = "BH CS Traffic (Erlang)")); dataGridView1.Invoke(new Action(() => dataGridView1.Columns[8].Width = 100));
+                //dataGridView1.Invoke(new Action(() => dataGridView1.Rows[0].Cells[9].Value = "PS RRC SR")); dataGridView1.Invoke(new Action(() => dataGridView1.Columns[9].Width = 100));
+                //dataGridView1.Invoke(new Action(() => dataGridView1.Rows[0].Cells[10].Value = "PS Drop Rate")); dataGridView1.Invoke(new Action(() => dataGridView1.Columns[10].Width = 100));
+                //dataGridView1.Invoke(new Action(() => dataGridView1.Rows[0].Cells[11].Value = "RSSI (dBm)")); dataGridView1.Invoke(new Action(() => dataGridView1.Columns[11].Width = 100));
+
+                //dataGridView1.Invoke(new Action(() => dataGridView1.Rows[0].Cells[12].Value = "HS User Throughput (Mbps)")); dataGridView1.Invoke(new Action(() => dataGridView1.Columns[12].Width = 100));
+
+                //dataGridView1.Invoke(new Action(() => dataGridView1.Rows[0].Cells[13].Value = "Daily PS Traffic (GB)")); dataGridView1.Invoke(new Action(() => dataGridView1.Columns[13].Width = 100));
+                //dataGridView1.Invoke(new Action(() => dataGridView1.Rows[0].Cells[14].Value = "Cell Status")); dataGridView1.Invoke(new Action(() => dataGridView1.Columns[14].Width = 100));
+
+
+                string Vendor = "";
+                string[] Sector_Vec = new string [1000];
+                DateTime[] Date_Vec = new DateTime[1000];
+
+                int Sector_Vec_Ind = 0;
+                int Date_Vec_Ind = 0;
+
+                if (result1 == DialogResult.OK)
+                {
+                    string file = openFileDialog1.FileName;
+                    FName = file;
+                    xlApp = new Excel.Application();
+                    xlWorkBook = xlApp.Workbooks.Open(file);
+                    Sheet_3GCS = xlWorkBook.Worksheets[1];
+                    Sheet_3GPS = xlWorkBook.Worksheets[2];
+
+
+
+                    Excel.Range History_TT_3GCS = Sheet_3GCS.get_Range("A2", "L" + Sheet_3GCS.UsedRange.Rows.Count);
+                    object[,] FARAZ_Data_3GCS = (object[,])History_TT_3GCS.Value;
+
+                    Excel.Range History_TT_3GPS = Sheet_3GPS.get_Range("A2", "L" + Sheet_3GPS.UsedRange.Rows.Count);
+                    object[,] FARAZ_Data_3GPS = (object[,])History_TT_3GPS.Value;
+
+                    int Count_3GCS = Sheet_3GCS.UsedRange.Rows.Count;
+                    int Count_3GPS = Sheet_3GPS.UsedRange.Rows.Count;
+
+                    for (int k = 0; k < Count_3GCS - 1; k++)
+                    {
+
+                        if (FARAZ_Data_3GCS[k + 1, 6] == null && FARAZ_Data_3GCS[k + 1, 7] == null)
+                        {
+                            continue;
+                        }
+
+                        DateTime Date = Convert.ToDateTime(FARAZ_Data_3GCS[k + 1, 1]);
+                        string NE = FARAZ_Data_3GCS[k + 1, 2].ToString();
+                        string Site = "";
+
+
+                        // Filling Null values in differnt hours and Daily KPIs
+                        for (int t=3; t<=12; t++)  // For completing CS
+                        {
+                            for (int k1 = 0; k1 < Count_3GCS - 1; k1++)
+                            {
+                                DateTime Date1 = Convert.ToDateTime(FARAZ_Data_3GCS[k1 + 1, 1]);
+                                string NE1 = FARAZ_Data_3GCS[k1 + 1, 2].ToString();
+                                if (Date.Date == Date1.Date && NE == NE1 && FARAZ_Data_3GCS[k1 + 1, t] != null)
+                                {
+                                    FARAZ_Data_3GCS[k + 1, t] = FARAZ_Data_3GCS[k1 + 1, t];
+                                    break;
+                                }
+                            }
+                        }
+
+                        for (int t = 8; t <= 12; t++)  // For completing PS
+                        {
+                            for (int k1 = 0; k1 < Count_3GPS - 1; k1++)
+                            {
+                                DateTime Date1 = Convert.ToDateTime(FARAZ_Data_3GPS[k1 + 1, 1]);
+                                string NE1 = FARAZ_Data_3GPS[k1 + 1, 2].ToString();
+                                if (Date.Date == Date1.Date && NE == NE1)
+                                {
+                                    FARAZ_Data_3GCS[k + 1, t] = FARAZ_Data_3GPS[k1 + 1, t];
+                                    break;
+                                }
+                            }
+                        }
+
+
+                        int index_of_dash = 0;
+                        for (int l= 0; l < NE.Length; l++)
+                        {
+                            if (NE[l].ToString()=="|")
+                            {
+                                index_of_dash = l;
+                                break;
+                            }
+                        }
+                        string RNC = NE.Substring(0, index_of_dash - 1);
+                        string CellName= NE.Substring(index_of_dash+2, NE.Length-1-(index_of_dash+1));
+                        Site = CellName.Substring(0, 8);
+                        string Vendor_Last = RNC.Substring(RNC.Length - 1, 1);
+
+                        if (Vendor_Last == "E")
+                        {
+                            Vendor = "Ericsson";
+                        }
+                        if (Vendor_Last == "H")
+                        {
+                            Vendor = "Huawei";
+                        }
+                        if (Vendor_Last == "N")
+                        {
+                            Vendor = "Nokia";
+                        }
+
+                        //string str2 = Regex.Replace(NE, "[^a-zA-Z0-9]", " ");      //هر کاراکتری که غیر از عدد و حرف بود را به کاراکتر خالی تبدیل کن
+                        //str2 = Regex.Replace(str2, " {2,}", " ").Trim();           //چندین کاراکتر خالی پشت سر هم را به یک کاراکتر خالی تبدیل می کند
+                        //string[] Split_Description = str2.Split(' ');
+                        //string RNC = Split_Description[0];
+
+                        //string Tech = Split_Description[0].Substring(0, 1);
+                        //string Tech_Last = Split_Description[0].Substring(Split_Description[0].Length - 1, 1);
+
+                        //string CellName = "";
+                        //if ((Tech == "R" && (Tech_Last == "E" || Tech_Last == "H" || Tech_Last == "N")) || Split_Description[0].Length == 2)
+                        //{
+                        //    //int c1 = Split_Description.Length;
+                        //    CellName = Split_Description[1];
+                        //}
+                        //else
+                        //{
+                        //    int c1 = Split_Description.Length;
+                        //    CellName = Split_Description[c1 - 1];
+                        //}
+
+
+                        //if (CellName.Length == 7)
+                        //{
+                        //    Site = CellName.Substring(0, 6);
+                        //}
+                        //if (CellName.Length > 7)
+                        //{
+                        //    Site = CellName.Substring(0, 8);
+                        //}
+
+
+                        //if (Tech_Last == "E")
+                        //{
+                        //    Vendor = "Ericsson";
+                        //}
+                        //if (Tech_Last == "H")
+                        //{
+                        //    Vendor = "Huawei";
+                        //}
+                        //if (Tech_Last == "N")
+                        //{
+                        //    Vendor = "Nokia";
+                        //}
+
+                        double CS_RRC_SR = -1;
+                        double CS_RAB = -1;
+                        double Voice_Drop = -1;
+                        double Availability = -1;
+                        double CS_Traffic = -1;
+                        double PS_RRC_SR = -1;
+                        double PS_Drop = -1;
+                        double RSSI = -1;
+                        double THR = -1;
+                        double PS_Traffic = -1;
+
+                        if (FARAZ_Data_3GCS[k + 1, 3] != null)
+                        {
+                            CS_RRC_SR = Convert.ToDouble(FARAZ_Data_3GCS[k + 1, 3].ToString());
+                        }
+                        else
+                        {
+                            CS_RRC_SR = -1;
+                        }
+
+                        if (FARAZ_Data_3GCS[k + 1, 4] != null)
+                        {
+                            CS_RAB = Convert.ToDouble(FARAZ_Data_3GCS[k + 1, 4].ToString());
+                        }
+                        else
+                        {
+                            CS_RAB = -1;
+                        }
+
+                        if (FARAZ_Data_3GCS[k + 1, 5] != null)
+                        {
+                            Voice_Drop = Convert.ToDouble(FARAZ_Data_3GCS[k + 1, 5].ToString());
+                        }
+                        else
+                        {
+                            Voice_Drop = -1;
+                        }
+
+                        if (FARAZ_Data_3GCS[k + 1, 6] != null)
+                        {
+                            Availability = Convert.ToDouble(FARAZ_Data_3GCS[k + 1, 6].ToString());
+                        }
+                        else
+                        {
+                            Availability = -1;
+                        }
+
+                        if (FARAZ_Data_3GCS[k + 1, 7] != null)
+                        {
+                            CS_Traffic = Convert.ToDouble(FARAZ_Data_3GCS[k + 1, 7].ToString());
+                        }
+                        else
+                        {
+                            CS_Traffic = -1;
+                        }
+
+                        if (FARAZ_Data_3GCS[k + 1, 8] != null)
+                        {
+                            PS_RRC_SR = Convert.ToDouble(FARAZ_Data_3GCS[k + 1, 8].ToString());
+                        }
+                        else
+                        {
+                            PS_RRC_SR = -1;
+                        }
+
+                        if (FARAZ_Data_3GCS[k + 1, 9] != null)
+                        {
+                            PS_Drop = Convert.ToDouble(FARAZ_Data_3GCS[k + 1, 9].ToString());
+                        }
+                        else
+                        {
+                            PS_Drop = -1;
+                        }
+
+                        if (FARAZ_Data_3GCS[k + 1, 10] != null)
+                        {
+                            RSSI = Convert.ToDouble(FARAZ_Data_3GCS[k + 1, 10].ToString());
+                        }
+                        else
+                        {
+                            RSSI = -1;
+                        }
+
+                        if (FARAZ_Data_3GCS[k + 1, 11] != null)
+                        {
+                            THR = Convert.ToDouble(FARAZ_Data_3GCS[k + 1, 11].ToString());
+                            if (Vendor=="Huawei")
+                            {
+                                THR = THR / 1000;
+                            }
+                        }
+                        else
+                        {
+                            THR = -1;
+                        }
+
+                        if (FARAZ_Data_3GCS[k + 1, 12] != null)
+                        {
+                            PS_Traffic = Convert.ToDouble(FARAZ_Data_3GCS[k + 1, 12].ToString());
+                        }
+                        else
+                        {
+                            PS_Traffic = -1;
+                        }
+
+                        
+                        if (!Sector_Vec.Contains(CellName.Substring(0, 9)))
+                        {
+                            Sector_Vec[Sector_Vec_Ind] = CellName.Substring(0, 9);
+                            Sector_Vec_Ind++;
+                        }
+
+                        if (!Date_Vec.Contains(Date.Date))
+                        {
+                            Date_Vec[Date_Vec_Ind] = Date.Date;
+                            Date_Vec_Ind++;
+                        }
+
+                        Data_Table_3G.Rows.Add(Date.Date, RNC, CellName.Substring(0,9), CS_RRC_SR, CS_RAB, Voice_Drop, Availability, CS_Traffic,  PS_RRC_SR, PS_Drop, RSSI, THR, PS_Traffic, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, Site);
+
+                    }
+
+                }
+
+                // Avergare of all nulls = -1 and average of some nulls must be evaluated correctly
+                for (int s=0; s<= Sector_Vec_Ind-1; s++)
+                {
+                    for (int d = 0; d <= Date_Vec_Ind - 1; d++)
+                    {
+                        string Sector = Sector_Vec[s].ToString();
+                        DateTime Date = Date_Vec[d];
+
+                        var Data_3G = (from myrow in Data_Table_3G.AsEnumerable()
+                                       where  (myrow.Field<String>("Sector") == Sector && myrow.Field<DateTime>("Day") == Date)
+                                       select myrow).ToList();
+
+
+                        string RNC = Data_3G[0].ItemArray[1].ToString();
+                        string Site = Data_3G[0].ItemArray[24].ToString();
+
+                        double CS_RRC_Ave = -1;  int CS_RRC_Count = 0; double CS_RRC_Sum = 0;
+                        for (int k=0; k< Data_3G.Count; k++)
+                        {
+                            if (Convert.ToDouble(Data_3G[k].ItemArray[3])!=-1)
+                            {
+                                CS_RRC_Count++;
+                                CS_RRC_Sum = CS_RRC_Sum + Convert.ToDouble(Data_3G[k].ItemArray[3]);
+                            }
+                        }
+
+                        if (CS_RRC_Count!=0)
+                        {
+                            CS_RRC_Ave = CS_RRC_Sum / CS_RRC_Count;
+                        }
+
+
+                        double CS_RAB_Ave = -1; int CS_RAB_Count = 0; double CS_RAB_Sum = 0;
+                        for (int k = 0; k < Data_3G.Count; k++)
+                        {
+                            if (Convert.ToDouble(Data_3G[k].ItemArray[4]) != -1)
+                            {
+                                CS_RAB_Count++;
+                                CS_RAB_Sum = CS_RAB_Sum + Convert.ToDouble(Data_3G[k].ItemArray[4]);
+                            }
+                        }
+
+                        if (CS_RAB_Count != 0)
+                        {
+                            CS_RAB_Ave = CS_RAB_Sum / CS_RAB_Count;
+                        }
+
+
+                        double Voice_Drop_Ave = -1; int Voice_Drop_Count = 0; double Voice_Drop_Sum = 0;
+                        for (int k = 0; k < Data_3G.Count; k++)
+                        {
+                            if (Convert.ToDouble(Data_3G[k].ItemArray[5]) != -1)
+                            {
+                                Voice_Drop_Count++;
+                                Voice_Drop_Sum = Voice_Drop_Sum + Convert.ToDouble(Data_3G[k].ItemArray[5]);
+                            }
+                        }
+
+                        if (Voice_Drop_Count != 0)
+                        {
+                            Voice_Drop_Ave = Voice_Drop_Sum / Voice_Drop_Count;
+                        }
+
+
+
+                        double Availability_Ave = -1; int Availability_Count = 0; double Availability_Sum = 0;
+                        for (int k = 0; k < Data_3G.Count; k++)
+                        {
+                            if (Convert.ToDouble(Data_3G[k].ItemArray[6]) != -1)
+                            {
+                                Availability_Count++;
+                                Availability_Sum = Availability_Sum + Convert.ToDouble(Data_3G[k].ItemArray[6]);
+                            }
+                        }
+
+                        if (Availability_Count != 0)
+                        {
+                            Availability_Ave = Availability_Sum / Availability_Count;
+                        }
+
+
+
+
+                        double CS_Traffic_Sum = 0;
+                        for (int k = 0; k < Data_3G.Count; k++)
+                        {
+                            if (Convert.ToDouble(Data_3G[k].ItemArray[7]) != -1)
+                            {
+                                CS_Traffic_Sum = CS_Traffic_Sum + Convert.ToDouble(Data_3G[k].ItemArray[7]);
+                            }
+                        }
+
+
+
+                        double PS_RRC_Ave = -1; int PS_RRC_Count = 0; double PS_RRC_Sum = 0;
+                        for (int k = 0; k < Data_3G.Count; k++)
+                        {
+                            if (Convert.ToDouble(Data_3G[k].ItemArray[8]) != -1)
+                            {
+                                PS_RRC_Count++;
+                                PS_RRC_Sum = PS_RRC_Sum + Convert.ToDouble(Data_3G[k].ItemArray[8]);
+                            }
+                        }
+
+                        if (PS_RRC_Count != 0)
+                        {
+                            PS_RRC_Ave = PS_RRC_Sum / PS_RRC_Count;
+                        }
+
+
+
+
+                        double PS_Drop_Ave = -1; int PS_Drop_Count = 0; double PS_Drop_Sum = 0;
+                        for (int k = 0; k < Data_3G.Count; k++)
+                        {
+                            if (Convert.ToDouble(Data_3G[k].ItemArray[9]) != -1)
+                            {
+                                PS_Drop_Count++;
+                                PS_Drop_Sum = PS_Drop_Sum + Convert.ToDouble(Data_3G[k].ItemArray[9]);
+                            }
+                        }
+
+                        if (PS_Drop_Count != 0)
+                        {
+                            PS_Drop_Ave = PS_Drop_Sum / PS_Drop_Count;
+                        }
+
+
+
+                        double RSSI_Ave = -1; int RSSI_Count = 0; double RSSI_Sum = 0;
+                        for (int k = 0; k < Data_3G.Count; k++)
+                        {
+                            if (Convert.ToDouble(Data_3G[k].ItemArray[10]) != -1)
+                            {
+                                RSSI_Count++;
+                                RSSI_Sum = RSSI_Sum + Convert.ToDouble(Data_3G[k].ItemArray[10]);
+                            }
+                        }
+
+                        if (RSSI_Count != 0)
+                        {
+                            RSSI_Ave = RSSI_Sum / RSSI_Count;
+                        }
+
+
+
+                        double THR_Ave = -1; int THR_Count = 0; double THR_Sum = 0;
+                        for (int k = 0; k < Data_3G.Count; k++)
+                        {
+                            if (Convert.ToDouble(Data_3G[k].ItemArray[11]) != -1)
+                            {
+                                THR_Count++;
+                                THR_Sum = THR_Sum + Convert.ToDouble(Data_3G[k].ItemArray[11]);
+                            }
+                        }
+
+                        if (THR_Count != 0)
+                        {
+                            THR_Ave = THR_Sum / THR_Count;
+                        }
+
+
+
+
+
+                        double PS_Traffic_Sum = 0;
+                        for (int k = 0; k < Data_3G.Count; k++)
+                        {
+                            if (Convert.ToDouble(Data_3G[k].ItemArray[12]) != -1)
+                            {
+                                PS_Traffic_Sum = PS_Traffic_Sum + Convert.ToDouble(Data_3G[k].ItemArray[12]);
+                            }
+                        }
+
+
+                        Data_Table_3G_SectorAgg.Rows.Add(Date.Date, RNC, Sector, CS_RRC_Ave, CS_RAB_Ave, Voice_Drop_Ave, Availability_Ave, CS_Traffic_Sum, PS_RRC_Ave, PS_Drop_Ave, RSSI_Ave, THR_Ave, PS_Traffic_Sum, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, Site);
+
+   
+
+                    }
+                }
+
+
+                // Group by Date and Sector (It had a problem for all null items)
+                //var results = from row in Data_Table_3G.AsEnumerable()
+                //                  group row by new { f1 = row.Field<DateTime>("Day"), f2 = row.Field<string>("Sector"), f3 = row.Field<string>("RNC"), f4 = row.Field<string>("Site") } into rows
+                //                  select new
+                //                  {
+                //                      Date = rows.Key.f1,
+                //                      Sector = rows.Key.f2,
+                //                      RNC = rows.Key.f3,
+                //                      CS_RRC_SR = rows.Select(x => (double)x["CS RRC SR, TH=95"]).Where(x => x != -1).Average(),
+                //                      CS_RAB_SR = rows.Select(x => (double)x["CS RAB Establish, TH=95"]).Where(x => x != -1).Average(),
+                //                      Voice_Drop = rows.Select(x => (double)x["Voice Drop Rate, TH=4"]).Where(x => x != -1).Average(),
+                //                      Availability = rows.Select(x => (double)x["Cell Availability, TH=99"]).Where(x => x != -1).Average(),
+                //                      CS_Traffic = rows.Select(x => (double)x["BH CS Traffic (Erlang), TH=0"]).Where(x => x != -1).Sum(),
+                //                      PS_RRC_SR = rows.Select(x => (double)x["PS RRC SR, TH=95"]).Where(x => x != -1).Average(),
+                //                      PS_Drop = rows.Select(x => (double)x["PS Drop Rate, TH=4"]).Where(x => x != -1).Average(),
+                //                      RSSI = rows.Select(x => (double)x["RSSI (dBm), TH=-90"]).Where(x => x != -1).Average(),
+                //                      THR = rows.Select(x => (double)x["HS User Throughput (Mbps), TH=1"]).Where(x => x != -1).Average(),
+                //                      PS_Traffic = rows.Select(x => (double)x["Daily PS Traffic (GB), TH=0"]).Where(x => x != -1).Sum(),
+                //                      CS_RRC_SR_Score = 0,
+                //                      CS_RAB_SR_Score = 0,
+                //                      Voice_Drop_Score = 0,
+                //                      Availability_Score = 0,
+                //                      CS_Traffic_Score = 0,
+                //                      PS_RRC_SR_Score = 0,
+                //                      PS_Drop_Score = 0,
+                //                      RSSI_Score = 0,
+                //                      THR_Score = 0,
+                //                      PS_Traffic_Score = 0,
+                //                      Site = rows.Key.f4
+                //                  };
+                //DataTable Data_Table_3G_SectorAgg = new DataTable();
+                //Data_Table_3G_SectorAgg = ConvertToDataTable(results);
+
+
+
+
+
+
+                progressBar1.Minimum = 0;
+                //progressBar1.Maximum = Data_Table_3G_CS.Rows.Count - 1;
+
+
+                if (Data_Table_3G_SectorAgg.Rows.Count == 0)
+                {
+                    MessageBox.Show("There is no Data in Database");
+                }
+
+                if (Data_Table_3G_SectorAgg.Rows.Count != 0)
+                {
+                    // progressBar1.Maximum = Data_Table_3G_CS.Rows.Count - 1;
+                    progressBar1.Invoke(new Action(() => progressBar1.Maximum = Data_Table_3G_SectorAgg.Rows.Count - 1));
+
+                    //dataGridView1.ColumnCount = 14;
+                    dataGridView1.Invoke(new Action(() => dataGridView1.ColumnCount = 15));
+
+                    // dataGridView1.Rows.Clear();
+                    //dataGridView1.Invoke(new Action(() => dataGridView1.Rows.Clear()));
+                    //dataGridView1.RowCount = Data_Table_3G_CS.Rows.Count + 1;
+                    dataGridView1.Invoke(new Action(() => dataGridView1.RowCount = Data_Table_3G_SectorAgg.Rows.Count + 1));
+
+
+
+
+
+                    dataGridView1.Invoke(new Action(() => dataGridView1.Rows[0].Cells[0].Value = "Date")); dataGridView1.Invoke(new Action(() => dataGridView1.Columns[0].Width = 100));
+                    dataGridView1.Invoke(new Action(() => dataGridView1.Rows[0].Cells[1].Value = "RNC")); dataGridView1.Invoke(new Action(() => dataGridView1.Columns[1].Width = 100));
+                    dataGridView1.Invoke(new Action(() => dataGridView1.Rows[0].Cells[2].Value = "Site")); dataGridView1.Invoke(new Action(() => dataGridView1.Columns[2].Width = 100));
+                    dataGridView1.Invoke(new Action(() => dataGridView1.Rows[0].Cells[3].Value = "Sector")); dataGridView1.Invoke(new Action(() => dataGridView1.Columns[3].Width = 100));
+                    dataGridView1.Invoke(new Action(() => dataGridView1.Rows[0].Cells[4].Value = "CS RRC SR")); dataGridView1.Invoke(new Action(() => dataGridView1.Columns[4].Width = 100));
+                    dataGridView1.Invoke(new Action(() => dataGridView1.Rows[0].Cells[5].Value = "CS RAB Establish")); dataGridView1.Invoke(new Action(() => dataGridView1.Columns[5].Width = 100));
+                    dataGridView1.Invoke(new Action(() => dataGridView1.Rows[0].Cells[6].Value = "Voice Drop Rate")); dataGridView1.Invoke(new Action(() => dataGridView1.Columns[6].Width = 100));
+                    dataGridView1.Invoke(new Action(() => dataGridView1.Rows[0].Cells[7].Value = "Cell Availability")); dataGridView1.Invoke(new Action(() => dataGridView1.Columns[7].Width = 100));
+                    dataGridView1.Invoke(new Action(() => dataGridView1.Rows[0].Cells[8].Value = "BH CS Traffic (Erlang)")); dataGridView1.Invoke(new Action(() => dataGridView1.Columns[8].Width = 100));
+                    dataGridView1.Invoke(new Action(() => dataGridView1.Rows[0].Cells[9].Value = "PS RRC SR")); dataGridView1.Invoke(new Action(() => dataGridView1.Columns[9].Width = 100));
+                    dataGridView1.Invoke(new Action(() => dataGridView1.Rows[0].Cells[10].Value = "PS Drop Rate")); dataGridView1.Invoke(new Action(() => dataGridView1.Columns[10].Width = 100));
+                    dataGridView1.Invoke(new Action(() => dataGridView1.Rows[0].Cells[11].Value = "RSSI (dBm)")); dataGridView1.Invoke(new Action(() => dataGridView1.Columns[11].Width = 100));
+
+                    dataGridView1.Invoke(new Action(() => dataGridView1.Rows[0].Cells[12].Value = "HS User Throughput (Mbps)")); dataGridView1.Invoke(new Action(() => dataGridView1.Columns[12].Width = 100));
+
+                    dataGridView1.Invoke(new Action(() => dataGridView1.Rows[0].Cells[13].Value = "Daily PS Traffic (GB)")); dataGridView1.Invoke(new Action(() => dataGridView1.Columns[13].Width = 100));
+                    dataGridView1.Invoke(new Action(() => dataGridView1.Rows[0].Cells[14].Value = "Cell Status")); dataGridView1.Invoke(new Action(() => dataGridView1.Columns[14].Width = 100));
+
+
+
+
+
+
+
+
+                    for (int k = 0; k < Data_Table_3G_SectorAgg.Rows.Count; k++)
+                    {
+                        int result = 0;
+                        // Thresholds
+                        double CS_RRC_SR_TH = 95;
+                        double CS_Drop_TH = 4;
+                        double CS_RAB_TH = 95;
+                        double CS_Traffic_TH = 0;
+                        double PS_RRC_SR_TH = 95;
+                        double PS_Drop_TH = 4;
+                        double RSSI_TH = -90;
+                        double THR_TH = 1;
+                        double PS_Payload_TH = 0;
+                        double Availability_TH = 99;
+
+
+
+                        // Date
+                        //   dataGridView1.Rows[k + 1].Cells[0].Value = Data_Table_3G.Rows[k][0];
+                        dataGridView1.Invoke(new Action(() => dataGridView1.Rows[k + 1].Cells[0].Value = Data_Table_3G_SectorAgg.Rows[k][0]));
+                        //RNC
+                        //  dataGridView1.Rows[k + 1].Cells[1].Value = Data_Table_3G.Rows[k][1];
+                        dataGridView1.Invoke(new Action(() => dataGridView1.Rows[k + 1].Cells[1].Value = Data_Table_3G_SectorAgg.Rows[k][1]));
+                        // Site
+                        string Cell = Data_Table_3G_SectorAgg.Rows[k][2].ToString();
+                        //dataGridView1.Rows[k + 1].Cells[2].Value = Cell.Substring(0, 8);
+                        dataGridView1.Invoke(new Action(() => dataGridView1.Rows[k + 1].Cells[2].Value = Data_Table_3G_SectorAgg.Rows[k][24]));
+                        //Data_Table_3G_SectorAgg.Rows[k][24] = Cell.Substring(0, 8);
+                        // Sector
+                        // dataGridView1.Rows[k + 1].Cells[3].Value = Data_Table_3G.Rows[k][2];
+                        dataGridView1.Invoke(new Action(() => dataGridView1.Rows[k + 1].Cells[3].Value = Data_Table_3G_SectorAgg.Rows[k][2]));
+
+
+                        // CS RRC SR
+                        // dataGridView1.Rows[k + 1].Cells[4].Value = Data_Table_3G.Rows[k][3];
+                        dataGridView1.Invoke(new Action(() => dataGridView1.Rows[k + 1].Cells[4].Value = Data_Table_3G_SectorAgg.Rows[k][3]));
+                        if (Convert.ToDouble(Data_Table_3G_SectorAgg.Rows[k][3]) == -1)
+                        {
+                           Data_Table_3G_SectorAgg.Rows[k][13] = -1;
+                        }
+                        if (Convert.ToDouble(Data_Table_3G_SectorAgg.Rows[k][3]) < CS_RRC_SR_TH && Convert.ToDouble(Data_Table_3G_SectorAgg.Rows[k][3])!=-1)
+                        {
+                            Data_Table_3G_SectorAgg.Rows[k][13] = 1; result++; dataGridView1.Rows[k + 1].Cells[4].Style.BackColor = Color.Orange;
+                        }
+                        else if (Convert.ToDouble(Data_Table_3G_SectorAgg.Rows[k][3]) >= CS_RRC_SR_TH && Convert.ToDouble(Data_Table_3G_SectorAgg.Rows[k][3]) != -1)
+                        {
+                            Data_Table_3G_SectorAgg.Rows[k][13] = 0;
+                        }
+
+
+                        // CS RAB Setablish
+                        //  dataGridView1.Rows[k + 1].Cells[5].Value = Data_Table_3G.Rows[k][4];
+                        dataGridView1.Invoke(new Action(() => dataGridView1.Rows[k + 1].Cells[5].Value = Data_Table_3G_SectorAgg.Rows[k][4]));
+                        if (Convert.ToDouble(Data_Table_3G_SectorAgg.Rows[k][4]) == -1)
+                        {
+                            Data_Table_3G_SectorAgg.Rows[k][14] = -1;
+                        }
+                        if (Convert.ToDouble(Data_Table_3G_SectorAgg.Rows[k][4]) < CS_RAB_TH && Convert.ToDouble(Data_Table_3G_SectorAgg.Rows[k][4]) != -1)
+                        {
+                            Data_Table_3G_SectorAgg.Rows[k][14] = 1; result++; dataGridView1.Rows[k + 1].Cells[5].Style.BackColor = Color.Orange;
+                        }
+                        else if (Convert.ToDouble(Data_Table_3G_SectorAgg.Rows[k][4]) >= CS_RAB_TH && Convert.ToDouble(Data_Table_3G_SectorAgg.Rows[k][4]) != -1)
+                        {
+                            Data_Table_3G_SectorAgg.Rows[k][14] = 0;
+                        }
+
+
+                        // Voice Drop Rate
+                        //dataGridView1.Rows[k + 1].Cells[6].Value = Data_Table_3G.Rows[k][5];
+                        dataGridView1.Invoke(new Action(() => dataGridView1.Rows[k + 1].Cells[6].Value = Data_Table_3G_SectorAgg.Rows[k][5]));
+                        if (Convert.ToDouble(Data_Table_3G_SectorAgg.Rows[k][5]) == -1)
+                        {
+                            Data_Table_3G_SectorAgg.Rows[k][15] = -1;
+                        }
+                        if (Convert.ToDouble(Data_Table_3G_SectorAgg.Rows[k][5]) > CS_Drop_TH && Convert.ToDouble(Data_Table_3G_SectorAgg.Rows[k][5]) != -1)
+                        {
+                            Data_Table_3G_SectorAgg.Rows[k][15] = 1; result++; dataGridView1.Rows[k + 1].Cells[6].Style.BackColor = Color.Orange;
+                        }
+                        else if (Convert.ToDouble(Data_Table_3G_SectorAgg.Rows[k][5]) <= CS_Drop_TH && Convert.ToDouble(Data_Table_3G_SectorAgg.Rows[k][5]) != -1)
+                        {
+                            Data_Table_3G_SectorAgg.Rows[k][15] = 0;
+                        }
+
+
+                        // Availability
+                        //dataGridView1.Rows[k + 1].Cells[7].Value = Data_Table_3G.Rows[k][6];
+                        dataGridView1.Invoke(new Action(() => dataGridView1.Rows[k + 1].Cells[7].Value = Data_Table_3G_SectorAgg.Rows[k][6]));
+                        if (Convert.ToDouble(Data_Table_3G_SectorAgg.Rows[k][6]) == -1)
+                        {
+                            Data_Table_3G_SectorAgg.Rows[k][16] = -1;
+                        }
+                        if (Convert.ToDouble(Data_Table_3G_SectorAgg.Rows[k][6]) < Availability_TH && Convert.ToDouble(Data_Table_3G_SectorAgg.Rows[k][6]) > 0 && Convert.ToDouble(Data_Table_3G_SectorAgg.Rows[k][6]) != -1)
+                        {
+                            Data_Table_3G_SectorAgg.Rows[k][16] = 1; result++; dataGridView1.Rows[k + 1].Cells[7].Style.BackColor = Color.Orange;
+                        }
+                        else if (Convert.ToDouble(Data_Table_3G_SectorAgg.Rows[k][6]) >= Availability_TH && Convert.ToDouble(Data_Table_3G_SectorAgg.Rows[k][6]) != -1)
+                        {
+                            Data_Table_3G_SectorAgg.Rows[k][16] = 0;
+                        }
+
+
+                        // CS Traffic
+                        // dataGridView1.Rows[k + 1].Cells[8].Value = Data_Table_3G.Rows[k][7];
+                        dataGridView1.Invoke(new Action(() => dataGridView1.Rows[k + 1].Cells[8].Value = Data_Table_3G_SectorAgg.Rows[k][7]));
+                        if (Convert.ToDouble(Data_Table_3G_SectorAgg.Rows[k][7]) == -1)
+                        {
+                            Data_Table_3G_SectorAgg.Rows[k][17] = -1;
+                        }
+                        if (Convert.ToDouble(Data_Table_3G_SectorAgg.Rows[k][7]) == CS_Traffic_TH && Convert.ToDouble(Data_Table_3G_SectorAgg.Rows[k][7]) != -1)
+                        {
+                            Data_Table_3G_SectorAgg.Rows[k][17] = 1; result++; dataGridView1.Rows[k + 1].Cells[8].Style.BackColor = Color.Orange;
+                        }
+                        else if (Convert.ToDouble(Data_Table_3G_SectorAgg.Rows[k][7]) > CS_Traffic_TH && Convert.ToDouble(Data_Table_3G_SectorAgg.Rows[k][7]) != -1)
+                        {
+                            Data_Table_3G_SectorAgg.Rows[k][17] = 0;
+                        }
+
+
+                        // PS RRC SR
+                        //dataGridView1.Rows[k + 1].Cells[9].Value = Data_Table_3G.Rows[k][8];
+                        dataGridView1.Invoke(new Action(() => dataGridView1.Rows[k + 1].Cells[9].Value = Data_Table_3G_SectorAgg.Rows[k][8]));
+                        if (Convert.ToDouble(Data_Table_3G_SectorAgg.Rows[k][8]) == -1)
+                        {
+                            Data_Table_3G_SectorAgg.Rows[k][18] = -1;
+                        }
+                        if (Convert.ToDouble(Data_Table_3G_SectorAgg.Rows[k][8]) < PS_RRC_SR_TH && Convert.ToDouble(Data_Table_3G_SectorAgg.Rows[k][8]) != -1)
+                        {
+                            Data_Table_3G_SectorAgg.Rows[k][18] = 1; result++; dataGridView1.Rows[k + 1].Cells[9].Style.BackColor = Color.Orange;
+                        }
+                        else if (Convert.ToDouble(Data_Table_3G_SectorAgg.Rows[k][8]) >= PS_RRC_SR_TH && Convert.ToDouble(Data_Table_3G_SectorAgg.Rows[k][8]) != -1)
+                        {
+                            Data_Table_3G_SectorAgg.Rows[k][18] = 0;
+                        }
+
+                        // PS Drop Rate
+                        // dataGridView1.Rows[k + 1].Cells[10].Value = Data_Table_3G.Rows[k][9];
+                        dataGridView1.Invoke(new Action(() => dataGridView1.Rows[k + 1].Cells[10].Value = Data_Table_3G_SectorAgg.Rows[k][9]));
+                        if (Convert.ToDouble(Data_Table_3G_SectorAgg.Rows[k][9]) == -1)
+                        {
+                            Data_Table_3G_SectorAgg.Rows[k][19] = -1;
+                        }
+                        if (Convert.ToDouble(Data_Table_3G_SectorAgg.Rows[k][9]) > PS_Drop_TH && Convert.ToDouble(Data_Table_3G_SectorAgg.Rows[k][9]) != -1)
+                        {
+                            Data_Table_3G_SectorAgg.Rows[k][19] = 1; result++; dataGridView1.Rows[k + 1].Cells[10].Style.BackColor = Color.Orange;
+                        }
+                        else if (Convert.ToDouble(Data_Table_3G_SectorAgg.Rows[k][9]) <= PS_Drop_TH && Convert.ToDouble(Data_Table_3G_SectorAgg.Rows[k][9]) != -1)
+                        {
+                            Data_Table_3G_SectorAgg.Rows[k][19] = 0;
+                        }
+
+
+                        // RSSI
+                        // dataGridView1.Rows[k + 1].Cells[11].Value = Data_Table_3G.Rows[k][10];
+                        dataGridView1.Invoke(new Action(() => dataGridView1.Rows[k + 1].Cells[11].Value = Data_Table_3G_SectorAgg.Rows[k][10]));
+                        if (Convert.ToDouble(Data_Table_3G_SectorAgg.Rows[k][10]) == -1)
+                        {
+                            Data_Table_3G_SectorAgg.Rows[k][20] = -1;
+                        }
+                        if (Convert.ToDouble(Data_Table_3G_SectorAgg.Rows[k][10]) > RSSI_TH && Convert.ToDouble(Data_Table_3G_SectorAgg.Rows[k][10]) != -1)
+                        {
+                            Data_Table_3G_SectorAgg.Rows[k][20] = 1; result++; dataGridView1.Rows[k + 1].Cells[11].Style.BackColor = Color.Orange;
+                        }
+                        else if (Convert.ToDouble(Data_Table_3G_SectorAgg.Rows[k][10]) <= RSSI_TH && Convert.ToDouble(Data_Table_3G_SectorAgg.Rows[k][10]) != -1)
+                        {
+                            Data_Table_3G_SectorAgg.Rows[k][20] = 0;
+                        }
+
+
+
+
+                        // HS User THR
+                        // dataGridView1.Rows[k + 1].Cells[11].Value = Data_Table_3G.Rows[k][10];
+                        dataGridView1.Invoke(new Action(() => dataGridView1.Rows[k + 1].Cells[12].Value = Data_Table_3G_SectorAgg.Rows[k][11]));
+                        if (Convert.ToDouble(Data_Table_3G_SectorAgg.Rows[k][11]) == -1)
+                        {
+                            Data_Table_3G_SectorAgg.Rows[k][21] = -1;
+                        }
+                        if (Convert.ToDouble(Data_Table_3G_SectorAgg.Rows[k][11]) < THR_TH && Convert.ToDouble(Data_Table_3G_SectorAgg.Rows[k][11]) != -1)
+                        {
+                            Data_Table_3G_SectorAgg.Rows[k][21] = 1; result++; dataGridView1.Rows[k + 1].Cells[12].Style.BackColor = Color.Orange;
+                        }
+                        else if (Convert.ToDouble(Data_Table_3G_SectorAgg.Rows[k][11]) >= THR_TH && Convert.ToDouble(Data_Table_3G_SectorAgg.Rows[k][11]) != -1)
+                        {
+                            Data_Table_3G_SectorAgg.Rows[k][21] = 0;
+                        }
+
+
+
+                     
+
+
+
+                        // PS Traffic
+                        //dataGridView1.Rows[k + 1].Cells[12].Value = Data_Table_3G.Rows[k][11];
+                        dataGridView1.Invoke(new Action(() => dataGridView1.Rows[k + 1].Cells[13].Value = Data_Table_3G_SectorAgg.Rows[k][12]));
+                        if (Convert.ToDouble(Data_Table_3G_SectorAgg.Rows[k][12]) == -1)
+                        {
+                            Data_Table_3G_SectorAgg.Rows[k][22] = -1;
+                        }
+                        if (Convert.ToDouble(Data_Table_3G_SectorAgg.Rows[k][12]) == PS_Payload_TH && Convert.ToDouble(Data_Table_3G_SectorAgg.Rows[k][12]) != -1)
+                        {
+                            Data_Table_3G_SectorAgg.Rows[k][22] = 1; result++; dataGridView1.Rows[k + 1].Cells[13].Style.BackColor = Color.Orange;
+                        }
+                        else if (Convert.ToDouble(Data_Table_3G_SectorAgg.Rows[k][12]) > PS_Payload_TH && Convert.ToDouble(Data_Table_3G_SectorAgg.Rows[k][12]) != -1)
+                        {
+                            Data_Table_3G_SectorAgg.Rows[k][22] = 0;
+                        }
+
+
+
+                        if ((Convert.ToInt16(Data_Table_3G_SectorAgg.Rows[k][17]) == -1) || (Convert.ToInt16(Data_Table_3G_SectorAgg.Rows[k][22]) == -1))
+                        {
+                            //         if (Convert.ToInt16(Data_Table_3G.Rows[k][21])!= 0)
+                            //  {
+                            Data_Table_3G_SectorAgg.Rows[k][23] = 1; dataGridView1.Rows[k + 1].Cells[14].Value = "Not Updated";
+                            //                             }
+                        }
+                        else if (result == 0)
+                        {
+                            Data_Table_3G_SectorAgg.Rows[k][23] = 0.1; dataGridView1.Rows[k + 1].Cells[14].Value = "Passed";
+                        }
+                        if (result > 0)
+                        {
+                            Data_Table_3G_SectorAgg.Rows[k][23] = 0; dataGridView1.Rows[k + 1].Cells[14].Value = "Rejected";
+                        }
+                        progressBar1.Invoke(new Action(() => progressBar1.Value = k));
+                        //   progressBar1.Value = k;
+
+
+                    }
+                    var distinctIds = Data_Table_3G_SectorAgg.AsEnumerable()
+       .Select(s => new
+       {
+           id = s.Field<string>("Site"),
+       })
+       .Distinct().ToList();
+
+                    for (int j = 0; j < distinctIds.Count; j++)
+                    {
+                        var cell_data = (from p in Data_Table_3G_SectorAgg.AsEnumerable()
+                                         where p.Field<string>("Site") == distinctIds[j].id
+                                         select p).ToList();
+
+
+                        double multiplier = 1;
+                        for (int h = 0; h < cell_data.Count; h++)
+                        {
+                            multiplier = multiplier * Convert.ToDouble(cell_data[h].ItemArray[23]);
+
+                        }
+
+                        if (multiplier > 0 && multiplier < 1)
+                        {
+                            Site_Data_Table_3G.Rows.Add(distinctIds[j].id, "Passed");
+                        }
+                        if (multiplier == 0)
+                        {
+                            Site_Data_Table_3G.Rows.Add(distinctIds[j].id, "Rejected");
+                        }
+                        if (multiplier == 1)
+                        {
+                            Site_Data_Table_3G.Rows.Add(distinctIds[j].id, "Not Updated");
+                        }
+
+                    }
+
+
+
+                }
+
+
+
+
+
+
+            }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
             if (Input_Type == "FARAZ" && Technology == "4G")
             {
                 Technology = "4G-MCI";
@@ -4145,7 +5149,7 @@ inner join (SELECT [Datetime]
             if (Technology == "3G" || Technology == "3G-MCI")
             {
                 XLWorkbook wb = new XLWorkbook();
-                wb.Worksheets.Add(Data_Table_3G, "Data Table");
+                wb.Worksheets.Add(Data_Table_3G_SectorAgg, "Data Table");
                 wb.Worksheets.Add(Site_Data_Table_3G, "Result");
                 var saveFileDialog = new SaveFileDialog
                 {
