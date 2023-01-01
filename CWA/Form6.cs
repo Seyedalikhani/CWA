@@ -3623,170 +3623,173 @@ inner join (SELECT [Datetime]
                                        where  (myrow.Field<String>("Sector") == Sector && myrow.Field<DateTime>("Day") == Date)
                                        select myrow).ToList();
 
-
-                        string RNC = Data_3G[0].ItemArray[1].ToString();
-                        string Site = Data_3G[0].ItemArray[24].ToString();
-
-                        double CS_RRC_Ave = -1;  int CS_RRC_Count = 0; double CS_RRC_Sum = 0;
-                        for (int k=0; k< Data_3G.Count; k++)
+                        if (Data_3G.Count!=0)
                         {
-                            if (Convert.ToDouble(Data_3G[k].ItemArray[3])!=-1)
+                            string RNC = Data_3G[0].ItemArray[1].ToString();
+                            string Site = Data_3G[0].ItemArray[24].ToString();
+
+                            double CS_RRC_Ave = -1; int CS_RRC_Count = 0; double CS_RRC_Sum = 0;
+                            for (int k = 0; k < Data_3G.Count; k++)
                             {
-                                CS_RRC_Count++;
-                                CS_RRC_Sum = CS_RRC_Sum + Convert.ToDouble(Data_3G[k].ItemArray[3]);
+                                if (Convert.ToDouble(Data_3G[k].ItemArray[3]) != -1)
+                                {
+                                    CS_RRC_Count++;
+                                    CS_RRC_Sum = CS_RRC_Sum + Convert.ToDouble(Data_3G[k].ItemArray[3]);
+                                }
                             }
-                        }
 
-                        if (CS_RRC_Count!=0)
-                        {
-                            CS_RRC_Ave = CS_RRC_Sum / CS_RRC_Count;
-                        }
-
-
-                        double CS_RAB_Ave = -1; int CS_RAB_Count = 0; double CS_RAB_Sum = 0;
-                        for (int k = 0; k < Data_3G.Count; k++)
-                        {
-                            if (Convert.ToDouble(Data_3G[k].ItemArray[4]) != -1)
+                            if (CS_RRC_Count != 0)
                             {
-                                CS_RAB_Count++;
-                                CS_RAB_Sum = CS_RAB_Sum + Convert.ToDouble(Data_3G[k].ItemArray[4]);
+                                CS_RRC_Ave = CS_RRC_Sum / CS_RRC_Count;
                             }
-                        }
-
-                        if (CS_RAB_Count != 0)
-                        {
-                            CS_RAB_Ave = CS_RAB_Sum / CS_RAB_Count;
-                        }
 
 
-                        double Voice_Drop_Ave = -1; int Voice_Drop_Count = 0; double Voice_Drop_Sum = 0;
-                        for (int k = 0; k < Data_3G.Count; k++)
-                        {
-                            if (Convert.ToDouble(Data_3G[k].ItemArray[5]) != -1)
+                            double CS_RAB_Ave = -1; int CS_RAB_Count = 0; double CS_RAB_Sum = 0;
+                            for (int k = 0; k < Data_3G.Count; k++)
                             {
-                                Voice_Drop_Count++;
-                                Voice_Drop_Sum = Voice_Drop_Sum + Convert.ToDouble(Data_3G[k].ItemArray[5]);
+                                if (Convert.ToDouble(Data_3G[k].ItemArray[4]) != -1)
+                                {
+                                    CS_RAB_Count++;
+                                    CS_RAB_Sum = CS_RAB_Sum + Convert.ToDouble(Data_3G[k].ItemArray[4]);
+                                }
                             }
-                        }
 
-                        if (Voice_Drop_Count != 0)
-                        {
-                            Voice_Drop_Ave = Voice_Drop_Sum / Voice_Drop_Count;
-                        }
-
-
-
-                        double Availability_Ave = -1; int Availability_Count = 0; double Availability_Sum = 0;
-                        for (int k = 0; k < Data_3G.Count; k++)
-                        {
-                            if (Convert.ToDouble(Data_3G[k].ItemArray[6]) != -1)
+                            if (CS_RAB_Count != 0)
                             {
-                                Availability_Count++;
-                                Availability_Sum = Availability_Sum + Convert.ToDouble(Data_3G[k].ItemArray[6]);
+                                CS_RAB_Ave = CS_RAB_Sum / CS_RAB_Count;
                             }
-                        }
-
-                        if (Availability_Count != 0)
-                        {
-                            Availability_Ave = Availability_Sum / Availability_Count;
-                        }
 
 
-
-
-                        double CS_Traffic_Sum = 0;
-                        for (int k = 0; k < Data_3G.Count; k++)
-                        {
-                            if (Convert.ToDouble(Data_3G[k].ItemArray[7]) != -1)
+                            double Voice_Drop_Ave = -1; int Voice_Drop_Count = 0; double Voice_Drop_Sum = 0;
+                            for (int k = 0; k < Data_3G.Count; k++)
                             {
-                                CS_Traffic_Sum = CS_Traffic_Sum + Convert.ToDouble(Data_3G[k].ItemArray[7]);
+                                if (Convert.ToDouble(Data_3G[k].ItemArray[5]) != -1)
+                                {
+                                    Voice_Drop_Count++;
+                                    Voice_Drop_Sum = Voice_Drop_Sum + Convert.ToDouble(Data_3G[k].ItemArray[5]);
+                                }
                             }
-                        }
 
-
-
-                        double PS_RRC_Ave = -1; int PS_RRC_Count = 0; double PS_RRC_Sum = 0;
-                        for (int k = 0; k < Data_3G.Count; k++)
-                        {
-                            if (Convert.ToDouble(Data_3G[k].ItemArray[8]) != -1)
+                            if (Voice_Drop_Count != 0)
                             {
-                                PS_RRC_Count++;
-                                PS_RRC_Sum = PS_RRC_Sum + Convert.ToDouble(Data_3G[k].ItemArray[8]);
+                                Voice_Drop_Ave = Voice_Drop_Sum / Voice_Drop_Count;
                             }
-                        }
-
-                        if (PS_RRC_Count != 0)
-                        {
-                            PS_RRC_Ave = PS_RRC_Sum / PS_RRC_Count;
-                        }
 
 
 
-
-                        double PS_Drop_Ave = -1; int PS_Drop_Count = 0; double PS_Drop_Sum = 0;
-                        for (int k = 0; k < Data_3G.Count; k++)
-                        {
-                            if (Convert.ToDouble(Data_3G[k].ItemArray[9]) != -1)
+                            double Availability_Ave = -1; int Availability_Count = 0; double Availability_Sum = 0;
+                            for (int k = 0; k < Data_3G.Count; k++)
                             {
-                                PS_Drop_Count++;
-                                PS_Drop_Sum = PS_Drop_Sum + Convert.ToDouble(Data_3G[k].ItemArray[9]);
+                                if (Convert.ToDouble(Data_3G[k].ItemArray[6]) != -1)
+                                {
+                                    Availability_Count++;
+                                    Availability_Sum = Availability_Sum + Convert.ToDouble(Data_3G[k].ItemArray[6]);
+                                }
                             }
-                        }
 
-                        if (PS_Drop_Count != 0)
-                        {
-                            PS_Drop_Ave = PS_Drop_Sum / PS_Drop_Count;
-                        }
-
-
-
-                        double RSSI_Ave = -1; int RSSI_Count = 0; double RSSI_Sum = 0;
-                        for (int k = 0; k < Data_3G.Count; k++)
-                        {
-                            if (Convert.ToDouble(Data_3G[k].ItemArray[10]) != -1)
+                            if (Availability_Count != 0)
                             {
-                                RSSI_Count++;
-                                RSSI_Sum = RSSI_Sum + Convert.ToDouble(Data_3G[k].ItemArray[10]);
+                                Availability_Ave = Availability_Sum / Availability_Count;
                             }
-                        }
-
-                        if (RSSI_Count != 0)
-                        {
-                            RSSI_Ave = RSSI_Sum / RSSI_Count;
-                        }
 
 
 
-                        double THR_Ave = -1; int THR_Count = 0; double THR_Sum = 0;
-                        for (int k = 0; k < Data_3G.Count; k++)
-                        {
-                            if (Convert.ToDouble(Data_3G[k].ItemArray[11]) != -1)
+
+                            double CS_Traffic_Sum = 0;
+                            for (int k = 0; k < Data_3G.Count; k++)
                             {
-                                THR_Count++;
-                                THR_Sum = THR_Sum + Convert.ToDouble(Data_3G[k].ItemArray[11]);
+                                if (Convert.ToDouble(Data_3G[k].ItemArray[7]) != -1)
+                                {
+                                    CS_Traffic_Sum = CS_Traffic_Sum + Convert.ToDouble(Data_3G[k].ItemArray[7]);
+                                }
                             }
-                        }
-
-                        if (THR_Count != 0)
-                        {
-                            THR_Ave = THR_Sum / THR_Count;
-                        }
 
 
 
-
-
-                        double PS_Traffic_Sum = 0;
-                        for (int k = 0; k < Data_3G.Count; k++)
-                        {
-                            if (Convert.ToDouble(Data_3G[k].ItemArray[12]) != -1)
+                            double PS_RRC_Ave = -1; int PS_RRC_Count = 0; double PS_RRC_Sum = 0;
+                            for (int k = 0; k < Data_3G.Count; k++)
                             {
-                                PS_Traffic_Sum = PS_Traffic_Sum + Convert.ToDouble(Data_3G[k].ItemArray[12]);
+                                if (Convert.ToDouble(Data_3G[k].ItemArray[8]) != -1)
+                                {
+                                    PS_RRC_Count++;
+                                    PS_RRC_Sum = PS_RRC_Sum + Convert.ToDouble(Data_3G[k].ItemArray[8]);
+                                }
                             }
+
+                            if (PS_RRC_Count != 0)
+                            {
+                                PS_RRC_Ave = PS_RRC_Sum / PS_RRC_Count;
+                            }
+
+
+
+
+                            double PS_Drop_Ave = -1; int PS_Drop_Count = 0; double PS_Drop_Sum = 0;
+                            for (int k = 0; k < Data_3G.Count; k++)
+                            {
+                                if (Convert.ToDouble(Data_3G[k].ItemArray[9]) != -1)
+                                {
+                                    PS_Drop_Count++;
+                                    PS_Drop_Sum = PS_Drop_Sum + Convert.ToDouble(Data_3G[k].ItemArray[9]);
+                                }
+                            }
+
+                            if (PS_Drop_Count != 0)
+                            {
+                                PS_Drop_Ave = PS_Drop_Sum / PS_Drop_Count;
+                            }
+
+
+
+                            double RSSI_Ave = -1; int RSSI_Count = 0; double RSSI_Sum = 0;
+                            for (int k = 0; k < Data_3G.Count; k++)
+                            {
+                                if (Convert.ToDouble(Data_3G[k].ItemArray[10]) != -1)
+                                {
+                                    RSSI_Count++;
+                                    RSSI_Sum = RSSI_Sum + Convert.ToDouble(Data_3G[k].ItemArray[10]);
+                                }
+                            }
+
+                            if (RSSI_Count != 0)
+                            {
+                                RSSI_Ave = RSSI_Sum / RSSI_Count;
+                            }
+
+
+
+                            double THR_Ave = -1; int THR_Count = 0; double THR_Sum = 0;
+                            for (int k = 0; k < Data_3G.Count; k++)
+                            {
+                                if (Convert.ToDouble(Data_3G[k].ItemArray[11]) != -1)
+                                {
+                                    THR_Count++;
+                                    THR_Sum = THR_Sum + Convert.ToDouble(Data_3G[k].ItemArray[11]);
+                                }
+                            }
+
+                            if (THR_Count != 0)
+                            {
+                                THR_Ave = THR_Sum / THR_Count;
+                            }
+
+
+
+
+
+                            double PS_Traffic_Sum = 0;
+                            for (int k = 0; k < Data_3G.Count; k++)
+                            {
+                                if (Convert.ToDouble(Data_3G[k].ItemArray[12]) != -1)
+                                {
+                                    PS_Traffic_Sum = PS_Traffic_Sum + Convert.ToDouble(Data_3G[k].ItemArray[12]);
+                                }
+                            }
+
+
+                            Data_Table_3G_SectorAgg.Rows.Add(Date.Date, RNC, Sector, CS_RRC_Ave, CS_RAB_Ave, Voice_Drop_Ave, Availability_Ave, CS_Traffic_Sum, PS_RRC_Ave, PS_Drop_Ave, RSSI_Ave, THR_Ave, PS_Traffic_Sum, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, Site);
                         }
-
-
-                        Data_Table_3G_SectorAgg.Rows.Add(Date.Date, RNC, Sector, CS_RRC_Ave, CS_RAB_Ave, Voice_Drop_Ave, Availability_Ave, CS_Traffic_Sum, PS_RRC_Ave, PS_Drop_Ave, RSSI_Ave, THR_Ave, PS_Traffic_Sum, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, Site);
+                     
 
    
 
