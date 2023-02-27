@@ -291,6 +291,7 @@
             this.comboBox1.Items.AddRange(new object[] {
             "2G",
             "3G",
+            "3G-MCI",
             "4G"});
             this.comboBox1.Location = new System.Drawing.Point(132, 91);
             this.comboBox1.Name = "comboBox1";

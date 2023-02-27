@@ -5152,7 +5152,14 @@ inner join (SELECT [Datetime]
             if (Technology == "3G" || Technology == "3G-MCI")
             {
                 XLWorkbook wb = new XLWorkbook();
-                wb.Worksheets.Add(Data_Table_3G_SectorAgg, "Data Table");
+                if (Technology == "3G")
+                {
+                    wb.Worksheets.Add(Data_Table_3G_SectorAgg, "Data Table");
+                }
+                if (Technology == "3G-MCI")
+                {
+                    wb.Worksheets.Add(Data_Table_3G, "Data Table");
+                }
                 wb.Worksheets.Add(Site_Data_Table_3G, "Result");
                 var saveFileDialog = new SaveFileDialog
                 {

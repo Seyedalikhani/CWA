@@ -145,6 +145,14 @@ namespace CWA
 
 
 
+
+   
+
+
+
+
+
+
             // Last Date
             string Max_Date_Quary = @"Select max(Date) from Tehran_CC_Maintable";
             DataTable Max_Date_Table = Query_Execution_Table_Output(Max_Date_Quary);
@@ -244,6 +252,8 @@ namespace CWA
 
 
 
+
+
             //Date of ReadyToClose Table
             string ReadyToClose_Date_Quary = @"Select Distinct Date from Tehran_CC_ReadyToClose where cast(Date as Date)>='2022-07-31' order by Date";
             DataTable ReadyToClose_Date_Table = Query_Execution_Table_Output(ReadyToClose_Date_Quary);
@@ -327,6 +337,11 @@ namespace CWA
             //Query_Execution(Truncate_Tehran_CC_ReadyToCloseRemovePark_Detail_Quary);
 
 
+            //// Truncate [Tehran_CC_MTTR]
+            //string Truncate_Tehran_CC_MTTR_Quary = "Truncate table [Tehran_CC_MTTR]";
+            //Query_Execution(Truncate_Tehran_CC_MTTR_Quary);
+
+
 
             ////// **********************************
 
@@ -352,6 +367,16 @@ namespace CWA
             string Truncate_Tehran_CC_Generated_Quary = "Truncate table [Tehran_CC_Generated]";
             Query_Execution(Truncate_Tehran_CC_Generated_Quary);
 
+            // Truncate [Tehran_CC_NPOGenerated]
+            string Truncate_Tehran_CC_NPOGenerated_Quary = "Truncate table [Tehran_CC_NPOGenerated]";
+            Query_Execution(Truncate_Tehran_CC_NPOGenerated_Quary);
+
+
+            // Truncate [Tehran_CC_FOGenerated]
+            string Truncate_Tehran_CC_FOGenerated_Quary = "Truncate table [Tehran_CC_FOGenerated]";
+            Query_Execution(Truncate_Tehran_CC_FOGenerated_Quary);
+
+
             // Insert Zero Values to Defulat Tables
 
             SqlBulkCopy objbulk_Close = new SqlBulkCopy(connection);
@@ -371,11 +396,11 @@ namespace CWA
 
 
             // Generated TTs (Remove duplicated on TTs with ordered Date)
-            string Tehran_CC_Generated_Quary = @"select [TT Code] as 'GeneratedTTs', '' as 'GeneratedDate', RNC,	Date
+            string Tehran_CC_Generated_Quary = @"select [TT Code] as 'GeneratedTTs', '' as 'GeneratedDate', RNC
  from (
-select distinct [TT Code],  RNC , Date, 
+select distinct [TT Code],  RNC ,  
 RN = ROW_NUMBER()OVER(PARTITION BY [TT Code] ORDER BY [TT Code] )
-from Tehran_CC_Maintable  ) tbl where RN=1 ORDER BY Date desc";
+from Tehran_CC_Maintable  ) tbl where RN=1";
             DataTable Generated_Table = Query_Execution_Table_Output(Tehran_CC_Generated_Quary);
 
             for (int n = 0; n < Generated_Table.Rows.Count; n++)
@@ -383,7 +408,7 @@ from Tehran_CC_Maintable  ) tbl where RN=1 ORDER BY Date desc";
                 string String_TT = Convert.ToString((Generated_Table.Rows[n]).ItemArray[0]);
                 string String_Date = String_TT.Substring(0, 8);
                 DateTime Date = Convert.ToDateTime(String_TT.Substring(0, 4) + "-" + String_TT.Substring(4, 2) + "-" + String_TT.Substring(6, 2));
-                DateTime Date_of_File = Convert.ToDateTime((Generated_Table.Rows[n]).ItemArray[3]);
+                //DateTime Date_of_File = Convert.ToDateTime((Generated_Table.Rows[n]).ItemArray[3]);
                 string RNC_Name = Convert.ToString((Generated_Table.Rows[n]).ItemArray[2]);
                 Generated_Table.Rows[n][1] = Date;
                 //Generated_Table.Rows.Add(String_TT, Date, RNC_Name, Date_of_File);
@@ -394,8 +419,129 @@ from Tehran_CC_Maintable  ) tbl where RN=1 ORDER BY Date desc";
             objbulk_Generated.ColumnMappings.Add("GeneratedTTs", "GeneratedTTs");
             objbulk_Generated.ColumnMappings.Add("GeneratedDate", "GeneratedDate");
             objbulk_Generated.ColumnMappings.Add("RNC", "RNC");
-            objbulk_Generated.ColumnMappings.Add("Date", "Date");
+            //objbulk_Generated.ColumnMappings.Add("Date", "Date");
             objbulk_Generated.WriteToServer(Generated_Table);
+
+
+
+
+
+            // NPO Generated TTs(Remove duplicated on TTs with ordered Date)
+            string Tehran_CC_NPOGenerated_Quary = @"select [TT Code] as 'NPOGeneratedTTs', '' as 'GeneratedDate', RNC	
+ from (
+select distinct [TT Code],  RNC ,  
+RN = ROW_NUMBER()OVER(PARTITION BY [TT Code] ORDER BY [TT Code] )
+from Tehran_CC_Maintable where (cast([Ticket Status] as varchar)='باز داخل باکس شخصی' or cast([Ticket Status] as varchar)='باز داخل باکس گروهی' ) and ( (cast([The Last Agent Name] as varchar)='Delayناک تهران' or [The Last Agent Name]='Mohamadreza Kazmi')) ) tbl where RN=1";
+            DataTable NPOGenerated_Table = Query_Execution_Table_Output(Tehran_CC_NPOGenerated_Quary);
+
+            for (int n = 0; n < NPOGenerated_Table.Rows.Count; n++)
+            {
+                string String_TT = Convert.ToString((NPOGenerated_Table.Rows[n]).ItemArray[0]);
+                string String_Date = String_TT.Substring(0, 8);
+                DateTime Date = Convert.ToDateTime(String_TT.Substring(0, 4) + "-" + String_TT.Substring(4, 2) + "-" + String_TT.Substring(6, 2));
+                //DateTime Date_of_File = Convert.ToDateTime((NPOGenerated_Table.Rows[n]).ItemArray[3]);
+                string RNC_Name = Convert.ToString((NPOGenerated_Table.Rows[n]).ItemArray[2]);
+                NPOGenerated_Table.Rows[n][1] = Date;
+                //Generated_Table.Rows.Add(String_TT, Date, RNC_Name, Date_of_File);
+            }
+
+            SqlBulkCopy objbulk_NPOGenerated = new SqlBulkCopy(connection);
+            objbulk_NPOGenerated.DestinationTableName = "Tehran_CC_NPOGenerated";
+            objbulk_NPOGenerated.ColumnMappings.Add("NPOGeneratedTTs", "NPOGeneratedTTs");
+            objbulk_NPOGenerated.ColumnMappings.Add("GeneratedDate", "GeneratedDate");
+            objbulk_NPOGenerated.ColumnMappings.Add("RNC", "RNC");
+            //objbulk_NPOGenerated.ColumnMappings.Add("Date", "Date");
+            objbulk_NPOGenerated.WriteToServer(NPOGenerated_Table);
+
+
+
+
+            // FO Generated TTs(Remove duplicated on TTs with ordered Date)
+            string Tehran_CC_FOGenerated_Quary = @"select [TT Code] as 'FOGeneratedTTs', '' as 'GeneratedDate', RNC	
+ from (
+select distinct [TT Code],  RNC ,  
+RN = ROW_NUMBER()OVER(PARTITION BY [TT Code] ORDER BY [TT Code] )
+from Tehran_CC_Maintable where (cast([Ticket Status] as varchar)='باز داخل باکس شخصی' or cast([Ticket Status] as varchar)='باز داخل باکس گروهی' ) and ( (cast([The Last Agent Name] as varchar)!='Delayناک تهران' and [The Last Agent Name]!='Mohamadreza Kazmi')) ) tbl where RN=1";
+            DataTable FOGenerated_Table = Query_Execution_Table_Output(Tehran_CC_FOGenerated_Quary);
+
+            for (int n = 0; n < FOGenerated_Table.Rows.Count; n++)
+            {
+                string String_TT = Convert.ToString((FOGenerated_Table.Rows[n]).ItemArray[0]);
+                string String_Date = String_TT.Substring(0, 8);
+                DateTime Date = Convert.ToDateTime(String_TT.Substring(0, 4) + "-" + String_TT.Substring(4, 2) + "-" + String_TT.Substring(6, 2));
+                //DateTime Date_of_File = Convert.ToDateTime((NPOGenerated_Table.Rows[n]).ItemArray[3]);
+                string RNC_Name = Convert.ToString((FOGenerated_Table.Rows[n]).ItemArray[2]);
+                FOGenerated_Table.Rows[n][1] = Date;
+                //Generated_Table.Rows.Add(String_TT, Date, RNC_Name, Date_of_File);
+            }
+
+            SqlBulkCopy objbulk_FOGenerated = new SqlBulkCopy(connection);
+            objbulk_FOGenerated.DestinationTableName = "Tehran_CC_FOGenerated";
+            objbulk_FOGenerated.ColumnMappings.Add("FOGeneratedTTs", "FOGeneratedTTs");
+            objbulk_FOGenerated.ColumnMappings.Add("GeneratedDate", "GeneratedDate");
+            objbulk_FOGenerated.ColumnMappings.Add("RNC", "RNC");
+            //objbulk_FOGenerated.ColumnMappings.Add("Date", "Date");
+            objbulk_FOGenerated.WriteToServer(FOGenerated_Table);
+
+
+
+
+
+            //MTTR of Tickets
+            for (int i = 0; i < Date_Table.Rows.Count; i++)
+            {
+                DateTime Date1 = Convert.ToDateTime((Date_Table.Rows[i]).ItemArray[0]);
+                string Date = Date_ToString(Date1);
+
+                if (Date1 <= Last_Updated_Date_Incoming)
+                {
+                    continue;
+                }
+
+                string MTTR_Quary = @"select Date, RNC, [RNC MTTR Num], [RNC MTTR Den], [RNC MTTR] from (
+select MTTR1_Total.Date, MTTR1_Total.RNC, MTTR1_Total.[RNC MTTR Num], MTTR2_Total.[RNC MTTR Den], cast(MTTR1_Total.[RNC MTTR Num] as float)/cast(MTTR2_Total.[RNC MTTR Den] as float) as 'RNC MTTR' from (
+
+select '" +
+  Date + @"' as Date, RNC, sum([RNC MTTR Num]) as 'RNC MTTR Num' from (
+select Date , RNC, Count(*) as 'RNC MTTR Num' from Tehran_CC_Maintable where (cast([Ticket Status] as varchar)='باز داخل باکس شخصی' or cast([Ticket Status] as varchar)='باز داخل باکس گروهی' ) and ( (cast([The Last Agent Name] as varchar)='Delayناک تهران' or [The Last Agent Name]='Mohamadreza Kazmi')) and Date<='" +
+  Date + @"'
+group by Date , RNC) tble group by RNC) MTTR1_Total
+left join( 
+
+select '" +
+  Date + @"' as Date1, RNC1, Count(*) as 'RNC MTTR Den' from (
+select [TT Code], RNC as 'RNC1', Date from (
+  SELECT
+  RANK() OVER(PARTITION BY  [TT Code] ORDER BY Date desc) AS ranking,
+  [TT Code],
+  RNC,
+Date from Tehran_CC_Maintable where (cast([Ticket Status] as varchar)='باز داخل باکس شخصی' or cast([Ticket Status] as varchar)='باز داخل باکس گروهی' ) and ( (cast([The Last Agent Name] as varchar)='Delayناک تهران' or [The Last Agent Name]='Mohamadreza Kazmi')) and Date<='" +
+  Date + @"') tble
+where ranking=1
+
+) tbl group by RNC1) MTTR2_Total 
+
+on MTTR1_Total.Date=MTTR2_Total.Date1 and
+MTTR1_Total.RNC=MTTR2_Total.RNC1  ) tble where [RNC MTTR] is not null";
+
+
+
+                DataTable MTTR_Table = Query_Execution_Table_Output(MTTR_Quary);
+
+                SqlBulkCopy objbulk_MTTR = new SqlBulkCopy(connection);
+                objbulk_MTTR.DestinationTableName = "Tehran_CC_MTTR";
+                objbulk_MTTR.ColumnMappings.Add("Date", "Date");
+                objbulk_MTTR.ColumnMappings.Add("RNC", "RNC");
+                objbulk_MTTR.ColumnMappings.Add("RNC MTTR Num", "RNC MTTR Num");
+                objbulk_MTTR.ColumnMappings.Add("RNC MTTR Den", "RNC MTTR Den");
+                objbulk_MTTR.ColumnMappings.Add("RNC MTTR", "RNC MTTR");
+                objbulk_MTTR.WriteToServer(MTTR_Table);
+            }
+
+
+
+
+
 
 
 
@@ -712,23 +858,29 @@ select Old_TBL.[ReadyToCloseTTs], Old_TBL.[RNC],  Old_TBL.Date, New_TBL.NewTT fr
 
             DataTable Tehran_VIP_CC = new DataTable();
             Tehran_VIP_CC.Columns.Add("CCID", typeof(String));
-            Tehran_VIP_CC.Columns.Add("Subscriber Name", typeof(String));
-            Tehran_VIP_CC.Columns.Add("Phone", typeof(String));
-            Tehran_VIP_CC.Columns.Add("Address", typeof(String));
-            Tehran_VIP_CC.Columns.Add("latitude", typeof(double));
-            Tehran_VIP_CC.Columns.Add("longitude", typeof(double));
-            Tehran_VIP_CC.Columns.Add("Source Of Complaint", typeof(String));
+            Tehran_VIP_CC.Columns.Add("SubscriberName", typeof(String));
+            Tehran_VIP_CC.Columns.Add("SubscriberPhone", typeof(String));
+            Tehran_VIP_CC.Columns.Add("SubscriberAddress", typeof(String));
+            Tehran_VIP_CC.Columns.Add("LatitudeValue", typeof(double));
+            Tehran_VIP_CC.Columns.Add("LongitudeValue", typeof(double));
+            Tehran_VIP_CC.Columns.Add("SourceofComplaint", typeof(String));
             Tehran_VIP_CC.Columns.Add("RNC", typeof(String));
-            Tehran_VIP_CC.Columns.Add("Status", typeof(String));
-            Tehran_VIP_CC.Columns.Add("Created Da", typeof(DateTime));
-            Tehran_VIP_CC.Columns.Add("comments", typeof(String));
-            Tehran_VIP_CC.Columns.Add("SOLUTIONCATEGORY", typeof(String));
-            Tehran_VIP_CC.Columns.Add("Pending Site", typeof(String));
-            Tehran_VIP_CC.Columns.Add("RESPONSIBLE", typeof(String));
+            Tehran_VIP_CC.Columns.Add("NPOstatus", typeof(String));
+            Tehran_VIP_CC.Columns.Add("Create date", typeof(DateTime));
+            Tehran_VIP_CC.Columns.Add("AssignComment", typeof(String));
+            Tehran_VIP_CC.Columns.Add("SolutionCategory", typeof(String));
+            Tehran_VIP_CC.Columns.Add("PendingSite", typeof(String));
+            Tehran_VIP_CC.Columns.Add("ResponsibleTeam", typeof(String));
+            Tehran_VIP_CC.Columns.Add("CustomerComplaintRef", typeof(String));
+            Tehran_VIP_CC.Columns.Add("ReadyToCloseDate", typeof(DateTime));
+            Tehran_VIP_CC.Columns.Add("ResolveDate", typeof(DateTime));
 
 
 
-            Excel.Range Data = Sheet.get_Range("A2", "N" + Sheet.UsedRange.Rows.Count);
+
+
+
+            Excel.Range Data = Sheet.get_Range("A2", "Q" + Sheet.UsedRange.Rows.Count);
             object[,] VIP_Data = (object[,])Data.Value;
             int Count = Sheet.UsedRange.Rows.Count;
 
@@ -836,12 +988,36 @@ select Old_TBL.[ReadyToCloseTTs], Old_TBL.[RNC],  Old_TBL.Date, New_TBL.NewTT fr
                 if (VIP_Data[k + 1, 14] != null)
                 {
                     RESPONSIBLE = VIP_Data[k + 1, 14].ToString();
-                } 
+                }
+
+
+                string CustomerComplaintRef = "";
+                if (VIP_Data[k + 1, 15] != null)
+                {
+                    CustomerComplaintRef = VIP_Data[k + 1, 15].ToString();
+                }
+
+
+                DateTime ReadyToCloseDate = Convert.ToDateTime(VIP_Data[k + 1, 16]);
+                //if (ReadyToCloseDate == null || ReadyToCloseDate.Year < 2022)
+                //{
+                //    ReadyToCloseDate = "";
+                //}
+                //else
+                //{
+                //    ReadyToCloseDate
+                //}
+
+
+                DateTime ResolveDate = Convert.ToDateTime(VIP_Data[k + 1, 17]);
+                //if (ResolveDate == null || ResolveDate.Year < 2022)
+                //{
+                //    continue;
+                //}
 
 
 
-
-                Tehran_VIP_CC.Rows.Add(CCID, Subscriber_Name, Phone,Address, latitude, longitude, Source_Of_Complaint,RNC,Status,Date, comments, SOLUTIONCATEGORY, Pending_Site, RESPONSIBLE);
+                Tehran_VIP_CC.Rows.Add(CCID, Subscriber_Name, Phone,Address, latitude, longitude, Source_Of_Complaint,RNC,Status,Date, comments, SOLUTIONCATEGORY, Pending_Site, RESPONSIBLE, CustomerComplaintRef, ReadyToCloseDate, ResolveDate);
 
 
             }
@@ -851,23 +1027,25 @@ select Old_TBL.[ReadyToCloseTTs], Old_TBL.[RNC],  Old_TBL.Date, New_TBL.NewTT fr
             SqlBulkCopy objbulk_Tehran_VIP_CC = new SqlBulkCopy(connection);
             objbulk_Tehran_VIP_CC.DestinationTableName = "Tehran_VIP_CC";
             objbulk_Tehran_VIP_CC.ColumnMappings.Add("CCID", "CCID");
-            objbulk_Tehran_VIP_CC.ColumnMappings.Add("Subscriber Name", "Subscriber Name");
-            objbulk_Tehran_VIP_CC.ColumnMappings.Add("Phone", "Phone");
-            objbulk_Tehran_VIP_CC.ColumnMappings.Add("Address", "Address");
+            objbulk_Tehran_VIP_CC.ColumnMappings.Add("SubscriberName", "SubscriberName");
+            objbulk_Tehran_VIP_CC.ColumnMappings.Add("SubscriberPhone", "SubscriberPhone");
+            objbulk_Tehran_VIP_CC.ColumnMappings.Add("SubscriberAddress", "SubscriberAddress");
 
-            objbulk_Tehran_VIP_CC.ColumnMappings.Add("latitude", "latitude");
-            objbulk_Tehran_VIP_CC.ColumnMappings.Add("longitude", "longitude");
-            objbulk_Tehran_VIP_CC.ColumnMappings.Add("Source Of Complaint", "Source Of Complaint");
+            objbulk_Tehran_VIP_CC.ColumnMappings.Add("LatitudeValue", "LatitudeValue");
+            objbulk_Tehran_VIP_CC.ColumnMappings.Add("LongitudeValue", "LongitudeValue");
+            objbulk_Tehran_VIP_CC.ColumnMappings.Add("SourceofComplaint", "SourceofComplaint");
             objbulk_Tehran_VIP_CC.ColumnMappings.Add("RNC", "RNC");
 
-            objbulk_Tehran_VIP_CC.ColumnMappings.Add("Status", "Status");
-            objbulk_Tehran_VIP_CC.ColumnMappings.Add("Created Da", "Created Da");
-            objbulk_Tehran_VIP_CC.ColumnMappings.Add("comments", "comments");
-            objbulk_Tehran_VIP_CC.ColumnMappings.Add("SOLUTIONCATEGORY", "SOLUTIONCATEGORY");
+            objbulk_Tehran_VIP_CC.ColumnMappings.Add("NPOstatus", "NPOstatus");
+            objbulk_Tehran_VIP_CC.ColumnMappings.Add("Create date", "Create date ");
+            objbulk_Tehran_VIP_CC.ColumnMappings.Add("AssignComment", "AssignComment");
+            objbulk_Tehran_VIP_CC.ColumnMappings.Add("SolutionCategory", "SolutionCategory");
+            objbulk_Tehran_VIP_CC.ColumnMappings.Add("PendingSite", "PendingSite");
+            objbulk_Tehran_VIP_CC.ColumnMappings.Add("ResponsibleTeam", "ResponsibleTeam");
+            objbulk_Tehran_VIP_CC.ColumnMappings.Add("CustomerComplaintRef", "CustomerComplaintRef");
 
-            objbulk_Tehran_VIP_CC.ColumnMappings.Add("Pending Site", "Pending Site");
-            objbulk_Tehran_VIP_CC.ColumnMappings.Add("RESPONSIBLE", "RESPONSIBLE");
-
+            objbulk_Tehran_VIP_CC.ColumnMappings.Add("ReadyToCloseDate", "ReadyToCloseDate");
+            objbulk_Tehran_VIP_CC.ColumnMappings.Add("ResolveDate", "ResolveDate");
 
             objbulk_Tehran_VIP_CC.WriteToServer(Tehran_VIP_CC);
 
