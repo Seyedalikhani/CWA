@@ -1,6 +1,6 @@
 ﻿namespace CWA
 {
-    partial class Form9
+    partial class Availability
     {
         /// <summary>
         /// Required designer variable.

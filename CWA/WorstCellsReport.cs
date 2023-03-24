@@ -16,21 +16,21 @@ using ClosedXML.Excel;
 namespace CWA
 {
 
-    public partial class Form2 : Form
+    public partial class WorstCellsReport : Form
     {
-        public Form2()
+        public WorstCellsReport()
         {
             InitializeComponent();
         }
 
 
-        public Form1 form1;
+        public Main form1;
 
 
-        public Form2(Form form)
+        public WorstCellsReport(Form form)
         {
             InitializeComponent();
-            form1 = (Form1)form;
+            form1 = (Main)form;
         }
 
 

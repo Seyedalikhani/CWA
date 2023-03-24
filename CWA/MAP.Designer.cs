@@ -1,6 +1,6 @@
 ﻿namespace CWA
 {
-    partial class Form5
+    partial class MAP
     {
         /// <summary>
         /// Required designer variable.

@@ -1,6 +1,6 @@
 ﻿namespace CWA
 {
-    partial class Form12
+    partial class Core
     {
         /// <summary>
         /// Required designer variable.

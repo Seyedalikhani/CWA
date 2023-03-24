@@ -23,16 +23,16 @@ using System.Collections;
 
 namespace CWA
 {
-    public partial class Form5 : Form
+    public partial class MAP : Form
     {
 
-        public Form5()
+        public MAP()
         {
             InitializeComponent();
         }
 
 
-        public Form1 form1;
+        public Main form1;
 
 
         public string ConnectionString = "";
@@ -164,10 +164,10 @@ namespace CWA
 
 
 
-        public Form5(Form form)
+        public MAP(Form form)
         {
             InitializeComponent();
-            form1 = (Form1)form;
+            form1 = (Main)form;
         }
 
 
@@ -1633,8 +1633,8 @@ namespace CWA
             gMapControl1.Overlays.Add(Layer20);
             Nodes = new List<TNode>();
 
-           //ConnectionString = @"Server=" + Server_Name + "; Database=" + DataBase_Name + "; Trusted_Connection=True;";
-           ConnectionString = @"Server=" + Server_Name + "; Database=" + DataBase_Name + "; User ID=cwpcApp;Password=cwpcApp@830625#Ahmad; Max Pool Size=10;";
+            //ConnectionString = @"Server=" + Server_Name + "; Database=" + DataBase_Name + "; Trusted_Connection=True;";
+            ConnectionString = @"Server=" + Server_Name + "; Database=" + DataBase_Name + "; User ID=cwpcApp;Password=cwpcApp@830625#Ahmad; Max Pool Size=10;";
             connection = new SqlConnection(ConnectionString);
             connection.Open();
 

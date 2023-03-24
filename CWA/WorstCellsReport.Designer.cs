@@ -1,6 +1,6 @@
 ﻿namespace CWA
 {
-    partial class Form2
+    partial class WorstCellsReport
     {
         /// <summary>
         /// Required designer variable.

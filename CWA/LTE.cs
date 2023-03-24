@@ -15,21 +15,21 @@ using System.Text.RegularExpressions;
 
 namespace CWA
 {
-    public partial class Form8 : Form
+    public partial class LTE : Form
     {
-        public Form8()
+        public LTE()
         {
             InitializeComponent();
         }
 
 
-        public Form1 form1;
+        public Main form1;
 
 
-        public Form8(Form form)
+        public LTE(Form form)
         {
             InitializeComponent();
-            form1 = (Form1)form;
+            form1 = (Main)form;
         }
 
         public string ConnectionString = "";

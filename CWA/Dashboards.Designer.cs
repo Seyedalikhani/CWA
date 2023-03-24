@@ -1,6 +1,6 @@
 ﻿namespace CWA
 {
-    partial class Form3
+    partial class Dashboards
     {
         /// <summary>
         /// Required designer variable.

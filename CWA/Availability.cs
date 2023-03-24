@@ -16,21 +16,21 @@ using System.Reflection;
 
 namespace CWA
 {
-    public partial class Form9 : Form
+    public partial class Availability : Form
     {
-        public Form9()
+        public Availability()
         {
             InitializeComponent();
         }
 
 
-        public Form1 form1;
+        public Main form1;
 
 
-        public Form9(Form form)
+        public Availability(Form form)
         {
             InitializeComponent();
-            form1 = (Form1)form;
+            form1 = (Main)form;
 
 
         }

@@ -15,21 +15,21 @@ using ClosedXML.Excel;
 
 namespace CWA
 {
-    public partial class Form3 : Form
+    public partial class Dashboards : Form
     {
-        public Form3()
+        public Dashboards()
         {
             InitializeComponent();
         }
 
 
-        public Form1 form1;
+        public Main form1;
 
 
-        public Form3(Form form)
+        public Dashboards(Form form)
         {
             InitializeComponent();
-            form1 = (Form1)form;
+            form1 = (Main)form;
         }
 
         public string Vendor = "";

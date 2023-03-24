@@ -1,6 +1,6 @@
 ﻿namespace CWA
 {
-    partial class Form13
+    partial class CustomerComplaint
     {
         /// <summary>
         /// Required designer variable.
@@ -65,7 +65,7 @@
             this.Controls.Add(this.button2);
             this.Controls.Add(this.button1);
             this.Name = "Form13";
-            this.Text = "Customer Complain";
+            this.Text = "Customer Complaint";
             this.Load += new System.EventHandler(this.Form13_Load);
             this.ResumeLayout(false);
 

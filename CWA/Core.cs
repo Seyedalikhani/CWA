@@ -19,23 +19,23 @@ using System.Text.RegularExpressions;
 
 namespace CWA
 {
-    public partial class Form12 : Form
+    public partial class Core : Form
     {
 
 
-        public Form12()
+        public Core()
         {
             InitializeComponent();
         }
 
 
-        public Form1 form1;
+        public Main form1;
 
 
-        public Form12(Form form)
+        public Core(Form form)
         {
             InitializeComponent();
-            form1 = (Form1)form;
+            form1 = (Main)form;
         }
 
 

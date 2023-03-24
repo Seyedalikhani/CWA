@@ -17,27 +17,26 @@ using System.Reflection;
 
 namespace CWA
 {
-    public partial class Form6 : Form
+    public partial class KPIZero : Form
     {
-        public Form6()
+        public KPIZero()
         {
             InitializeComponent();
         }
 
 
-        public Form1 form1;
+        public Main form1;
 
 
-        public Form6(Form form)
+        public KPIZero(Form form)
         {
             InitializeComponent();
-            form1 = (Form1)form;
+            form1 = (Main)form;
         }
 
 
         public string ConnectionString = "";
         public SqlConnection connection = new SqlConnection();
-        //public string Server_Name = "172.26.7.159";
         public string Server_Name = "PERFORMANCEDB01";
         public string DataBase_Name = "Performance_NAK";
         public string Technology = "";
@@ -46,14 +45,13 @@ namespace CWA
         public DataTable Data_Table_3G_CS = new DataTable();
         public DataTable Data_Table_3G_PS = new DataTable();
         public DataTable Data_Table_3G = new DataTable();
-        public DataTable  Data_Table_3G_SectorAgg = new DataTable();
+        public DataTable Data_Table_3G_SectorAgg = new DataTable();
         public DataTable Site_Data_Table_3G = new DataTable();
         public DataTable Data_Table_4G = new DataTable();
         public DataTable Site_Data_Table_4G = new DataTable();
         public string Input_Type = "DataBase";
         public string FName = "";
         public IXLWorksheet Source_worksheet = null;
-        //public DataTable Data_Table_2G = new DataTable();
         public Excel.Application xlApp { get; set; }
         public Excel.Workbook xlWorkBook { get; set; }
         public Excel.Worksheet Sheet { get; set; }
@@ -62,7 +60,7 @@ namespace CWA
 
 
 
-
+        // Method of Converting Varlist to Table
         public DataTable ConvertToDataTable<T>(IEnumerable<T> varlist)
         {
             DataTable dtReturn = new DataTable();
@@ -106,49 +104,30 @@ namespace CWA
 
 
 
-
-        //public double Average_func(double[] arr)
-        //{
-        //    int size = arr.Length;
-        //    double sum = 0;
-        //    double average = 0;
-        //    int count = 0;
-
-        //    for (int i = 0; i < size; i++)
-        //    {
-        //        if (arr[i] != null && arr[i] != "")
-        //        {
-        //            sum = sum + arr[i];
-        //            count = count + 1;
-        //        }
-
-        //    }
-
-        //    average = sum / count; // sum divided by total elements in array
-        //    return average;
-
-
-        //}
+        // Method of Query Execution with Output
+        public DataTable Query_Execution_Table_Output(String Query)
+        {
+            string Quary_String = Query;
+            SqlCommand Quary_Command = new SqlCommand(Quary_String, connection);
+            Quary_Command.CommandTimeout = 0;
+            Quary_Command.ExecuteNonQuery();
+            DataTable Output_Table = new DataTable();
+            SqlDataAdapter dataAdapter_Quary_Command = new SqlDataAdapter(Quary_Command);
+            dataAdapter_Quary_Command.Fill(Output_Table);
+            return Output_Table;
+        }
 
 
 
 
         private void Form6_Load(object sender, EventArgs e)
         {
-            //string [] arr = { "10", "20", "", "8",null };
-            //double av = sumAverageElements(arr);
 
-
-
-            ConnectionString = @"Server=" + Server_Name + "; Database=" + DataBase_Name + "; User ID=cwpcApp;Password=cwpcApp@830625#Ahmad";
-            connection = new SqlConnection(ConnectionString);
-            connection.Open();
-
+            //ConnectionString = @"Server=" + Server_Name + "; Database=" + DataBase_Name + "; User ID=cwpcApp;Password=cwpcApp@830625#Ahmad";
+            //connection = new SqlConnection(ConnectionString);
+            //connection.Open();
 
         }
-
-
-
 
 
 
@@ -204,169 +183,6 @@ namespace CWA
 
         void my_thread1()
         {
-
-            //if (Input_Type == "DataBase")
-            //{
-
-
-
-            //    string site_list = textBox1.Text;
-            //    string Site_Disticnts1 = Regex.Replace(site_list, "[^a-zA-Z0-9]", " ");
-            //    Site_Disticnts1 = Regex.Replace(Site_Disticnts1, " {2,}", " ").Trim();
-            //    string[] Site_Code_Distincts = Site_Disticnts1.Split(' ');
-
-            //    string EH_sites_list_2G = "";
-            //    string H_sites_list_2G = "";
-            //    string N_sites_list_2G = "";
-            //    string sites_list_3G = "";
-            //    string EH_sites_list_4G = "";
-            //    string N_sites_list_4G = "";
-
-            //    int Data_in_2G = 0;
-            //    int Data_in_3G = 0;
-            //    int Data_in_4G = 0;
-
-            //    for (int i = 0; i < Site_Code_Distincts.Count(); i++)
-            //    {
-
-
-            //        string Band_Letter = Site_Code_Distincts[i].Substring(3,1);
-
-            //        if (Band_Letter=="g" || Band_Letter == "G" || Site_Code_Distincts[i].Length==6)
-            //        {
-            //            Technology = "2G";
-            //            Data_in_2G++;
-            //        }
-            //        if (Band_Letter == "u" || Band_Letter == "U")
-            //        {
-            //            Technology = "3G";
-            //            Data_in_3G++;
-            //        }
-
-            //        if (Band_Letter == "l" || Band_Letter == "L" )
-            //        {
-            //            Technology = "4G";
-            //            Data_in_4G++;
-            //        }
-
-            //        if (Technology == "2G")
-            //        {
-            //            string Letter_6_Site = Site_Code_Distincts[i];
-            //            if (Site_Code_Distincts[i].Length>6)
-            //            {
-            //                Letter_6_Site = Site_Code_Distincts[i].Substring(0, 2) + Site_Code_Distincts[i].Substring(4, 4);
-            //            }
-            //            EH_sites_list_2G = EH_sites_list_2G + "substring([Cell],1,6)='" + Letter_6_Site + "' or ";
-            //            H_sites_list_2G = H_sites_list_2G + "substring([Cell],1,2)+substring([Cell],5,4)='" + Letter_6_Site + "' or ";
-            //            N_sites_list_2G = N_sites_list_2G + "substring([Seg],1,2)+substring([Seg],5,4)='" + Letter_6_Site + "' or ";
-            //        }
-            //        if (Technology == "3G" || Technology == "3G-MCI")
-            //        {
-            //            sites_list_3G = sites_list_3G + "substring([ElementID1],1,8)='" + Site_Code_Distincts[i] + "' or ";
-            //        }
-            //        if (Technology == "4G")
-            //        {
-            //            EH_sites_list_4G = EH_sites_list_4G + "substring([eNodeB],1,8)='" + Site_Code_Distincts[i] + "' or ";
-            //            N_sites_list_4G = N_sites_list_4G + "substring([ElementID1],1,8)='" + Site_Code_Distincts[i] + "' or ";
-            //        }
-
-            //    }
-            //    if (Data_in_2G != 0)
-            //    {
-            //        EH_sites_list_2G = EH_sites_list_2G.Substring(0, EH_sites_list_2G.Length - 4);
-            //        H_sites_list_2G = H_sites_list_2G.Substring(0, H_sites_list_2G.Length - 4);
-            //        N_sites_list_2G = N_sites_list_2G.Substring(0, N_sites_list_2G.Length - 4);
-            //    }
-            //    if (Data_in_3G != 0)
-            //    {
-            //        sites_list_3G = sites_list_3G.Substring(0, sites_list_3G.Length - 4);
-            //    }
-            //    if (Data_in_4G != 0)
-            //    {
-            //        EH_sites_list_4G = EH_sites_list_4G.Substring(0, EH_sites_list_4G.Length - 4);
-            //        N_sites_list_4G = N_sites_list_4G.Substring(0, N_sites_list_4G.Length - 4);
-            //    }
-
-            //    string date_list = "";
-            //    string EH_date_list = "";
-            //    string N_date_list = "";
-            //    for (int i = 0; i < listBox1.Items.Count; i++)
-            //    {
-            //        string date_list1 = listBox1.Items[i].ToString();
-            //        int space_index = 0;
-            //        for (int k = 0; k < date_list1.Length; k++)
-            //        {
-            //            if (date_list1[k].ToString() == " ")
-            //            {
-            //                space_index = k;
-            //                break;
-            //            }
-            //        }
-            //        string Day = date_list1.Substring(space_index + 1, date_list1.Length - space_index - 1);
-            //        //if (Technology != "4G")
-            //        //{
-            //            date_list = date_list + "substring(convert(varchar, Date, 23), 1, 10) = '" + Day + "' or ";
-            //        //}
-            //        //if (Technology == "4G")
-            //        //{
-            //            EH_date_list = EH_date_list + "substring(convert(varchar, Datetime, 23), 1, 10) = '" + Day + "' or ";
-            //            N_date_list = N_date_list + "substring(convert(varchar, Date, 23), 1, 10) = '" + Day + "' or ";
-            //       // }
-            //    }
-            //    //if (Technology != "4G")
-            //    //{
-            //        date_list = date_list.Substring(0, date_list.Length - 4);
-            //    //}
-            //    //if (Technology == "4G")
-            //    //{
-            //        EH_date_list = EH_date_list.Substring(0, EH_date_list.Length - 4);
-            //        N_date_list = N_date_list.Substring(0, N_date_list.Length - 4);
-            //   // }
-
-
-
-
-            //    if (Data_in_2G != 0)
-            //    {
-
-            //        string Data_Quary = @"select [Date], [BSC], [Cell], [TCH_Traffic_BH] as 'TCH_Traffic_BH (Erlang)', [TCH_Availability] as 'TCH Availability' from [dbo].[CC2_Ericsson_Cell_BH] where  (" + EH_sites_list_2G + ") and (" + date_list + ")" +
-            //            @" union all select [Date], [BSC], [Cell], [TCH_Traffic_BH] as 'TCH_Traffic_BH (Erlang)', [TCH_Availability] as 'TCH Availability' from [dbo].[CC2_Huawei_Cell_BH] where (" + EH_sites_list_2G + ") and (" + date_list + ")" +
-            //            @" union all select [Date], [BSC], [Cell], [TCH_Traffic_BH] as 'TCH_Traffic_BH (Erlang)', [TCH_Availability] as 'TCH Availability' from [dbo].[CC2_Huawei_Cell_BH] where (" + H_sites_list_2G + ") and (" + date_list + ")" +
-            //            @" union all select [Date], [BSC], [SEG] as 'Cell', [TCH_Traffic_BH] as 'TCH_Traffic_BH (Erlang)', [TCH_Availability] as 'TCH Availability' from [dbo].[CC2_Nokia_Cell_BH] where (" + N_sites_list_2G + ") and (" + date_list + ")";
-
-            //        SqlCommand Data_Quary1 = new SqlCommand(Data_Quary, connection);
-            //        Data_Quary1.CommandTimeout = 0;
-            //        Data_Quary1.ExecuteNonQuery();
-            //        Data_Table_2G = new DataTable();
-            //        SqlDataAdapter Date_Table1 = new SqlDataAdapter(Data_Quary1);
-            //        Date_Table1.Fill(Data_Table_2G);
-
-            //        Data_Table_2G.Columns.Add("Traffic Score", typeof(int));
-            //        Data_Table_2G.Columns.Add("Availability Score", typeof(int));
-            //        Data_Table_2G.Columns.Add("Cell Score", typeof(double));
-            //        // Data_Table_2G.Columns.Add("Site Score", typeof(double));
-            //        Data_Table_2G.Columns.Add("Site", typeof(string));
-
-
-            //        Site_Data_Table_2G = new DataTable();
-            //        Site_Data_Table_2G.Columns.Add("Site", typeof(string));
-            //        Site_Data_Table_2G.Columns.Add("Pre KPI Zero Status", typeof(string));
-            //        Site_Data_Table_2G.Columns.Add("Rejected Cell List", typeof(string));
-
-
-
-
-
-
-            //    }
-
-
-
-
-
-
-
-            //    }
 
 
             if (Input_Type == "DataBase")
@@ -461,12 +277,14 @@ namespace CWA
                         @" union all select [Date], [BSC], [Cell], [TCH_Traffic_BH] as 'TCH_Traffic_BH (Erlang)', [CSSR3] as'CSSR', [CDR3] as 'Voice Drop Rate', [IHSR2] as 'IHSR', [OHSR2] as 'OHSR',  [TCH_Availability] as 'TCH Availability' from [dbo].[CC2_Huawei_Cell_BH] where (" + H_sites_list + ") and (" + date_list + ")" +
                         @" union all select [Date], [BSC], [SEG] as 'Cell', [TCH_Traffic_BH] as 'TCH_Traffic_BH (Erlang)', [CSSR_MCI] as'CSSR', [CDR(including_CS_IRAT_handovers_3G_to2G)(Nokia_SEG)] as 'Voicde  Drop Rate', [IHSR] as 'IHSR', [OHSR] AS 'OHSR', [TCH_Availability] as 'TCH Availability' from [dbo].[CC2_Nokia_Cell_BH] where (" + N_sites_list + ") and (" + date_list + ")";
 
-                    SqlCommand Data_Quary1 = new SqlCommand(Data_Quary, connection);
-                    Data_Quary1.CommandTimeout = 0;
-                    Data_Quary1.ExecuteNonQuery();
-                    Data_Table_2G = new DataTable();
-                    SqlDataAdapter Date_Table1 = new SqlDataAdapter(Data_Quary1);
-                    Date_Table1.Fill(Data_Table_2G);
+                    Data_Table_2G = Query_Execution_Table_Output(Data_Quary);
+
+                    //SqlCommand Data_Quary1 = new SqlCommand(Data_Quary, connection);
+                    //Data_Quary1.CommandTimeout = 0;
+                    //Data_Quary1.ExecuteNonQuery();
+                    //Data_Table_2G = new DataTable();
+                    //SqlDataAdapter Date_Table1 = new SqlDataAdapter(Data_Quary1);
+                    //Date_Table1.Fill(Data_Table_2G);
 
                     Data_Table_2G.Columns.Add("Traffic Score", typeof(int));
                     Data_Table_2G.Columns.Add("CSSR Score", typeof(int));
@@ -475,7 +293,6 @@ namespace CWA
                     Data_Table_2G.Columns.Add("OHSR Score", typeof(int));
                     Data_Table_2G.Columns.Add("Availability Score", typeof(int));
                     Data_Table_2G.Columns.Add("Cell Score", typeof(double));
-                    // Data_Table_2G.Columns.Add("Site Score", typeof(double));
                     Data_Table_2G.Columns.Add("Site", typeof(string));
 
 
@@ -486,11 +303,8 @@ namespace CWA
                     Site_Data_Table_2G.Columns.Add("Rejected Cell List", typeof(string));
 
 
-                    // dataGridView1.ColumnCount = 11;
                     dataGridView1.Invoke(new Action(() => dataGridView1.ColumnCount = 11));
-                    // dataGridView1.Rows.Clear();
                     dataGridView1.Invoke(new Action(() => dataGridView1.Rows.Clear()));
-                    // dataGridView1.RowCount = Data_Table_2G.Rows.Count + 1;
                     dataGridView1.Invoke(new Action(() => dataGridView1.RowCount = Data_Table_2G.Rows.Count + 1));
 
                     dataGridView1.Invoke(new Action(() => dataGridView1.Rows[0].Cells[0].Value = "Date")); dataGridView1.Invoke(new Action(() => dataGridView1.Columns[0].Width = 100));
@@ -505,20 +319,6 @@ namespace CWA
                     dataGridView1.Invoke(new Action(() => dataGridView1.Rows[0].Cells[9].Value = "Availability")); dataGridView1.Invoke(new Action(() => dataGridView1.Columns[9].Width = 100));
                     dataGridView1.Invoke(new Action(() => dataGridView1.Rows[0].Cells[10].Value = "Cell Status")); dataGridView1.Invoke(new Action(() => dataGridView1.Columns[10].Width = 100));
 
-
-                    //dataGridView1.Rows[0].Cells[0].Value = "Date"; dataGridView1.Columns[0].Width = 100;
-                    //dataGridView1.Rows[0].Cells[1].Value = "BSC"; dataGridView1.Columns[1].Width = 100;
-                    //dataGridView1.Rows[0].Cells[2].Value = "Site"; dataGridView1.Columns[2].Width = 100;
-                    //dataGridView1.Rows[0].Cells[3].Value = "Cell"; dataGridView1.Columns[3].Width = 100;
-                    //dataGridView1.Rows[0].Cells[4].Value = "TCH_Traffic_BH (Erlang)"; dataGridView1.Columns[4].Width = 100;
-                    //dataGridView1.Rows[0].Cells[5].Value = "CSSR"; dataGridView1.Columns[5].Width = 100;
-                    //dataGridView1.Rows[0].Cells[6].Value = "CDR"; dataGridView1.Columns[6].Width = 100;
-                    //dataGridView1.Rows[0].Cells[7].Value = "IHSR"; dataGridView1.Columns[7].Width = 100;
-                    //dataGridView1.Rows[0].Cells[8].Value = "OHSR"; dataGridView1.Columns[8].Width = 100;
-                    //dataGridView1.Rows[0].Cells[9].Value = "Availability"; dataGridView1.Columns[9].Width = 100;
-                    //dataGridView1.Rows[0].Cells[10].Value = "Cell Status"; dataGridView1.Columns[10].Width = 100;
-                    // dataGridView1.Rows[0].Cells[11].Value = "Site Status"; dataGridView1.Columns[11].Width = 100;
-
                     progressBar1.Minimum = 0;
 
 
@@ -530,7 +330,6 @@ namespace CWA
 
                     if (Data_Table_2G.Rows.Count != 0)
                     {
-                        //progressBar1.Maximum = Data_Table_2G.Rows.Count - 1;
                         progressBar1.Invoke(new Action(() => progressBar1.Maximum = Data_Table_2G.Rows.Count - 1));
                         for (int k = 0; k < Data_Table_2G.Rows.Count; k++)
                         {
@@ -538,10 +337,8 @@ namespace CWA
                             int result = 0;
 
                             // Date
-                            //dataGridView1.Rows[k + 1].Cells[0].Value = Data_Table_2G.Rows[k][0];
                             dataGridView1.Invoke(new Action(() => dataGridView1.Rows[k + 1].Cells[0].Value = Data_Table_2G.Rows[k][0]));
                             //BSC
-                            //   dataGridView1.Rows[k + 1].Cells[1].Value = Data_Table_2G.Rows[k][1];
                             dataGridView1.Invoke(new Action(() => dataGridView1.Rows[k + 1].Cells[1].Value = Data_Table_2G.Rows[k][1]));
 
                             // Site
@@ -555,17 +352,13 @@ namespace CWA
                             {
                                 Site = Cell.Substring(0, 2) + Cell.Substring(4, 4);
                             }
-                            //dataGridView1.Rows[k + 1].Cells[2].Value = Site;
                             dataGridView1.Invoke(new Action(() => dataGridView1.Rows[k + 1].Cells[2].Value = Site));
                             Data_Table_2G.Rows[k][16] = Site;
 
                             // Cell
-                            // dataGridView1.Rows[k + 1].Cells[3].Value = Data_Table_2G.Rows[k][2];
                             dataGridView1.Invoke(new Action(() => dataGridView1.Rows[k + 1].Cells[3].Value = Data_Table_2G.Rows[k][2]));
 
                             // Traffic
-
-                            //  dataGridView1.Rows[k + 1].Cells[4].Value = Data_Table_2G.Rows[k][3];
                             dataGridView1.Invoke(new Action(() => dataGridView1.Rows[k + 1].Cells[4].Value = Data_Table_2G.Rows[k][3]));
                             if (Data_Table_2G.Rows[k][3].ToString() == "")
                             {
@@ -581,7 +374,6 @@ namespace CWA
                             }
 
                             // CSSR
-                            // dataGridView1.Rows[k + 1].Cells[5].Value = Data_Table_2G.Rows[k][4];
                             dataGridView1.Invoke(new Action(() => dataGridView1.Rows[k + 1].Cells[5].Value = Data_Table_2G.Rows[k][4]));
                             if (Data_Table_2G.Rows[k][4].ToString() == "")
                             {
@@ -597,7 +389,6 @@ namespace CWA
                             }
 
                             // CDR
-                            // dataGridView1.Rows[k + 1].Cells[6].Value = Data_Table_2G.Rows[k][5];
                             dataGridView1.Invoke(new Action(() => dataGridView1.Rows[k + 1].Cells[6].Value = Data_Table_2G.Rows[k][5]));
                             if (Data_Table_2G.Rows[k][5].ToString() == "")
                             {
@@ -613,7 +404,6 @@ namespace CWA
                             }
 
                             // IHSR
-                            //  dataGridView1.Rows[k + 1].Cells[7].Value = Data_Table_2G.Rows[k][6];
                             dataGridView1.Invoke(new Action(() => dataGridView1.Rows[k + 1].Cells[7].Value = Data_Table_2G.Rows[k][6]));
                             if (Data_Table_2G.Rows[k][6].ToString() == "")
                             {
@@ -629,7 +419,6 @@ namespace CWA
                             }
 
                             // OHSR
-                            //  dataGridView1.Rows[k + 1].Cells[8].Value = Data_Table_2G.Rows[k][7];
                             dataGridView1.Invoke(new Action(() => dataGridView1.Rows[k + 1].Cells[8].Value = Data_Table_2G.Rows[k][7]));
                             if (Data_Table_2G.Rows[k][7].ToString() == "")
                             {
@@ -645,7 +434,6 @@ namespace CWA
                             }
 
                             // Availability
-                            //  dataGridView1.Rows[k + 1].Cells[9].Value = Data_Table_2G.Rows[k][8];
                             dataGridView1.Invoke(new Action(() => dataGridView1.Rows[k + 1].Cells[9].Value = Data_Table_2G.Rows[k][8]));
                             if (Data_Table_2G.Rows[k][8].ToString() == "")
                             {
@@ -674,7 +462,6 @@ namespace CWA
                                 Data_Table_2G.Rows[k][15] = 0; dataGridView1.Rows[k + 1].Cells[10].Value = "Rejected";
                             }
 
-                            //progressBar1.Value = k;
                             progressBar1.Invoke(new Action(() => progressBar1.Value = k));
 
                         }
@@ -803,19 +590,14 @@ inner join (SELECT [Day]
   T1.[Sector]=T2.[Sector]";
 
 
-                    SqlCommand CS_Data_Quary = new SqlCommand(Data_Quary2, connection);
-                    CS_Data_Quary.CommandTimeout = 0;
-                    CS_Data_Quary.ExecuteNonQuery();
-                    Data_Table_3G_CS = new DataTable();
-                    SqlDataAdapter Date_Table1 = new SqlDataAdapter(CS_Data_Quary);
-                    Date_Table1.Fill(Data_Table_3G_CS);
+                    //SqlCommand CS_Data_Quary = new SqlCommand(Data_Quary2, connection);
+                    //CS_Data_Quary.CommandTimeout = 0;
+                    //CS_Data_Quary.ExecuteNonQuery();
+                    //Data_Table_3G_CS = new DataTable();
+                    //SqlDataAdapter Date_Table1 = new SqlDataAdapter(CS_Data_Quary);
+                    //Date_Table1.Fill(Data_Table_3G_CS);
 
-
-
-
-                    //string Data_Quary3 = @" select [Date], substring(convert(varchar,Date,23),1,10) as 'Day', [ElementID] as 'RNC', substring([ElementID1],1,9) as 'Sector', [ElementID1] as 'Cell', [PS_Volume(GB)(UCell_Eric)] as 'PS_Traffic_Daily (GB)', [Ps_RAB_Establish_Success_Rate] as 'PS RAB Establish', [PS_RRC_Setup_Success_Rate(UCell_Eric)] as'PS RRC SR', [HSDPA_Drop_Call_Rate(UCell_Eric)] as 'HSDPA Drop Rate', [uplink_average_RSSI_dbm_(Eric_UCELL)] as 'RSSI (dBm)' from [dbo].[RD3_Ericsson_Cell_Daily] where  (" + sites_list + ") and (" + date_list + ")" +
-                    //  @" union all select [Date], substring(convert(varchar,Date,23),1,10) as 'Day', [ElementID] as 'RNC',  substring([ElementID1],1,9) as 'Sector', [ElementID1] as 'Cell', [PAYLOAD] as 'PS_Traffic_Daily (GB)', [PS_RAB_Setup_Success_Ratio] as 'PS RAB Establish', [PS_RRC_Connection_success_Rate_repeatless(Hu_Cell)] as'PS RRC SR',  [HSDPA_cdr(%)_(Hu_Cell)_new] as 'HSDPA Drop Rate',  [Mean_RTWP(Cell_Hu)] as 'RSSI (dBm)' from [dbo].[RD3_Huawei_Cell_Daily] where (" + sites_list + ") and (" + date_list + ")" +
-                    //  @" union all select [Date], substring(convert(varchar,Date,23),1,10) as 'Day', [ElementID] as 'RNC',  substring([ElementID1],1,9) as 'Sector', [ElementID1] as 'Cell', [PS_Payload_Total(HS+R99)(Nokia_CELL)_GB] as 'PS_Traffic_Daily (GB)', [RAB_Setup_and_Access_Complete_Ratio_for_NRT_Service_from_User_pe] as 'PS RAB Establish', [PS_RRCSETUP_SR] as 'PS RRC SR', [HSDPA_Call_Drop_Rate(Nokia_Cell)] as 'HSDPA Drop Rate', [average_RTWP_dbm(Nokia_Cell)] as 'RSSI (dBm)' from [dbo].[RD3_Nokia_Cell_Daily] where (" + sites_list + ") and (" + date_list + ")";
+                    Data_Table_3G_CS = Query_Execution_Table_Output(Data_Quary2);
 
 
                     string Data_Quary3 = @" select [Date], substring(convert(varchar,Date,23),1,10) as 'Day', [ElementID] as 'RNC', substring([ElementID1],1,9) as 'Sector', [ElementID1] as 'Cell', [PS_Volume(GB)(UCell_Eric)] as 'PS_Traffic_Daily (GB)', [Ps_RAB_Establish_Success_Rate] as 'PS RAB Establish', [PS_RRC_Setup_Success_Rate(UCell_Eric)] as'PS RRC SR', [HSDPA_Drop_Call_Rate(UCell_Eric)] as 'HSDPA Drop Rate' , [HS_USER_Throughput_NET_PQ(Mbps)(UCell_Eric)] as 'HS User THR' from [dbo].[RD3_Ericsson_Cell_Daily] where  (" + sites_list + ") and (" + date_list + ")" +
@@ -898,12 +680,16 @@ inner join (SELECT [Day]
   T1.[Sector]=T2.[Sector]";
 
 
-                    SqlCommand PS_Data_Quary = new SqlCommand(Data_Quary4, connection);
-                    PS_Data_Quary.CommandTimeout = 0;
-                    PS_Data_Quary.ExecuteNonQuery();
-                    Data_Table_3G_PS = new DataTable();
-                    SqlDataAdapter Date_Table2 = new SqlDataAdapter(PS_Data_Quary);
-                    Date_Table2.Fill(Data_Table_3G_PS);
+                    //SqlCommand PS_Data_Quary = new SqlCommand(Data_Quary4, connection);
+                    //PS_Data_Quary.CommandTimeout = 0;
+                    //PS_Data_Quary.ExecuteNonQuery();
+                    //Data_Table_3G_PS = new DataTable();
+                    //SqlDataAdapter Date_Table2 = new SqlDataAdapter(PS_Data_Quary);
+                    //Date_Table2.Fill(Data_Table_3G_PS);
+
+
+                    Data_Table_3G_PS = Query_Execution_Table_Output(Data_Quary4);
+
 
                     Data_Table_3G = new DataTable();
 
@@ -946,29 +732,11 @@ inner join (SELECT [Day]
 
 
 
-                    //dataGridView1.ColumnCount = 14;
                     dataGridView1.Invoke(new Action(() => dataGridView1.ColumnCount = 15));
 
-                    // dataGridView1.Rows.Clear();
-                    dataGridView1.Invoke(new Action(() => dataGridView1.Rows.Clear()));
-                    //dataGridView1.RowCount = Data_Table_3G_CS.Rows.Count + 1;
-                    dataGridView1.Invoke(new Action(() => dataGridView1.RowCount = Data_Table_3G_CS.Rows.Count + 1));
 
-                    //dataGridView1.Rows[0].Cells[0].Value = "Date"; dataGridView1.Columns[0].Width = 100;
-                    //dataGridView1.Rows[0].Cells[1].Value = "RNC"; dataGridView1.Columns[1].Width = 100;
-                    //dataGridView1.Rows[0].Cells[2].Value = "Site"; dataGridView1.Columns[2].Width = 100;
-                    //dataGridView1.Rows[0].Cells[3].Value = "Sector"; dataGridView1.Columns[3].Width = 100;
-                    //dataGridView1.Rows[0].Cells[4].Value = "CS RRC SR"; dataGridView1.Columns[4].Width = 100;
-                    //dataGridView1.Rows[0].Cells[5].Value = "CS RAB Establish"; dataGridView1.Columns[5].Width = 100;
-                    //dataGridView1.Rows[0].Cells[6].Value = "Voice Drop Rate"; dataGridView1.Columns[6].Width = 100;
-                    //dataGridView1.Rows[0].Cells[7].Value = "Cell Availability"; dataGridView1.Columns[7].Width = 100;
-                    //dataGridView1.Rows[0].Cells[8].Value = "BH CS Traffic (Erlang)"; dataGridView1.Columns[8].Width = 100;
-                    //dataGridView1.Rows[0].Cells[9].Value = "PS RRC SR"; dataGridView1.Columns[9].Width = 100;
-                    //dataGridView1.Rows[0].Cells[10].Value = "PS RAB Establish"; dataGridView1.Columns[10].Width = 100;
-                    //dataGridView1.Rows[0].Cells[11].Value = "HSDPA Drop Rate"; dataGridView1.Columns[11].Width = 100;
-                    ////dataGridView1.Rows[0].Cells[12].Value = "RSSI (dBm)"; dataGridView1.Columns[12].Width = 100;
-                    //dataGridView1.Rows[0].Cells[12].Value = "Daily PS Traffic (GB)"; dataGridView1.Columns[12].Width = 100;
-                    //dataGridView1.Rows[0].Cells[13].Value = "Cell Status"; dataGridView1.Columns[13].Width = 100;
+                    dataGridView1.Invoke(new Action(() => dataGridView1.Rows.Clear()));
+                    dataGridView1.Invoke(new Action(() => dataGridView1.RowCount = Data_Table_3G_CS.Rows.Count + 1));
 
 
                     dataGridView1.Invoke(new Action(() => dataGridView1.Rows[0].Cells[0].Value = "Date")); dataGridView1.Invoke(new Action(() => dataGridView1.Columns[0].Width = 100));
@@ -992,11 +760,7 @@ inner join (SELECT [Day]
 
 
 
-
-
-
                     progressBar1.Minimum = 0;
-                    //progressBar1.Maximum = Data_Table_3G_CS.Rows.Count - 1;
 
 
                     if (Data_Table_3G_CS.Rows.Count == 0)
@@ -1006,7 +770,6 @@ inner join (SELECT [Day]
 
                     if (Data_Table_3G_CS.Rows.Count != 0)
                     {
-                        // progressBar1.Maximum = Data_Table_3G_CS.Rows.Count - 1;
                         progressBar1.Invoke(new Action(() => progressBar1.Maximum = Data_Table_3G_CS.Rows.Count - 1));
                         for (int k = 0; k < Data_Table_3G_CS.Rows.Count; k++)
                         {
@@ -1028,21 +791,16 @@ inner join (SELECT [Day]
 
 
                             // Date
-                            //  dataGridView1.Rows[k + 1].Cells[0].Value = Data_Table_3G.Rows[k][0];
                             dataGridView1.Invoke(new Action(() => dataGridView1.Rows[k + 1].Cells[0].Value = Data_Table_3G.Rows[k][0]));
                             //RNC
-                            //  dataGridView1.Rows[k + 1].Cells[1].Value = Data_Table_3G.Rows[k][1];
                             dataGridView1.Invoke(new Action(() => dataGridView1.Rows[k + 1].Cells[1].Value = Data_Table_3G.Rows[k][1]));
                             // Site
                             string Cell = Data_Table_3G.Rows[k][2].ToString();
-                            //dataGridView1.Rows[k + 1].Cells[2].Value = Cell.Substring(0, 8);
                             dataGridView1.Invoke(new Action(() => dataGridView1.Rows[k + 1].Cells[2].Value = Cell.Substring(0, 8)));
                             Data_Table_3G.Rows[k][22] = Cell.Substring(0, 8);
                             // Sector
-                            // dataGridView1.Rows[k + 1].Cells[3].Value = Data_Table_3G.Rows[k][2];
                             dataGridView1.Invoke(new Action(() => dataGridView1.Rows[k + 1].Cells[3].Value = Data_Table_3G.Rows[k][2]));
                             // CS RRC SR
-                            // dataGridView1.Rows[k + 1].Cells[4].Value = Data_Table_3G.Rows[k][3];
                             dataGridView1.Invoke(new Action(() => dataGridView1.Rows[k + 1].Cells[4].Value = Data_Table_3G.Rows[k][3]));
                             if (Data_Table_3G.Rows[k][3].ToString() == "")
                             {
@@ -1059,7 +817,6 @@ inner join (SELECT [Day]
 
 
                             // CS RAB Setablish
-                            //  dataGridView1.Rows[k + 1].Cells[5].Value = Data_Table_3G.Rows[k][4];
                             dataGridView1.Invoke(new Action(() => dataGridView1.Rows[k + 1].Cells[5].Value = Data_Table_3G.Rows[k][4]));
                             if (Data_Table_3G.Rows[k][4].ToString() == "")
                             {
@@ -1076,7 +833,6 @@ inner join (SELECT [Day]
 
 
                             // Voice Drop Rate
-                            //dataGridView1.Rows[k + 1].Cells[6].Value = Data_Table_3G.Rows[k][5];
                             dataGridView1.Invoke(new Action(() => dataGridView1.Rows[k + 1].Cells[6].Value = Data_Table_3G.Rows[k][5]));
                             if (Data_Table_3G.Rows[k][5].ToString() == "")
                             {
@@ -1093,7 +849,6 @@ inner join (SELECT [Day]
 
 
                             // Availability
-                            //dataGridView1.Rows[k + 1].Cells[7].Value = Data_Table_3G.Rows[k][6];
                             dataGridView1.Invoke(new Action(() => dataGridView1.Rows[k + 1].Cells[7].Value = Data_Table_3G.Rows[k][6]));
                             if (Data_Table_3G.Rows[k][6].ToString() == "")
                             {
@@ -1110,7 +865,6 @@ inner join (SELECT [Day]
 
 
                             // CS Traffic
-                            // dataGridView1.Rows[k + 1].Cells[8].Value = Data_Table_3G.Rows[k][7];
                             dataGridView1.Invoke(new Action(() => dataGridView1.Rows[k + 1].Cells[8].Value = Data_Table_3G.Rows[k][7]));
                             if (Data_Table_3G.Rows[k][7].ToString() == "")
                             {
@@ -1127,7 +881,6 @@ inner join (SELECT [Day]
 
 
                             // PS RRC SR
-                            //dataGridView1.Rows[k + 1].Cells[9].Value = Data_Table_3G.Rows[k][8];
                             dataGridView1.Invoke(new Action(() => dataGridView1.Rows[k + 1].Cells[9].Value = Data_Table_3G.Rows[k][8]));
                             if (Data_Table_3G.Rows[k][8].ToString() == "")
                             {
@@ -1143,7 +896,6 @@ inner join (SELECT [Day]
                             }
 
                             // PS RAB Establish
-                            // dataGridView1.Rows[k + 1].Cells[10].Value = Data_Table_3G.Rows[k][9];
                             dataGridView1.Invoke(new Action(() => dataGridView1.Rows[k + 1].Cells[10].Value = Data_Table_3G.Rows[k][9]));
                             if (Data_Table_3G.Rows[k][9].ToString() == "")
                             {
@@ -1160,7 +912,6 @@ inner join (SELECT [Day]
 
 
                             // HSDPA Drop Rate
-                            // dataGridView1.Rows[k + 1].Cells[11].Value = Data_Table_3G.Rows[k][10];
                             dataGridView1.Invoke(new Action(() => dataGridView1.Rows[k + 1].Cells[11].Value = Data_Table_3G.Rows[k][10]));
                             if (Data_Table_3G.Rows[k][10].ToString() == "")
                             {
@@ -1178,7 +929,6 @@ inner join (SELECT [Day]
 
 
                             // HS User THR
-                            // dataGridView1.Rows[k + 1].Cells[11].Value = Data_Table_3G.Rows[k][10];
                             dataGridView1.Invoke(new Action(() => dataGridView1.Rows[k + 1].Cells[12].Value = Data_Table_3G.Rows[k][11]));
                             if (Data_Table_3G.Rows[k][11].ToString() == "")
                             {
@@ -1193,34 +943,9 @@ inner join (SELECT [Day]
                                 Data_Table_3G.Rows[k][21] = 0;
                             }
 
-                            // RSSI
-                            //dataGridView1.Rows[k + 1].Cells[12].Value = Data_Table_3G.Rows[k][11];
-                            //string Band = Cell.Substring(2, 2);
-                            //if (Data_Table_3G.Rows[k][11].ToString() == "")
-                            //{
-                            //    Data_Table_3G.Rows[k][21] = -1;
-                            //}
-                            //else if ((Convert.ToDouble(Data_Table_3G.Rows[k][11]) > Convert.ToDouble(textBox17.Text)) && (Band == "2U" || Band == "5U" || Band == "8U"))
-                            //{
-                            //    Data_Table_3G.Rows[k][21] = 1; result++; dataGridView1.Rows[k + 1].Cells[12].Style.BackColor = Color.Orange;
-                            //}
-                            //else if ((Convert.ToDouble(Data_Table_3G.Rows[k][11]) > Convert.ToDouble(textBox18.Text)) && (Band == "1U" || Band == "4U" || Band == "7U"))
-                            //{
-                            //    Data_Table_3G.Rows[k][21] = 1; result++; dataGridView1.Rows[k + 1].Cells[12].Style.BackColor = Color.Orange;
-                            //}
-                            //else if ((Convert.ToDouble(Data_Table_3G.Rows[k][11]) <= Convert.ToDouble(textBox17.Text)) && (Band == "2U" || Band == "5U" || Band == "8U"))
-                            //{
-                            //    Data_Table_3G.Rows[k][21] = 0;
-                            //}
-                            //else if ((Convert.ToDouble(Data_Table_3G.Rows[k][11]) <= Convert.ToDouble(textBox18.Text)) && (Band == "1U" || Band == "4U" || Band == "7U"))
-                            //{
-                            //    Data_Table_3G.Rows[k][21] = 0;
-                            //}
-
 
 
                             // PS Traffic
-                            //dataGridView1.Rows[k + 1].Cells[12].Value = Data_Table_3G.Rows[k][11];
                             dataGridView1.Invoke(new Action(() => dataGridView1.Rows[k + 1].Cells[13].Value = Data_Table_3G.Rows[k][12]));
                             if (Data_Table_3G.Rows[k][12].ToString() == "")
                             {
@@ -1239,10 +964,7 @@ inner join (SELECT [Day]
 
                             if ((Convert.ToInt16(Data_Table_3G.Rows[k][17]) == -1) || (Convert.ToInt16(Data_Table_3G.Rows[k][22]) == -1))
                             {
-                                //         if (Convert.ToInt16(Data_Table_3G.Rows[k][21])!= 0)
-                                //  {
                                 Data_Table_3G.Rows[k][23] = 1; dataGridView1.Rows[k + 1].Cells[13].Value = "Not Updated";
-                                //                             }
                             }
                             else if (result == 0)
                             {
@@ -1253,7 +975,6 @@ inner join (SELECT [Day]
                                 Data_Table_3G.Rows[k][23] = 0; dataGridView1.Rows[k + 1].Cells[13].Value = "Rejected";
                             }
                             progressBar1.Invoke(new Action(() => progressBar1.Value = k));
-                            //   progressBar1.Value = k;
                         }
 
 
@@ -1385,25 +1106,20 @@ inner join (SELECT [Day]
   T1.[Sector]=T2.[Sector]";
 
 
-                    SqlCommand CS_Data_Quary = new SqlCommand(Data_Quary2, connection);
-                    CS_Data_Quary.CommandTimeout = 0;
-                    CS_Data_Quary.ExecuteNonQuery();
-                    Data_Table_3G_CS = new DataTable();
-                    SqlDataAdapter Date_Table1 = new SqlDataAdapter(CS_Data_Quary);
-                    Date_Table1.Fill(Data_Table_3G_CS);
+                    //SqlCommand CS_Data_Quary = new SqlCommand(Data_Quary2, connection);
+                    //CS_Data_Quary.CommandTimeout = 0;
+                    //CS_Data_Quary.ExecuteNonQuery();
+                    //Data_Table_3G_CS = new DataTable();
+                    //SqlDataAdapter Date_Table1 = new SqlDataAdapter(CS_Data_Quary);
+                    //Date_Table1.Fill(Data_Table_3G_CS);
 
+                    Data_Table_3G_CS = Query_Execution_Table_Output(Data_Quary2);
 
 
 
                     string Data_Quary3 = @" select [Date], substring(convert(varchar,Date,23),1,10) as 'Day', [ElementID] as 'RNC', substring([ElementID1],1,9) as 'Sector', [ElementID1] as 'Cell', [PS_Volume(GB)(UCell_Eric)] as 'PS_Traffic_Daily (GB)',  [PS_RRC_Setup_Success_Rate(UCell_Eric)] as'PS RRC SR', [PS_Drop_Call_Rate(UCell_Eric)] as 'PS Drop Rate', [uplink_average_RSSI_dbm_(Eric_UCELL)] as 'RSSI' , [HS_USER_Throughput_NET_PQ(Mbps)(UCell_Eric)] as 'HS User THR' from [dbo].[RD3_Ericsson_Cell_Daily] where  (" + sites_list + ") and (" + date_list + ")" +
                       @" union all select [Date], substring(convert(varchar,Date,23),1,10) as 'Day', [ElementID] as 'RNC',  substring([ElementID1],1,9) as 'Sector', [ElementID1] as 'Cell', [PAYLOAD] as 'PS_Traffic_Daily (GB)', [PS_RRC_Connection_success_Rate_repeatless(Hu_Cell)] as'PS RRC SR',  [PS_Call_Drop_Ratio] as 'PS Drop Rate',  [Mean_RTWP(Cell_Hu)] as 'RSSI', [AVERAGE_HSDPA_USER_THROUGHPUT_DC+SC(Mbit/s)(CELL_HUAWEI)] as 'HS User THR' from [dbo].[RD3_Huawei_Cell_Daily] where (" + sites_list + ") and (" + date_list + ")" +
                       @" union all select [Date], substring(convert(varchar,Date,23),1,10) as 'Day', [ElementID] as 'RNC',  substring([ElementID1],1,9) as 'Sector', [ElementID1] as 'Cell', [PS_Payload_Total(HS+R99)(Nokia_CELL)_GB] as 'PS_Traffic_Daily (GB)',  [PS_RRCSETUP_SR] as 'PS RRC SR', [Packet_Session_Drop_Ratio_NOKIA(CELL_NOKIA)] as 'PS Drop Rate', [average_RTWP_dbm(Nokia_Cell)] as 'RSSI', [AVERAGE_HSDPA_USER_THROUGHPUT_DC+SC(Mbit/s)(Nokia_CELL)] as 'HS User THR' from [dbo].[RD3_Nokia_Cell_Daily] where (" + sites_list + ") and (" + date_list + ")";
-
-
-                    //string Data_Quary3 = @" select [Date], substring(convert(varchar,Date,23),1,10) as 'Day', [ElementID] as 'RNC', substring([ElementID1],1,9) as 'Sector', [ElementID1] as 'Cell', [PS_Volume(GB)(UCell_Eric)] as 'PS_Traffic_Daily (GB)', [Ps_RAB_Establish_Success_Rate] as 'PS RAB Establish', [PS_RRC_Setup_Success_Rate(UCell_Eric)] as'PS RRC SR', [HSDPA_Drop_Call_Rate(UCell_Eric)] as 'HSDPA Drop Rate' from [dbo].[RD3_Ericsson_Cell_Daily] where  (" + sites_list + ") and (" + date_list + ")" +
-                    //  @" union all select [Date], substring(convert(varchar,Date,23),1,10) as 'Day', [ElementID] as 'RNC',  substring([ElementID1],1,9) as 'Sector', [ElementID1] as 'Cell', [PAYLOAD] as 'PS_Traffic_Daily (GB)', [PS_RAB_Setup_Success_Ratio] as 'PS RAB Establish', [PS_RRC_Connection_success_Rate_repeatless(Hu_Cell)] as'PS RRC SR',  [HSDPA_cdr(%)_(Hu_Cell)_new] as 'HSDPA Drop Rate' from [dbo].[RD3_Huawei_Cell_Daily] where (" + sites_list + ") and (" + date_list + ")" +
-                    //  @" union all select [Date], substring(convert(varchar,Date,23),1,10) as 'Day', [ElementID] as 'RNC',  substring([ElementID1],1,9) as 'Sector', [ElementID1] as 'Cell', [PS_Payload_Total(HS+R99)(Nokia_CELL)_GB] as 'PS_Traffic_Daily (GB)', [RAB_Setup_and_Access_Complete_Ratio_for_NRT_Service_from_User_pe] as 'PS RAB Establish', [PS_RRCSETUP_SR] as 'PS RRC SR', [HSDPA_Call_Drop_Rate(Nokia_Cell)] as 'HSDPA Drop Rate' from [dbo].[RD3_Nokia_Cell_Daily] where (" + sites_list + ") and (" + date_list + ")";
-
 
 
                     string Data_Quary4 = @"
@@ -1483,12 +1199,16 @@ inner join (SELECT [Day]
   T1.[Sector]=T2.[Sector]";
 
 
-                    SqlCommand PS_Data_Quary = new SqlCommand(Data_Quary4, connection);
-                    PS_Data_Quary.CommandTimeout = 0;
-                    PS_Data_Quary.ExecuteNonQuery();
-                    Data_Table_3G_PS = new DataTable();
-                    SqlDataAdapter Date_Table2 = new SqlDataAdapter(PS_Data_Quary);
-                    Date_Table2.Fill(Data_Table_3G_PS);
+                    //SqlCommand PS_Data_Quary = new SqlCommand(Data_Quary4, connection);
+                    //PS_Data_Quary.CommandTimeout = 0;
+                    //PS_Data_Quary.ExecuteNonQuery();
+                    //Data_Table_3G_PS = new DataTable();
+                    //SqlDataAdapter Date_Table2 = new SqlDataAdapter(PS_Data_Quary);
+                    //Date_Table2.Fill(Data_Table_3G_PS);
+
+
+                    Data_Table_3G_PS = Query_Execution_Table_Output(Data_Quary4);
+
 
                     Data_Table_3G = new DataTable();
 
@@ -1531,29 +1251,11 @@ inner join (SELECT [Day]
 
 
 
-                    //dataGridView1.ColumnCount = 14;
                     dataGridView1.Invoke(new Action(() => dataGridView1.ColumnCount = 15));
 
-                    // dataGridView1.Rows.Clear();
                     dataGridView1.Invoke(new Action(() => dataGridView1.Rows.Clear()));
-                    //dataGridView1.RowCount = Data_Table_3G_CS.Rows.Count + 1;
                     dataGridView1.Invoke(new Action(() => dataGridView1.RowCount = Data_Table_3G_CS.Rows.Count + 1));
 
-                    //dataGridView1.Rows[0].Cells[0].Value = "Date"; dataGridView1.Columns[0].Width = 100;
-                    //dataGridView1.Rows[0].Cells[1].Value = "RNC"; dataGridView1.Columns[1].Width = 100;
-                    //dataGridView1.Rows[0].Cells[2].Value = "Site"; dataGridView1.Columns[2].Width = 100;
-                    //dataGridView1.Rows[0].Cells[3].Value = "Sector"; dataGridView1.Columns[3].Width = 100;
-                    //dataGridView1.Rows[0].Cells[4].Value = "CS RRC SR"; dataGridView1.Columns[4].Width = 100;
-                    //dataGridView1.Rows[0].Cells[5].Value = "CS RAB Establish"; dataGridView1.Columns[5].Width = 100;
-                    //dataGridView1.Rows[0].Cells[6].Value = "Voice Drop Rate"; dataGridView1.Columns[6].Width = 100;
-                    //dataGridView1.Rows[0].Cells[7].Value = "Cell Availability"; dataGridView1.Columns[7].Width = 100;
-                    //dataGridView1.Rows[0].Cells[8].Value = "BH CS Traffic (Erlang)"; dataGridView1.Columns[8].Width = 100;
-                    //dataGridView1.Rows[0].Cells[9].Value = "PS RRC SR"; dataGridView1.Columns[9].Width = 100;
-                    //dataGridView1.Rows[0].Cells[10].Value = "PS RAB Establish"; dataGridView1.Columns[10].Width = 100;
-                    //dataGridView1.Rows[0].Cells[11].Value = "HSDPA Drop Rate"; dataGridView1.Columns[11].Width = 100;
-                    //////dataGridView1.Rows[0].Cells[12].Value = "RSSI (dBm)"; dataGridView1.Columns[12].Width = 100;
-                    //dataGridView1.Rows[0].Cells[12].Value = "Daily PS Traffic (GB)"; dataGridView1.Columns[12].Width = 100;
-                    //dataGridView1.Rows[0].Cells[13].Value = "Cell Status"; dataGridView1.Columns[13].Width = 100;
 
 
                     dataGridView1.Invoke(new Action(() => dataGridView1.Rows[0].Cells[0].Value = "Date")); dataGridView1.Invoke(new Action(() => dataGridView1.Columns[0].Width = 100));
@@ -1578,7 +1280,6 @@ inner join (SELECT [Day]
 
 
                     progressBar1.Minimum = 0;
-                    //progressBar1.Maximum = Data_Table_3G_CS.Rows.Count - 1;
 
 
                     if (Data_Table_3G_CS.Rows.Count == 0)
@@ -1588,7 +1289,6 @@ inner join (SELECT [Day]
 
                     if (Data_Table_3G_CS.Rows.Count != 0)
                     {
-                        // progressBar1.Maximum = Data_Table_3G_CS.Rows.Count - 1;
                         progressBar1.Invoke(new Action(() => progressBar1.Maximum = Data_Table_3G_CS.Rows.Count - 1));
                         for (int k = 0; k < Data_Table_3G_CS.Rows.Count; k++)
                         {
@@ -1626,23 +1326,18 @@ inner join (SELECT [Day]
 
 
                             // Date
-                            //  dataGridView1.Rows[k + 1].Cells[0].Value = Data_Table_3G.Rows[k][0];
                             dataGridView1.Invoke(new Action(() => dataGridView1.Rows[k + 1].Cells[0].Value = Data_Table_3G.Rows[k][0]));
                             //RNC
-                            //  dataGridView1.Rows[k + 1].Cells[1].Value = Data_Table_3G.Rows[k][1];
                             dataGridView1.Invoke(new Action(() => dataGridView1.Rows[k + 1].Cells[1].Value = Data_Table_3G.Rows[k][1]));
                             // Site
                             string Cell = Data_Table_3G.Rows[k][2].ToString();
-                            //dataGridView1.Rows[k + 1].Cells[2].Value = Cell.Substring(0, 8);
                             dataGridView1.Invoke(new Action(() => dataGridView1.Rows[k + 1].Cells[2].Value = Cell.Substring(0, 8)));
                             Data_Table_3G.Rows[k][24] = Cell.Substring(0, 8);
                             // Sector
-                            // dataGridView1.Rows[k + 1].Cells[3].Value = Data_Table_3G.Rows[k][2];
                             dataGridView1.Invoke(new Action(() => dataGridView1.Rows[k + 1].Cells[3].Value = Data_Table_3G.Rows[k][2]));
 
 
                             // CS RRC SR
-                            // dataGridView1.Rows[k + 1].Cells[4].Value = Data_Table_3G.Rows[k][3];
                             dataGridView1.Invoke(new Action(() => dataGridView1.Rows[k + 1].Cells[4].Value = Data_Table_3G.Rows[k][3]));
                             if (Data_Table_3G.Rows[k][3].ToString() == "")
                             {
@@ -1659,7 +1354,6 @@ inner join (SELECT [Day]
 
 
                             // CS RAB Setablish
-                            //  dataGridView1.Rows[k + 1].Cells[5].Value = Data_Table_3G.Rows[k][4];
                             dataGridView1.Invoke(new Action(() => dataGridView1.Rows[k + 1].Cells[5].Value = Data_Table_3G.Rows[k][4]));
                             if (Data_Table_3G.Rows[k][4].ToString() == "")
                             {
@@ -1676,7 +1370,6 @@ inner join (SELECT [Day]
 
 
                             // Voice Drop Rate
-                            //dataGridView1.Rows[k + 1].Cells[6].Value = Data_Table_3G.Rows[k][5];
                             dataGridView1.Invoke(new Action(() => dataGridView1.Rows[k + 1].Cells[6].Value = Data_Table_3G.Rows[k][5]));
                             if (Data_Table_3G.Rows[k][5].ToString() == "")
                             {
@@ -1693,7 +1386,6 @@ inner join (SELECT [Day]
 
 
                             // Availability
-                            //dataGridView1.Rows[k + 1].Cells[7].Value = Data_Table_3G.Rows[k][6];
                             dataGridView1.Invoke(new Action(() => dataGridView1.Rows[k + 1].Cells[7].Value = Data_Table_3G.Rows[k][6]));
                             if (Data_Table_3G.Rows[k][6].ToString() == "")
                             {
@@ -1710,7 +1402,6 @@ inner join (SELECT [Day]
 
 
                             // CS Traffic
-                            // dataGridView1.Rows[k + 1].Cells[8].Value = Data_Table_3G.Rows[k][7];
                             dataGridView1.Invoke(new Action(() => dataGridView1.Rows[k + 1].Cells[8].Value = Data_Table_3G.Rows[k][7]));
                             if (Data_Table_3G.Rows[k][7].ToString() == "")
                             {
@@ -1727,7 +1418,6 @@ inner join (SELECT [Day]
 
 
                             // PS RRC SR
-                            //dataGridView1.Rows[k + 1].Cells[9].Value = Data_Table_3G.Rows[k][8];
                             dataGridView1.Invoke(new Action(() => dataGridView1.Rows[k + 1].Cells[9].Value = Data_Table_3G.Rows[k][8]));
                             if (Data_Table_3G.Rows[k][8].ToString() == "")
                             {
@@ -1743,7 +1433,6 @@ inner join (SELECT [Day]
                             }
 
                             // PS Drop Rate
-                            // dataGridView1.Rows[k + 1].Cells[10].Value = Data_Table_3G.Rows[k][9];
                             dataGridView1.Invoke(new Action(() => dataGridView1.Rows[k + 1].Cells[10].Value = Data_Table_3G.Rows[k][9]));
                             if (Data_Table_3G.Rows[k][9].ToString() == "")
                             {
@@ -1760,7 +1449,6 @@ inner join (SELECT [Day]
 
 
                             // RSSI
-                            // dataGridView1.Rows[k + 1].Cells[11].Value = Data_Table_3G.Rows[k][10];
                             dataGridView1.Invoke(new Action(() => dataGridView1.Rows[k + 1].Cells[11].Value = Data_Table_3G.Rows[k][10]));
                             if (Data_Table_3G.Rows[k][10].ToString() == "")
                             {
@@ -1779,7 +1467,6 @@ inner join (SELECT [Day]
 
 
                             // HS User THR
-                            // dataGridView1.Rows[k + 1].Cells[11].Value = Data_Table_3G.Rows[k][10];
                             dataGridView1.Invoke(new Action(() => dataGridView1.Rows[k + 1].Cells[12].Value = Data_Table_3G.Rows[k][11]));
                             if (Data_Table_3G.Rows[k][11].ToString() == "")
                             {
@@ -1796,107 +1483,76 @@ inner join (SELECT [Day]
 
 
 
-                            // RSSI
-                            //dataGridView1.Rows[k + 1].Cells[12].Value = Data_Table_3G.Rows[k][11];
-                            //string Band = Cell.Substring(2, 2);
-                            //if (Data_Table_3G.Rows[k][11].ToString() == "")
-                            //{
-                            //    Data_Table_3G.Rows[k][21] = -1;
-                            //}
-                            //else if ((Convert.ToDouble(Data_Table_3G.Rows[k][11]) > Convert.ToDouble(textBox17.Text)) && (Band == "2U" || Band == "5U" || Band == "8U"))
-                            //{
-                            //    Data_Table_3G.Rows[k][21] = 1; result++; dataGridView1.Rows[k + 1].Cells[12].Style.BackColor = Color.Orange;
-                            //}
-                            //else if ((Convert.ToDouble(Data_Table_3G.Rows[k][11]) > Convert.ToDouble(textBox18.Text)) && (Band == "1U" || Band == "4U" || Band == "7U"))
-                            //{
-                            //    Data_Table_3G.Rows[k][21] = 1; result++; dataGridView1.Rows[k + 1].Cells[12].Style.BackColor = Color.Orange;
-                            //}
-                            //else if ((Convert.ToDouble(Data_Table_3G.Rows[k][11]) <= Convert.ToDouble(textBox17.Text)) && (Band == "2U" || Band == "5U" || Band == "8U"))
-                            //{
-                            //    Data_Table_3G.Rows[k][21] = 0;
-                            //}
-                            //else if ((Convert.ToDouble(Data_Table_3G.Rows[k][11]) <= Convert.ToDouble(textBox18.Text)) && (Band == "1U" || Band == "4U" || Band == "7U"))
-                            //{
-                            //    Data_Table_3G.Rows[k][21] = 0;
-                            //}
-
-
-
                             // PS Traffic
-                            //dataGridView1.Rows[k + 1].Cells[12].Value = Data_Table_3G.Rows[k][11];
                             dataGridView1.Invoke(new Action(() => dataGridView1.Rows[k + 1].Cells[13].Value = Data_Table_3G.Rows[k][12]));
-                                if (Data_Table_3G.Rows[k][12].ToString() == "")
-                                {
-                                    Data_Table_3G.Rows[k][22] = -1;
-                                }
-                                else if (Convert.ToDouble(Data_Table_3G.Rows[k][12]) == PS_Payload_TH)
-                                {
-                                    Data_Table_3G.Rows[k][22] = 1; result++; dataGridView1.Rows[k + 1].Cells[13].Style.BackColor = Color.Orange;
-                                }
-                                else if (Convert.ToDouble(Data_Table_3G.Rows[k][12]) > PS_Payload_TH)
-                                {
-                                    Data_Table_3G.Rows[k][22] = 0;
-                                }
+                            if (Data_Table_3G.Rows[k][12].ToString() == "")
+                            {
+                                Data_Table_3G.Rows[k][22] = -1;
+                            }
+                            else if (Convert.ToDouble(Data_Table_3G.Rows[k][12]) == PS_Payload_TH)
+                            {
+                                Data_Table_3G.Rows[k][22] = 1; result++; dataGridView1.Rows[k + 1].Cells[13].Style.BackColor = Color.Orange;
+                            }
+                            else if (Convert.ToDouble(Data_Table_3G.Rows[k][12]) > PS_Payload_TH)
+                            {
+                                Data_Table_3G.Rows[k][22] = 0;
+                            }
 
 
 
-                                if ((Convert.ToInt16(Data_Table_3G.Rows[k][17]) == -1) || (Convert.ToInt16(Data_Table_3G.Rows[k][22]) == -1))
-                                {
-                                    //         if (Convert.ToInt16(Data_Table_3G.Rows[k][21])!= 0)
-                                    //  {
-                                    Data_Table_3G.Rows[k][23] = 1; dataGridView1.Rows[k + 1].Cells[14].Value = "Not Updated";
-                                    //                             }
-                                }
-                                else if (result == 0)
-                                {
-                                    Data_Table_3G.Rows[k][23] = 0.1; dataGridView1.Rows[k + 1].Cells[14].Value = "Passed";
-                                }
-                                if (result > 0)
-                                {
-                                    Data_Table_3G.Rows[k][23] = 0; dataGridView1.Rows[k + 1].Cells[14].Value = "Rejected";
-                                }
-                                progressBar1.Invoke(new Action(() => progressBar1.Value = k));
-                                //   progressBar1.Value = k;
+                            if ((Convert.ToInt16(Data_Table_3G.Rows[k][17]) == -1) || (Convert.ToInt16(Data_Table_3G.Rows[k][22]) == -1))
+                            {
+                                Data_Table_3G.Rows[k][23] = 1; dataGridView1.Rows[k + 1].Cells[14].Value = "Not Updated";
+                            }
+                            else if (result == 0)
+                            {
+                                Data_Table_3G.Rows[k][23] = 0.1; dataGridView1.Rows[k + 1].Cells[14].Value = "Passed";
+                            }
+                            if (result > 0)
+                            {
+                                Data_Table_3G.Rows[k][23] = 0; dataGridView1.Rows[k + 1].Cells[14].Value = "Rejected";
+                            }
+                            progressBar1.Invoke(new Action(() => progressBar1.Value = k));
 
 
                         }
-                            var distinctIds = Data_Table_3G.AsEnumerable()
-               .Select(s => new
-               {
-                   id = s.Field<string>("Site"),
-               })
-               .Distinct().ToList();
+                        var distinctIds = Data_Table_3G.AsEnumerable()
+           .Select(s => new
+           {
+               id = s.Field<string>("Site"),
+           })
+           .Distinct().ToList();
 
-                            for (int j = 0; j < distinctIds.Count; j++)
+                        for (int j = 0; j < distinctIds.Count; j++)
+                        {
+                            var cell_data = (from p in Data_Table_3G.AsEnumerable()
+                                             where p.Field<string>("Site") == distinctIds[j].id
+                                             select p).ToList();
+
+
+                            double multiplier = 1;
+                            for (int h = 0; h < cell_data.Count; h++)
                             {
-                                var cell_data = (from p in Data_Table_3G.AsEnumerable()
-                                                 where p.Field<string>("Site") == distinctIds[j].id
-                                                 select p).ToList();
-
-
-                                double multiplier = 1;
-                                for (int h = 0; h < cell_data.Count; h++)
-                                {
-                                    multiplier = multiplier * Convert.ToDouble(cell_data[h].ItemArray[23]);
-
-                                }
-
-                                if (multiplier > 0 && multiplier < 1)
-                                {
-                                    Site_Data_Table_3G.Rows.Add(distinctIds[j].id, "Passed");
-                                }
-                                if (multiplier == 0)
-                                {
-                                    Site_Data_Table_3G.Rows.Add(distinctIds[j].id, "Rejected");
-                                }
-                                if (multiplier == 1)
-                                {
-                                    Site_Data_Table_3G.Rows.Add(distinctIds[j].id, "Not Updated");
-                                }
+                                multiplier = multiplier * Convert.ToDouble(cell_data[h].ItemArray[23]);
 
                             }
 
-                        
+                            if (multiplier > 0 && multiplier < 1)
+                            {
+                                Site_Data_Table_3G.Rows.Add(distinctIds[j].id, "Passed");
+                            }
+                            if (multiplier == 0)
+                            {
+                                Site_Data_Table_3G.Rows.Add(distinctIds[j].id, "Rejected");
+                            }
+                            if (multiplier == 1)
+                            {
+                                Site_Data_Table_3G.Rows.Add(distinctIds[j].id, "Not Updated");
+                            }
+
+                        }
+
+
 
                     }
 
@@ -2017,26 +1673,16 @@ inner join (SELECT [Datetime]
 
 
 
-                    SqlCommand PS_Data_Quary = new SqlCommand(Data_Quary4, connection);
-                    PS_Data_Quary.CommandTimeout = 0;
-                    PS_Data_Quary.ExecuteNonQuery();
-                    Data_Table_4G = new DataTable();
-                    SqlDataAdapter Date_Table2 = new SqlDataAdapter(PS_Data_Quary);
-                    Date_Table2.Fill(Data_Table_4G);
+                    //SqlCommand PS_Data_Quary = new SqlCommand(Data_Quary4, connection);
+                    //PS_Data_Quary.CommandTimeout = 0;
+                    //PS_Data_Quary.ExecuteNonQuery();
+                    //Data_Table_4G = new DataTable();
+                    //SqlDataAdapter Date_Table2 = new SqlDataAdapter(PS_Data_Quary);
+                    //Date_Table2.Fill(Data_Table_4G);
 
 
+                    Data_Table_4G = Query_Execution_Table_Output(Data_Quary4);
 
-
-                    //Data_Table_4G.Columns.Add("Date", typeof(string));
-                    //Data_Table_4G.Columns.Add("Sector", typeof(string));
-                    //Data_Table_4G.Columns.Add("UE DL THR (Mbps)", typeof(string));
-                    //Data_Table_4G.Columns.Add("UE UL THR (Mbps)", typeof(string));
-                    //Data_Table_4G.Columns.Add("ERAB Drop Rate", typeof(string));
-                    //Data_Table_4G.Columns.Add("ERAB Setup SR", typeof(string));
-                    //Data_Table_4G.Columns.Add("Intra Freq HO SR", typeof(string));
-                    //Data_Table_4G.Columns.Add("RRC Connection SR", typeof(string));
-                    //Data_Table_4G.Columns.Add("Cell Availability", typeof(string));
-                    //Data_Table_4G.Columns.Add("Daily PS Traffic (GB)", typeof(string));
 
                     Data_Table_4G.Columns.Add("UE DL THR (Mbps) Score", typeof(int));
                     Data_Table_4G.Columns.Add("UE UL THR (Mbps) Score", typeof(int));
@@ -2059,30 +1705,11 @@ inner join (SELECT [Datetime]
                     Site_Data_Table_4G.Columns.Add("Rejected Cell List", typeof(string));
 
 
-
-                    //dataGridView1.ColumnCount = 12;
                     dataGridView1.Invoke(new Action(() => dataGridView1.ColumnCount = 12));
 
-                    //dataGridView1.Rows.Clear();
                     dataGridView1.Invoke(new Action(() => dataGridView1.Rows.Clear()));
 
-                    //dataGridView1.RowCount = Data_Table_4G.Rows.Count + 1;
                     dataGridView1.Invoke(new Action(() => dataGridView1.RowCount = Data_Table_4G.Rows.Count + 1));
-
-                    //dataGridView1.Rows[0].Cells[0].Value = "Date"; dataGridView1.Columns[0].Width = 100;
-                    //dataGridView1.Rows[0].Cells[1].Value = "Site"; dataGridView1.Columns[1].Width = 100;
-                    //dataGridView1.Rows[0].Cells[2].Value = "Sector"; dataGridView1.Columns[2].Width = 100;
-                    //dataGridView1.Rows[0].Cells[3].Value = "UE DL THR (Mbps)"; dataGridView1.Columns[3].Width = 100;
-                    //dataGridView1.Rows[0].Cells[4].Value = "UE UL THR (Mbps)"; dataGridView1.Columns[4].Width = 100;
-                    //dataGridView1.Rows[0].Cells[5].Value = "ERAB Drop Rate"; dataGridView1.Columns[5].Width = 100;
-                    //dataGridView1.Rows[0].Cells[6].Value = "ERAB Setup SR"; dataGridView1.Columns[6].Width = 100;
-                    //dataGridView1.Rows[0].Cells[7].Value = "Intra Freq HO SR"; dataGridView1.Columns[7].Width = 100;
-                    //dataGridView1.Rows[0].Cells[8].Value = "RRC Connection SR"; dataGridView1.Columns[8].Width = 100;
-                    //dataGridView1.Rows[0].Cells[9].Value = "Cell Availability"; dataGridView1.Columns[9].Width = 100;
-                    //dataGridView1.Rows[0].Cells[10].Value = "Daily PS Traffic (GB)"; dataGridView1.Columns[10].Width = 100;
-                    //dataGridView1.Rows[0].Cells[11].Value = "Cell Status"; dataGridView1.Columns[11].Width = 100;
-
-
 
 
                     dataGridView1.Invoke(new Action(() => dataGridView1.Rows[0].Cells[0].Value = "Date")); dataGridView1.Invoke(new Action(() => dataGridView1.Columns[0].Width = 100));
@@ -2109,31 +1736,27 @@ inner join (SELECT [Datetime]
 
                     if (Data_Table_4G.Rows.Count != 0)
                     {
-                        //  progressBar1.Maximum = Data_Table_4G.Rows.Count - 1;
+
                         progressBar1.Invoke(new Action(() => progressBar1.Maximum = Data_Table_4G.Rows.Count - 1));
                         for (int k = 0; k < Data_Table_4G.Rows.Count; k++)
                         {
                             int result = 0;
 
                             // Date
-                            //dataGridView1.Rows[k + 1].Cells[0].Value = Data_Table_4G.Rows[k][0];
                             dataGridView1.Invoke(new Action(() => dataGridView1.Rows[k + 1].Cells[0].Value = Data_Table_4G.Rows[k][0]));
 
 
                             // Site
                             string Cell = Data_Table_4G.Rows[k][1].ToString();
-                            //  dataGridView1.Rows[k + 1].Cells[1].Value = Cell.Substring(0, 8);
                             dataGridView1.Invoke(new Action(() => dataGridView1.Rows[k + 1].Cells[1].Value = Cell.Substring(0, 8)));
                             Data_Table_4G.Rows[k][19] = Cell.Substring(0, 8);
 
 
                             // Cell
-                            //dataGridView1.Rows[k + 1].Cells[2].Value = Data_Table_4G.Rows[k][1];
                             dataGridView1.Invoke(new Action(() => dataGridView1.Rows[k + 1].Cells[2].Value = Data_Table_4G.Rows[k][1]));
 
 
                             // UE DL THR
-                            //  dataGridView1.Rows[k + 1].Cells[3].Value = Data_Table_4G.Rows[k][2];
                             dataGridView1.Invoke(new Action(() => dataGridView1.Rows[k + 1].Cells[3].Value = Data_Table_4G.Rows[k][2]));
                             if (Data_Table_4G.Rows[k][2].ToString() == "")
                             {
@@ -2149,7 +1772,6 @@ inner join (SELECT [Datetime]
                             }
 
                             // UE UL THR
-                            //dataGridView1.Rows[k + 1].Cells[4].Value = Data_Table_4G.Rows[k][3];
                             dataGridView1.Invoke(new Action(() => dataGridView1.Rows[k + 1].Cells[4].Value = Data_Table_4G.Rows[k][3]));
                             if (Data_Table_4G.Rows[k][3].ToString() == "")
                             {
@@ -2166,7 +1788,6 @@ inner join (SELECT [Datetime]
 
 
                             // ERAB Drop Rate
-                            // dataGridView1.Rows[k + 1].Cells[5].Value = Data_Table_4G.Rows[k][4];
                             dataGridView1.Invoke(new Action(() => dataGridView1.Rows[k + 1].Cells[5].Value = Data_Table_4G.Rows[k][4]));
                             if (Data_Table_4G.Rows[k][4].ToString() == "")
                             {
@@ -2184,7 +1805,6 @@ inner join (SELECT [Datetime]
 
 
                             // ERAB Setup SR
-                            // dataGridView1.Rows[k + 1].Cells[6].Value = Data_Table_4G.Rows[k][3];
                             dataGridView1.Invoke(new Action(() => dataGridView1.Rows[k + 1].Cells[6].Value = Data_Table_4G.Rows[k][5]));
                             if (Data_Table_4G.Rows[k][5].ToString() == "")
                             {
@@ -2201,7 +1821,6 @@ inner join (SELECT [Datetime]
 
 
                             // Intra Freq HO SR
-                            //  dataGridView1.Rows[k + 1].Cells[7].Value = Data_Table_4G.Rows[k][3];
                             dataGridView1.Invoke(new Action(() => dataGridView1.Rows[k + 1].Cells[7].Value = Data_Table_4G.Rows[k][6]));
                             if (Data_Table_4G.Rows[k][6].ToString() == "")
                             {
@@ -2218,7 +1837,6 @@ inner join (SELECT [Datetime]
 
 
                             // RRC Connection SR
-                            //dataGridView1.Rows[k + 1].Cells[8].Value = Data_Table_4G.Rows[k][3];
                             dataGridView1.Invoke(new Action(() => dataGridView1.Rows[k + 1].Cells[8].Value = Data_Table_4G.Rows[k][7]));
                             if (Data_Table_4G.Rows[k][7].ToString() == "")
                             {
@@ -2235,7 +1853,6 @@ inner join (SELECT [Datetime]
 
 
                             // Cell Availability
-                            // dataGridView1.Rows[k + 1].Cells[9].Value = Data_Table_4G.Rows[k][3];
                             dataGridView1.Invoke(new Action(() => dataGridView1.Rows[k + 1].Cells[9].Value = Data_Table_4G.Rows[k][8]));
                             if (Data_Table_4G.Rows[k][8].ToString() == "")
                             {
@@ -2252,7 +1869,6 @@ inner join (SELECT [Datetime]
 
 
                             // Daily PS Traffic (GB)
-                            // dataGridView1.Rows[k + 1].Cells[10].Value = Data_Table_4G.Rows[k][3];
                             dataGridView1.Invoke(new Action(() => dataGridView1.Rows[k + 1].Cells[10].Value = Data_Table_4G.Rows[k][9]));
                             if (Data_Table_4G.Rows[k][9].ToString() == "")
                             {
@@ -2286,7 +1902,6 @@ inner join (SELECT [Datetime]
 
 
                             progressBar1.Invoke(new Action(() => progressBar1.Value = k));
-                            //progressBar1.Value = k;
                         }
 
 
@@ -2343,46 +1958,6 @@ inner join (SELECT [Datetime]
 
 
 
-            //private void listBox1_SelectedIndexChanged(object sender, EventArgs e)
-            //{
-
-            //}
-
-            //private void textBox27_TextChanged(object sender, EventArgs e)
-            //{
-
-            //    //if (textBox27.Text=="performance-nak")
-            //    //{
-            //    //    this.Close();
-            //    //}
-            //}
-
-            //private void checkBox1_CheckedChanged(object sender, EventArgs e)
-            //{
-
-            //    if (checkBox1.Checked == true)
-            //    {
-            //        Input_Type = "DataBase";
-            //        checkBox2.Checked = false;
-            //    }
-            //}
-
-            //private void checkBox2_CheckedChanged(object sender, EventArgs e)
-            //{
-
-            //    if (checkBox2.Checked == true)
-            //    {
-            //        Input_Type = "FARAZ";
-            //        checkBox1.Checked = false;
-            //    }
-            //}
-
-
-
-
-
-
-
         }
 
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
@@ -2407,18 +1982,6 @@ inner join (SELECT [Datetime]
             {
 
 
-                //string Data_Quary = @"select [Date], [BSC], [Cell], [TCH_Traffic_BH] as 'TCH_Traffic_BH (Erlang)', [CSSR_MCI] as'CSSR', [CDR(not Affected by incoming Handovers from 3G)(Eric_CELL)] as 'Voice Drop Rate', [IHSR] as 'IHSR', [OHSR] as 'OHSR', [TCH_Availability] as 'TCH Availability' from [dbo].[CC2_Ericsson_Cell_BH] where  (" + EH_sites_list + ") and (" + date_list + ")" +
-                //       @" union all select [Date], [BSC], [Cell], [TCH_Traffic_BH] as 'TCH_Traffic_BH (Erlang)', [CSSR3] as'CSSR', [CDR3] as 'Voice Drop Rate', [IHSR2] as 'IHSR', [OHSR2] as 'OHSR',  [TCH_Availability] as 'TCH Availability' from [dbo].[CC2_Huawei_Cell_BH] where (" + EH_sites_list + ") and (" + date_list + ")" +
-                //       @" union all select [Date], [BSC], [Cell], [TCH_Traffic_BH] as 'TCH_Traffic_BH (Erlang)', [CSSR3] as'CSSR', [CDR3] as 'Voice Drop Rate', [IHSR2] as 'IHSR', [OHSR2] as 'OHSR',  [TCH_Availability] as 'TCH Availability' from [dbo].[CC2_Huawei_Cell_BH] where (" + H_sites_list + ") and (" + date_list + ")" +
-                //       @" union all select [Date], [BSC], [SEG] as 'Cell', [TCH_Traffic_BH] as 'TCH_Traffic_BH (Erlang)', [CSSR_MCI] as'CSSR', [CDR(including_CS_IRAT_handovers_3G_to2G)(Nokia_SEG)] as 'Voicde  Drop Rate', [IHSR] as 'IHSR', [OHSR] AS 'OHSR', [TCH_Availability] as 'TCH Availability' from [dbo].[CC2_Nokia_Cell_BH] where (" + N_sites_list + ") and (" + date_list + ")";
-
-                //SqlCommand Data_Quary1 = new SqlCommand(Data_Quary, connection);
-                //Data_Quary1.CommandTimeout = 0;
-                //Data_Quary1.ExecuteNonQuery();
-                //Data_Table_2G = new DataTable();
-                //SqlDataAdapter Date_Table1 = new SqlDataAdapter(Data_Quary1);
-                //Date_Table1.Fill(Data_Table_2G);
-
                 Data_Table_2G.Columns.Add("Date", typeof(DateTime));
                 Data_Table_2G.Columns.Add("BSC", typeof(string));
                 Data_Table_2G.Columns.Add("Cell", typeof(string));
@@ -2436,7 +1999,6 @@ inner join (SELECT [Datetime]
                 Data_Table_2G.Columns.Add("OHSR Score", typeof(int));
                 Data_Table_2G.Columns.Add("Availability Score", typeof(int));
                 Data_Table_2G.Columns.Add("Cell Score", typeof(double));
-                // Data_Table_2G.Columns.Add("Site Score", typeof(double));
                 Data_Table_2G.Columns.Add("Site", typeof(string));
 
 
@@ -2582,7 +2144,6 @@ inner join (SELECT [Datetime]
                 dataGridView1.Rows[0].Cells[8].Value = "OHSR"; dataGridView1.Columns[8].Width = 100;
                 dataGridView1.Rows[0].Cells[9].Value = "Availability"; dataGridView1.Columns[9].Width = 100;
                 dataGridView1.Rows[0].Cells[10].Value = "Cell Status"; dataGridView1.Columns[10].Width = 100;
-                // dataGridView1.Rows[0].Cells[11].Value = "Site Status"; dataGridView1.Columns[11].Width = 100;
 
                 progressBar1.Minimum = 0;
 
@@ -2609,14 +2170,7 @@ inner join (SELECT [Datetime]
                         // Site
                         string Cell = Data_Table_2G.Rows[k][2].ToString();
                         string Site = Data_Table_2G.Rows[k][16].ToString();
-                        //if (Cell.Length == 7)
-                        //{
-                        //    Site = Cell.Substring(0, 6);
-                        //}
-                        //if (Cell.Length > 7)
-                        //{
-                        //    Site = Cell.Substring(0, 2) + Cell.Substring(4, 4);
-                        //}
+
                         dataGridView1.Rows[k + 1].Cells[2].Value = Site;
                         Data_Table_2G.Rows[k][16] = Site;
 
@@ -2782,22 +2336,11 @@ inner join (SELECT [Datetime]
             string File_Name = openFileDialog1.SafeFileName.ToString();
             if (Input_Type == "FARAZ" && Technology == "2G")
             {
-                Technology = "2G-MCI";
+                //Technology = "2G-MCI";
 
-                //string Data_Quary = @"select [Date], [BSC], [Cell], [TCH_Traffic_BH] as 'TCH_Traffic_BH (Erlang)', [CSSR_MCI] as'CSSR', [CDR(not Affected by incoming Handovers from 3G)(Eric_CELL)] as 'Voice Drop Rate', [IHSR] as 'IHSR', [OHSR] as 'OHSR', [TCH_Availability] as 'TCH Availability' from [dbo].[CC2_Ericsson_Cell_BH] where  (" + EH_sites_list + ") and (" + date_list + ")" +
-                //       @" union all select [Date], [BSC], [Cell], [TCH_Traffic_BH] as 'TCH_Traffic_BH (Erlang)', [CSSR3] as'CSSR', [CDR3] as 'Voice Drop Rate', [IHSR2] as 'IHSR', [OHSR2] as 'OHSR',  [TCH_Availability] as 'TCH Availability' from [dbo].[CC2_Huawei_Cell_BH] where (" + EH_sites_list + ") and (" + date_list + ")" +
-                //       @" union all select [Date], [BSC], [Cell], [TCH_Traffic_BH] as 'TCH_Traffic_BH (Erlang)', [CSSR3] as'CSSR', [CDR3] as 'Voice Drop Rate', [IHSR2] as 'IHSR', [OHSR2] as 'OHSR',  [TCH_Availability] as 'TCH Availability' from [dbo].[CC2_Huawei_Cell_BH] where (" + H_sites_list + ") and (" + date_list + ")" +
-                //       @" union all select [Date], [BSC], [SEG] as 'Cell', [TCH_Traffic_BH] as 'TCH_Traffic_BH (Erlang)', [CSSR_MCI] as'CSSR', [CDR(including_CS_IRAT_handovers_3G_to2G)(Nokia_SEG)] as 'Voicde  Drop Rate', [IHSR] as 'IHSR', [OHSR] AS 'OHSR', [TCH_Availability] as 'TCH Availability' from [dbo].[CC2_Nokia_Cell_BH] where (" + N_sites_list + ") and (" + date_list + ")";
-
-                //SqlCommand Data_Quary1 = new SqlCommand(Data_Quary, connection);
-                //Data_Quary1.CommandTimeout = 0;
-                //Data_Quary1.ExecuteNonQuery();
-                //Data_Table_2G = new DataTable();
-                //SqlDataAdapter Date_Table1 = new SqlDataAdapter(Data_Quary1);
-                //Date_Table1.Fill(Data_Table_2G);
+                Data_Table_2G = new DataTable();
 
                 Data_Table_2G.Columns.Add("CS Datetime", typeof(DateTime));
-                // Data_Table_2G.Columns.Add("PS Datetime", typeof(DateTime));
                 Data_Table_2G.Columns.Add("BSC", typeof(string));
                 Data_Table_2G.Columns.Add("Cell", typeof(string));
                 Data_Table_2G.Columns.Add("TCH_Traffic_BH (Erlang), TH=0", typeof(string));
@@ -2816,7 +2359,6 @@ inner join (SELECT [Datetime]
                 Data_Table_2G.Columns.Add("Availability Score", typeof(int));
                 Data_Table_2G.Columns.Add("TBF Score", typeof(int));
                 Data_Table_2G.Columns.Add("Cell Score", typeof(double));
-                // Data_Table_2G.Columns.Add("Site Score", typeof(double));
                 Data_Table_2G.Columns.Add("Site", typeof(string));
 
 
@@ -3014,7 +2556,6 @@ inner join (SELECT [Datetime]
                 dataGridView1.Rows[0].Cells[9].Value = "Availability"; dataGridView1.Columns[9].Width = 100;
                 dataGridView1.Rows[0].Cells[10].Value = "TBF Estblishment SR"; dataGridView1.Columns[10].Width = 100;
                 dataGridView1.Rows[0].Cells[11].Value = "Cell Status"; dataGridView1.Columns[11].Width = 100;
-                // dataGridView1.Rows[0].Cells[11].Value = "Site Status"; dataGridView1.Columns[11].Width = 100;
 
                 progressBar1.Minimum = 0;
 
@@ -3055,14 +2596,7 @@ inner join (SELECT [Datetime]
                         // Site
                         string Cell = Data_Table_2G.Rows[k][2].ToString();
                         string Site = Data_Table_2G.Rows[k][18].ToString();
-                        //if (Cell.Length == 7)
-                        //{
-                        //    Site = Cell.Substring(0, 6);
-                        //}
-                        //if (Cell.Length > 7)
-                        //{
-                        //    Site = Cell.Substring(0, 2) + Cell.Substring(4, 4);
-                        //}
+
                         dataGridView1.Rows[k + 1].Cells[2].Value = Site;
                         Data_Table_2G.Rows[k][18] = Site;
 
@@ -3243,7 +2777,7 @@ inner join (SELECT [Datetime]
 
             if (Input_Type == "FARAZ" && Technology == "3G")
             {
-                Technology = "3G-MCI";
+              //  Technology = "3G-MCI";
 
 
 
@@ -3318,36 +2852,16 @@ inner join (SELECT [Datetime]
 
 
 
-                //dataGridView1.ColumnCount = 14;
                 dataGridView1.Invoke(new Action(() => dataGridView1.ColumnCount = 15));
 
-                // dataGridView1.Rows.Clear();
                 dataGridView1.Invoke(new Action(() => dataGridView1.Rows.Clear()));
-                //dataGridView1.RowCount = Data_Table_3G_CS.Rows.Count + 1;
                 dataGridView1.Invoke(new Action(() => dataGridView1.RowCount = Data_Table_3G_CS.Rows.Count + 1));
 
 
-                //dataGridView1.Invoke(new Action(() => dataGridView1.Rows[0].Cells[0].Value = "Date")); dataGridView1.Invoke(new Action(() => dataGridView1.Columns[0].Width = 100));
-                //dataGridView1.Invoke(new Action(() => dataGridView1.Rows[0].Cells[1].Value = "RNC")); dataGridView1.Invoke(new Action(() => dataGridView1.Columns[1].Width = 100));
-                //dataGridView1.Invoke(new Action(() => dataGridView1.Rows[0].Cells[2].Value = "Site")); dataGridView1.Invoke(new Action(() => dataGridView1.Columns[2].Width = 100));
-                //dataGridView1.Invoke(new Action(() => dataGridView1.Rows[0].Cells[3].Value = "Sector")); dataGridView1.Invoke(new Action(() => dataGridView1.Columns[3].Width = 100));
-                //dataGridView1.Invoke(new Action(() => dataGridView1.Rows[0].Cells[4].Value = "CS RRC SR")); dataGridView1.Invoke(new Action(() => dataGridView1.Columns[4].Width = 100));
-                //dataGridView1.Invoke(new Action(() => dataGridView1.Rows[0].Cells[5].Value = "CS RAB Establish")); dataGridView1.Invoke(new Action(() => dataGridView1.Columns[5].Width = 100));
-                //dataGridView1.Invoke(new Action(() => dataGridView1.Rows[0].Cells[6].Value = "Voice Drop Rate")); dataGridView1.Invoke(new Action(() => dataGridView1.Columns[6].Width = 100));
-                //dataGridView1.Invoke(new Action(() => dataGridView1.Rows[0].Cells[7].Value = "Cell Availability")); dataGridView1.Invoke(new Action(() => dataGridView1.Columns[7].Width = 100));
-                //dataGridView1.Invoke(new Action(() => dataGridView1.Rows[0].Cells[8].Value = "BH CS Traffic (Erlang)")); dataGridView1.Invoke(new Action(() => dataGridView1.Columns[8].Width = 100));
-                //dataGridView1.Invoke(new Action(() => dataGridView1.Rows[0].Cells[9].Value = "PS RRC SR")); dataGridView1.Invoke(new Action(() => dataGridView1.Columns[9].Width = 100));
-                //dataGridView1.Invoke(new Action(() => dataGridView1.Rows[0].Cells[10].Value = "PS Drop Rate")); dataGridView1.Invoke(new Action(() => dataGridView1.Columns[10].Width = 100));
-                //dataGridView1.Invoke(new Action(() => dataGridView1.Rows[0].Cells[11].Value = "RSSI (dBm)")); dataGridView1.Invoke(new Action(() => dataGridView1.Columns[11].Width = 100));
-
-                //dataGridView1.Invoke(new Action(() => dataGridView1.Rows[0].Cells[12].Value = "HS User Throughput (Mbps)")); dataGridView1.Invoke(new Action(() => dataGridView1.Columns[12].Width = 100));
-
-                //dataGridView1.Invoke(new Action(() => dataGridView1.Rows[0].Cells[13].Value = "Daily PS Traffic (GB)")); dataGridView1.Invoke(new Action(() => dataGridView1.Columns[13].Width = 100));
-                //dataGridView1.Invoke(new Action(() => dataGridView1.Rows[0].Cells[14].Value = "Cell Status")); dataGridView1.Invoke(new Action(() => dataGridView1.Columns[14].Width = 100));
 
 
                 string Vendor = "";
-                string[] Sector_Vec = new string [1000];
+                string[] Sector_Vec = new string[1000];
                 DateTime[] Date_Vec = new DateTime[1000];
 
                 int Sector_Vec_Ind = 0;
@@ -3387,7 +2901,7 @@ inner join (SELECT [Datetime]
 
 
                         // Filling Null values in differnt hours and Daily KPIs
-                        for (int t=3; t<=12; t++)  // For completing CS
+                        for (int t = 3; t <= 12; t++)  // For completing CS
                         {
                             for (int k1 = 0; k1 < Count_3GCS - 1; k1++)
                             {
@@ -3417,16 +2931,16 @@ inner join (SELECT [Datetime]
 
 
                         int index_of_dash = 0;
-                        for (int l= 0; l < NE.Length; l++)
+                        for (int l = 0; l < NE.Length; l++)
                         {
-                            if (NE[l].ToString()=="|")
+                            if (NE[l].ToString() == "|")
                             {
                                 index_of_dash = l;
                                 break;
                             }
                         }
                         string RNC = NE.Substring(0, index_of_dash - 1);
-                        string CellName= NE.Substring(index_of_dash+2, NE.Length-1-(index_of_dash+1));
+                        string CellName = NE.Substring(index_of_dash + 2, NE.Length - 1 - (index_of_dash + 1));
                         Site = CellName.Substring(0, 8);
                         string Vendor_Last = RNC.Substring(RNC.Length - 1, 1);
 
@@ -3443,49 +2957,7 @@ inner join (SELECT [Datetime]
                             Vendor = "Nokia";
                         }
 
-                        //string str2 = Regex.Replace(NE, "[^a-zA-Z0-9]", " ");      //هر کاراکتری که غیر از عدد و حرف بود را به کاراکتر خالی تبدیل کن
-                        //str2 = Regex.Replace(str2, " {2,}", " ").Trim();           //چندین کاراکتر خالی پشت سر هم را به یک کاراکتر خالی تبدیل می کند
-                        //string[] Split_Description = str2.Split(' ');
-                        //string RNC = Split_Description[0];
 
-                        //string Tech = Split_Description[0].Substring(0, 1);
-                        //string Tech_Last = Split_Description[0].Substring(Split_Description[0].Length - 1, 1);
-
-                        //string CellName = "";
-                        //if ((Tech == "R" && (Tech_Last == "E" || Tech_Last == "H" || Tech_Last == "N")) || Split_Description[0].Length == 2)
-                        //{
-                        //    //int c1 = Split_Description.Length;
-                        //    CellName = Split_Description[1];
-                        //}
-                        //else
-                        //{
-                        //    int c1 = Split_Description.Length;
-                        //    CellName = Split_Description[c1 - 1];
-                        //}
-
-
-                        //if (CellName.Length == 7)
-                        //{
-                        //    Site = CellName.Substring(0, 6);
-                        //}
-                        //if (CellName.Length > 7)
-                        //{
-                        //    Site = CellName.Substring(0, 8);
-                        //}
-
-
-                        //if (Tech_Last == "E")
-                        //{
-                        //    Vendor = "Ericsson";
-                        //}
-                        //if (Tech_Last == "H")
-                        //{
-                        //    Vendor = "Huawei";
-                        //}
-                        //if (Tech_Last == "N")
-                        //{
-                        //    Vendor = "Nokia";
-                        //}
 
                         double CS_RRC_SR = -1;
                         double CS_RAB = -1;
@@ -3573,7 +3045,7 @@ inner join (SELECT [Datetime]
                         if (FARAZ_Data_3GCS[k + 1, 11] != null)
                         {
                             THR = Convert.ToDouble(FARAZ_Data_3GCS[k + 1, 11].ToString());
-                            if (Vendor=="Huawei")
+                            if (Vendor == "Huawei")
                             {
                                 THR = THR / 1000;
                             }
@@ -3592,7 +3064,7 @@ inner join (SELECT [Datetime]
                             PS_Traffic = -1;
                         }
 
-                        
+
                         if (!Sector_Vec.Contains(CellName.Substring(0, 9)))
                         {
                             Sector_Vec[Sector_Vec_Ind] = CellName.Substring(0, 9);
@@ -3605,14 +3077,14 @@ inner join (SELECT [Datetime]
                             Date_Vec_Ind++;
                         }
 
-                        Data_Table_3G.Rows.Add(Date.Date, RNC, CellName.Substring(0,9), CS_RRC_SR, CS_RAB, Voice_Drop, Availability, CS_Traffic,  PS_RRC_SR, PS_Drop, RSSI, THR, PS_Traffic, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, Site);
+                        Data_Table_3G.Rows.Add(Date.Date, RNC, CellName.Substring(0, 9), CS_RRC_SR, CS_RAB, Voice_Drop, Availability, CS_Traffic, PS_RRC_SR, PS_Drop, RSSI, THR, PS_Traffic, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, Site);
 
                     }
 
                 }
 
                 // Avergare of all nulls = -1 and average of some nulls must be evaluated correctly
-                for (int s=0; s<= Sector_Vec_Ind-1; s++)
+                for (int s = 0; s <= Sector_Vec_Ind - 1; s++)
                 {
                     for (int d = 0; d <= Date_Vec_Ind - 1; d++)
                     {
@@ -3620,10 +3092,10 @@ inner join (SELECT [Datetime]
                         DateTime Date = Date_Vec[d];
 
                         var Data_3G = (from myrow in Data_Table_3G.AsEnumerable()
-                                       where  (myrow.Field<String>("Sector") == Sector && myrow.Field<DateTime>("Day") == Date)
+                                       where (myrow.Field<String>("Sector") == Sector && myrow.Field<DateTime>("Day") == Date)
                                        select myrow).ToList();
 
-                        if (Data_3G.Count!=0)
+                        if (Data_3G.Count != 0)
                         {
                             string RNC = Data_3G[0].ItemArray[1].ToString();
                             string Site = Data_3G[0].ItemArray[24].ToString();
@@ -3789,46 +3261,12 @@ inner join (SELECT [Datetime]
 
                             Data_Table_3G_SectorAgg.Rows.Add(Date.Date, RNC, Sector, CS_RRC_Ave, CS_RAB_Ave, Voice_Drop_Ave, Availability_Ave, CS_Traffic_Sum, PS_RRC_Ave, PS_Drop_Ave, RSSI_Ave, THR_Ave, PS_Traffic_Sum, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, Site);
                         }
-                     
 
-   
+
+
 
                     }
                 }
-
-
-                // Group by Date and Sector (It had a problem for all null items)
-                //var results = from row in Data_Table_3G.AsEnumerable()
-                //                  group row by new { f1 = row.Field<DateTime>("Day"), f2 = row.Field<string>("Sector"), f3 = row.Field<string>("RNC"), f4 = row.Field<string>("Site") } into rows
-                //                  select new
-                //                  {
-                //                      Date = rows.Key.f1,
-                //                      Sector = rows.Key.f2,
-                //                      RNC = rows.Key.f3,
-                //                      CS_RRC_SR = rows.Select(x => (double)x["CS RRC SR, TH=95"]).Where(x => x != -1).Average(),
-                //                      CS_RAB_SR = rows.Select(x => (double)x["CS RAB Establish, TH=95"]).Where(x => x != -1).Average(),
-                //                      Voice_Drop = rows.Select(x => (double)x["Voice Drop Rate, TH=4"]).Where(x => x != -1).Average(),
-                //                      Availability = rows.Select(x => (double)x["Cell Availability, TH=99"]).Where(x => x != -1).Average(),
-                //                      CS_Traffic = rows.Select(x => (double)x["BH CS Traffic (Erlang), TH=0"]).Where(x => x != -1).Sum(),
-                //                      PS_RRC_SR = rows.Select(x => (double)x["PS RRC SR, TH=95"]).Where(x => x != -1).Average(),
-                //                      PS_Drop = rows.Select(x => (double)x["PS Drop Rate, TH=4"]).Where(x => x != -1).Average(),
-                //                      RSSI = rows.Select(x => (double)x["RSSI (dBm), TH=-90"]).Where(x => x != -1).Average(),
-                //                      THR = rows.Select(x => (double)x["HS User Throughput (Mbps), TH=1"]).Where(x => x != -1).Average(),
-                //                      PS_Traffic = rows.Select(x => (double)x["Daily PS Traffic (GB), TH=0"]).Where(x => x != -1).Sum(),
-                //                      CS_RRC_SR_Score = 0,
-                //                      CS_RAB_SR_Score = 0,
-                //                      Voice_Drop_Score = 0,
-                //                      Availability_Score = 0,
-                //                      CS_Traffic_Score = 0,
-                //                      PS_RRC_SR_Score = 0,
-                //                      PS_Drop_Score = 0,
-                //                      RSSI_Score = 0,
-                //                      THR_Score = 0,
-                //                      PS_Traffic_Score = 0,
-                //                      Site = rows.Key.f4
-                //                  };
-                //DataTable Data_Table_3G_SectorAgg = new DataTable();
-                //Data_Table_3G_SectorAgg = ConvertToDataTable(results);
 
 
 
@@ -3836,7 +3274,6 @@ inner join (SELECT [Datetime]
 
 
                 progressBar1.Minimum = 0;
-                //progressBar1.Maximum = Data_Table_3G_CS.Rows.Count - 1;
 
 
                 if (Data_Table_3G_SectorAgg.Rows.Count == 0)
@@ -3846,18 +3283,10 @@ inner join (SELECT [Datetime]
 
                 if (Data_Table_3G_SectorAgg.Rows.Count != 0)
                 {
-                    // progressBar1.Maximum = Data_Table_3G_CS.Rows.Count - 1;
                     progressBar1.Invoke(new Action(() => progressBar1.Maximum = Data_Table_3G_SectorAgg.Rows.Count - 1));
 
-                    //dataGridView1.ColumnCount = 14;
                     dataGridView1.Invoke(new Action(() => dataGridView1.ColumnCount = 15));
-
-                    // dataGridView1.Rows.Clear();
-                    //dataGridView1.Invoke(new Action(() => dataGridView1.Rows.Clear()));
-                    //dataGridView1.RowCount = Data_Table_3G_CS.Rows.Count + 1;
                     dataGridView1.Invoke(new Action(() => dataGridView1.RowCount = Data_Table_3G_SectorAgg.Rows.Count + 1));
-
-
 
 
 
@@ -3882,10 +3311,6 @@ inner join (SELECT [Datetime]
 
 
 
-
-
-
-
                     for (int k = 0; k < Data_Table_3G_SectorAgg.Rows.Count; k++)
                     {
                         int result = 0;
@@ -3904,29 +3329,23 @@ inner join (SELECT [Datetime]
 
 
                         // Date
-                        //   dataGridView1.Rows[k + 1].Cells[0].Value = Data_Table_3G.Rows[k][0];
                         dataGridView1.Invoke(new Action(() => dataGridView1.Rows[k + 1].Cells[0].Value = Data_Table_3G_SectorAgg.Rows[k][0]));
                         //RNC
-                        //  dataGridView1.Rows[k + 1].Cells[1].Value = Data_Table_3G.Rows[k][1];
                         dataGridView1.Invoke(new Action(() => dataGridView1.Rows[k + 1].Cells[1].Value = Data_Table_3G_SectorAgg.Rows[k][1]));
                         // Site
                         string Cell = Data_Table_3G_SectorAgg.Rows[k][2].ToString();
-                        //dataGridView1.Rows[k + 1].Cells[2].Value = Cell.Substring(0, 8);
                         dataGridView1.Invoke(new Action(() => dataGridView1.Rows[k + 1].Cells[2].Value = Data_Table_3G_SectorAgg.Rows[k][24]));
-                        //Data_Table_3G_SectorAgg.Rows[k][24] = Cell.Substring(0, 8);
                         // Sector
-                        // dataGridView1.Rows[k + 1].Cells[3].Value = Data_Table_3G.Rows[k][2];
                         dataGridView1.Invoke(new Action(() => dataGridView1.Rows[k + 1].Cells[3].Value = Data_Table_3G_SectorAgg.Rows[k][2]));
 
 
                         // CS RRC SR
-                        // dataGridView1.Rows[k + 1].Cells[4].Value = Data_Table_3G.Rows[k][3];
                         dataGridView1.Invoke(new Action(() => dataGridView1.Rows[k + 1].Cells[4].Value = Data_Table_3G_SectorAgg.Rows[k][3]));
                         if (Convert.ToDouble(Data_Table_3G_SectorAgg.Rows[k][3]) == -1)
                         {
-                           Data_Table_3G_SectorAgg.Rows[k][13] = -1;
+                            Data_Table_3G_SectorAgg.Rows[k][13] = -1;
                         }
-                        if (Convert.ToDouble(Data_Table_3G_SectorAgg.Rows[k][3]) < CS_RRC_SR_TH && Convert.ToDouble(Data_Table_3G_SectorAgg.Rows[k][3])!=-1)
+                        if (Convert.ToDouble(Data_Table_3G_SectorAgg.Rows[k][3]) < CS_RRC_SR_TH && Convert.ToDouble(Data_Table_3G_SectorAgg.Rows[k][3]) != -1)
                         {
                             Data_Table_3G_SectorAgg.Rows[k][13] = 1; result++; dataGridView1.Rows[k + 1].Cells[4].Style.BackColor = Color.Orange;
                         }
@@ -3937,7 +3356,6 @@ inner join (SELECT [Datetime]
 
 
                         // CS RAB Setablish
-                        //  dataGridView1.Rows[k + 1].Cells[5].Value = Data_Table_3G.Rows[k][4];
                         dataGridView1.Invoke(new Action(() => dataGridView1.Rows[k + 1].Cells[5].Value = Data_Table_3G_SectorAgg.Rows[k][4]));
                         if (Convert.ToDouble(Data_Table_3G_SectorAgg.Rows[k][4]) == -1)
                         {
@@ -3954,7 +3372,6 @@ inner join (SELECT [Datetime]
 
 
                         // Voice Drop Rate
-                        //dataGridView1.Rows[k + 1].Cells[6].Value = Data_Table_3G.Rows[k][5];
                         dataGridView1.Invoke(new Action(() => dataGridView1.Rows[k + 1].Cells[6].Value = Data_Table_3G_SectorAgg.Rows[k][5]));
                         if (Convert.ToDouble(Data_Table_3G_SectorAgg.Rows[k][5]) == -1)
                         {
@@ -3971,7 +3388,6 @@ inner join (SELECT [Datetime]
 
 
                         // Availability
-                        //dataGridView1.Rows[k + 1].Cells[7].Value = Data_Table_3G.Rows[k][6];
                         dataGridView1.Invoke(new Action(() => dataGridView1.Rows[k + 1].Cells[7].Value = Data_Table_3G_SectorAgg.Rows[k][6]));
                         if (Convert.ToDouble(Data_Table_3G_SectorAgg.Rows[k][6]) == -1)
                         {
@@ -3988,7 +3404,6 @@ inner join (SELECT [Datetime]
 
 
                         // CS Traffic
-                        // dataGridView1.Rows[k + 1].Cells[8].Value = Data_Table_3G.Rows[k][7];
                         dataGridView1.Invoke(new Action(() => dataGridView1.Rows[k + 1].Cells[8].Value = Data_Table_3G_SectorAgg.Rows[k][7]));
                         if (Convert.ToDouble(Data_Table_3G_SectorAgg.Rows[k][7]) == -1)
                         {
@@ -4005,7 +3420,6 @@ inner join (SELECT [Datetime]
 
 
                         // PS RRC SR
-                        //dataGridView1.Rows[k + 1].Cells[9].Value = Data_Table_3G.Rows[k][8];
                         dataGridView1.Invoke(new Action(() => dataGridView1.Rows[k + 1].Cells[9].Value = Data_Table_3G_SectorAgg.Rows[k][8]));
                         if (Convert.ToDouble(Data_Table_3G_SectorAgg.Rows[k][8]) == -1)
                         {
@@ -4021,7 +3435,6 @@ inner join (SELECT [Datetime]
                         }
 
                         // PS Drop Rate
-                        // dataGridView1.Rows[k + 1].Cells[10].Value = Data_Table_3G.Rows[k][9];
                         dataGridView1.Invoke(new Action(() => dataGridView1.Rows[k + 1].Cells[10].Value = Data_Table_3G_SectorAgg.Rows[k][9]));
                         if (Convert.ToDouble(Data_Table_3G_SectorAgg.Rows[k][9]) == -1)
                         {
@@ -4038,7 +3451,6 @@ inner join (SELECT [Datetime]
 
 
                         // RSSI
-                        // dataGridView1.Rows[k + 1].Cells[11].Value = Data_Table_3G.Rows[k][10];
                         dataGridView1.Invoke(new Action(() => dataGridView1.Rows[k + 1].Cells[11].Value = Data_Table_3G_SectorAgg.Rows[k][10]));
                         if (Convert.ToDouble(Data_Table_3G_SectorAgg.Rows[k][10]) == -1)
                         {
@@ -4057,7 +3469,6 @@ inner join (SELECT [Datetime]
 
 
                         // HS User THR
-                        // dataGridView1.Rows[k + 1].Cells[11].Value = Data_Table_3G.Rows[k][10];
                         dataGridView1.Invoke(new Action(() => dataGridView1.Rows[k + 1].Cells[12].Value = Data_Table_3G_SectorAgg.Rows[k][11]));
                         if (Convert.ToDouble(Data_Table_3G_SectorAgg.Rows[k][11]) == -1)
                         {
@@ -4074,12 +3485,9 @@ inner join (SELECT [Datetime]
 
 
 
-                     
-
 
 
                         // PS Traffic
-                        //dataGridView1.Rows[k + 1].Cells[12].Value = Data_Table_3G.Rows[k][11];
                         dataGridView1.Invoke(new Action(() => dataGridView1.Rows[k + 1].Cells[13].Value = Data_Table_3G_SectorAgg.Rows[k][12]));
                         if (Convert.ToDouble(Data_Table_3G_SectorAgg.Rows[k][12]) == -1)
                         {
@@ -4098,10 +3506,7 @@ inner join (SELECT [Datetime]
 
                         if ((Convert.ToInt16(Data_Table_3G_SectorAgg.Rows[k][17]) == -1) || (Convert.ToInt16(Data_Table_3G_SectorAgg.Rows[k][22]) == -1))
                         {
-                            //         if (Convert.ToInt16(Data_Table_3G.Rows[k][21])!= 0)
-                            //  {
                             Data_Table_3G_SectorAgg.Rows[k][23] = 1; dataGridView1.Rows[k + 1].Cells[14].Value = "Not Updated";
-                            //                             }
                         }
                         else if (result == 0)
                         {
@@ -4112,7 +3517,6 @@ inner join (SELECT [Datetime]
                             Data_Table_3G_SectorAgg.Rows[k][23] = 0; dataGridView1.Rows[k + 1].Cells[14].Value = "Rejected";
                         }
                         progressBar1.Invoke(new Action(() => progressBar1.Value = k));
-                        //   progressBar1.Value = k;
 
 
                     }
@@ -4178,19 +3582,10 @@ inner join (SELECT [Datetime]
 
             if (Input_Type == "FARAZ" && Technology == "4G")
             {
-                Technology = "4G-MCI";
-                //string Data_Quary = @"select [Date], [BSC], [Cell], [TCH_Traffic_BH] as 'TCH_Traffic_BH (Erlang)', [CSSR_MCI] as'CSSR', [CDR(not Affected by incoming Handovers from 3G)(Eric_CELL)] as 'Voice Drop Rate', [IHSR] as 'IHSR', [OHSR] as 'OHSR', [TCH_Availability] as 'TCH Availability' from [dbo].[CC2_Ericsson_Cell_BH] where  (" + EH_sites_list + ") and (" + date_list + ")" +
-                //       @" union all select [Date], [BSC], [Cell], [TCH_Traffic_BH] as 'TCH_Traffic_BH (Erlang)', [CSSR3] as'CSSR', [CDR3] as 'Voice Drop Rate', [IHSR2] as 'IHSR', [OHSR2] as 'OHSR',  [TCH_Availability] as 'TCH Availability' from [dbo].[CC2_Huawei_Cell_BH] where (" + EH_sites_list + ") and (" + date_list + ")" +
-                //       @" union all select [Date], [BSC], [Cell], [TCH_Traffic_BH] as 'TCH_Traffic_BH (Erlang)', [CSSR3] as'CSSR', [CDR3] as 'Voice Drop Rate', [IHSR2] as 'IHSR', [OHSR2] as 'OHSR',  [TCH_Availability] as 'TCH Availability' from [dbo].[CC2_Huawei_Cell_BH] where (" + H_sites_list + ") and (" + date_list + ")" +
-                //       @" union all select [Date], [BSC], [SEG] as 'Cell', [TCH_Traffic_BH] as 'TCH_Traffic_BH (Erlang)', [CSSR_MCI] as'CSSR', [CDR(including_CS_IRAT_handovers_3G_to2G)(Nokia_SEG)] as 'Voicde  Drop Rate', [IHSR] as 'IHSR', [OHSR] AS 'OHSR', [TCH_Availability] as 'TCH Availability' from [dbo].[CC2_Nokia_Cell_BH] where (" + N_sites_list + ") and (" + date_list + ")";
+                //Technology = "4G-MCI";
 
-                //SqlCommand Data_Quary1 = new SqlCommand(Data_Quary, connection);
-                //Data_Quary1.CommandTimeout = 0;
-                //Data_Quary1.ExecuteNonQuery();
-                //Data_Table_2G = new DataTable();
-                //SqlDataAdapter Date_Table1 = new SqlDataAdapter(Data_Quary1);
-                //Date_Table1.Fill(Data_Table_2G);
 
+                DataTable Data_Table_4G = new DataTable();
                 DataTable Data_Table_4G1 = new DataTable();
 
                 Data_Table_4G1.Columns.Add("Date", typeof(DateTime));
@@ -4231,7 +3626,6 @@ inner join (SELECT [Datetime]
                 Data_Table_4G.Columns.Add("PS_Traffic_Daily (GB) Score", typeof(int));
 
                 Data_Table_4G.Columns.Add("Cell Score", typeof(double));
-                // Data_Table_4G.Columns.Add("Site Score", typeof(double));
                 Data_Table_4G.Columns.Add("Site", typeof(string));
 
 
@@ -4281,41 +3675,6 @@ inner join (SELECT [Datetime]
                         string Cell_Name = FARAZ_Data[k + 1, 2].ToString();
                         string Sector = Cell_Name.Substring(5, 9);
                         string Site = Sector.Substring(0, 8);
-
-
-
-
-
-                        //string str2 = Regex.Replace(NE, "[^a-zA-Z0-9]", " ");      //?? ???????? ?? ??? ?? ??? ? ??? ??? ?? ?? ??????? ???? ????? ??
-                        //str2 = Regex.Replace(str2, " {2,}", " ").Trim();           //????? ??????? ???? ??? ?? ?? ?? ?? ?? ??????? ???? ????? ?? ???
-                        //string[] Split_Description = str2.Split(' ');
-                        //string BSC = Split_Description[0];
-
-                        //string Tech = Split_Description[0].Substring(0, 1);
-                        //string Tech_Last = Split_Description[0].Substring(Split_Description[0].Length - 1, 1);
-
-                        //string CellName = "";
-                        //if ((Tech == "B" && (Tech_Last == "E" || Tech_Last == "H" || Tech_Last == "N")) || Split_Description[0].Length == 2)
-                        //{
-                        //    //int c1 = Split_Description.Length;
-                        //    CellName = Split_Description[1];
-                        //}
-                        //else
-                        //{
-                        //    int c1 = Split_Description.Length;
-                        //    CellName = Split_Description[c1 - 1];
-                        //}
-
-
-                        //if (CellName.Length == 7)
-                        //{
-                        //    Site = CellName.Substring(0, 6);
-                        //}
-                        //if (CellName.Length > 7)
-                        //{
-                        //    Site = CellName.Substring(0, 8);
-                        //}
-
 
 
                         string ERAB_Setup_SR = "";
@@ -4564,99 +3923,12 @@ inner join (SELECT [Datetime]
                             }
                         }
 
-                        //  Data_Table_4G1.Rows.Add(Date, Site, Sector, Cell_Name, ERAB_Setup_SR, UE_DL_THR, Cell_Availability, CSFB_Success_Rate, Volte_Traffic, ERAB_Drop_Rate, Intra_Freq_HO_SR, RRC_Connection_SR, PS_Traffic_Daily);
-
 
                         Data_Table_4G.Rows.Add(Date, Sector, ERAB_Setup_SR, UE_DL_THR, Cell_Availability, CSFB_Success_Rate, Volte_Traffic, ERAB_Drop_Rate, Intra_Freq_HO_SR, RRC_Connection_SR, PS_Traffic_Daily, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, Site);
 
                     }
 
                 }
-
-
-
-
-                // Group By 
-                //      var groupedData = (from b in Data_Table_4G1.AsEnumerable()
-                //                        group b by new
-                //                        {
-                //                            Date=b.Field<DateTime>("Date"),
-                //                            Sector=b.Field<string>("Sector")
-                //                        } into g
-                //                        select new
-                //                        {
-                //                            Date = g.Key.Date,
-                //                            Sector = g.Key.Sector,
-
-                //                            //ChargeTag = g.Key,
-
-                //                            ERAB_Setup_SR = g.Select(x => x.Field<string>("ERAB Setup SR, TH=96"))
-                //.Where(s => !String.IsNullOrEmpty(s))
-                //.Select(Convert.ToDouble)
-                //.Average(),
-                //                            UE_DL_THR = g.Select(x => x.Field<string>("UE DL THR (Mbps), TH=4"))
-                //.Where(s => !String.IsNullOrEmpty(s))
-                //.Select(Convert.ToDouble)
-                //.Average(),
-
-                //                            Cell_Availability = g.Select(x => x.Field<string>("Cell Availability, TH=99"))
-                //.Where(s => !String.IsNullOrEmpty(s))
-                //.Select(Convert.ToDouble)
-                //.Average(),
-
-                //                            CSFB_Success_Rate = g.Select(x => x.Field<string>("CSFB_Success_Rate, TH=95"))
-                //.Where(s => !String.IsNullOrEmpty(s))
-                //.Select(Convert.ToDouble)
-                //.Average(),
-
-                //                            Volte_Traffic = g.Select(x => x.Field<string>("Volte_Traffic, TH=0"))
-                //.Where(s => !String.IsNullOrEmpty(s))
-                //.Select(Convert.ToDouble)
-                //.Sum(),
-
-                //                            ERAB_Drop_Rate = g.Select(x => x.Field<string>("ERAB Drop Rate, TH=3"))
-                //.Where(s => !String.IsNullOrEmpty(s))
-                //.Select(Convert.ToDouble)
-                //.Average(),
-
-                //                            Intra_Freq_HO_SR = g.Select(x => x.Field<string>("Intra Freq HO SR, TH=95"))
-                //.Where(s => !String.IsNullOrEmpty(s))
-                //.Select(Convert.ToDouble)
-                //.Average(),
-
-                //                            RRC_Connection_SR = g.Select(x => x.Field<string>("RRC Connection SR, TH=96"))
-                //.Where(s => !String.IsNullOrEmpty(s))
-                //.Select(Convert.ToDouble)
-                //.Average(),
-
-                //                            PS_Traffic_Daily = g.Select(x => x.Field<string>("PS_Traffic_Daily (GB), TH=0"))
-                //.Where(s => !String.IsNullOrEmpty(s))
-                //.Select(Convert.ToDouble)
-                //.Sum()
-                //                        }).ToList();
-
-
-
-                //      for (int i = 0; i <= groupedData.Count-1; i++)
-                //      {
-                //          DateTime Date1 = Convert.ToDateTime(groupedData[i].Date.ToString());
-                //          string Cell_Name1 = groupedData[i].Sector.ToString();
-                //          string Site1 = Cell_Name1.Substring(0, 8);
-                //          string ERAB_Setup_SR1 = groupedData[i].ERAB_Setup_SR.ToString();
-                //          string UE_DL_THR1 = groupedData[i].UE_DL_THR.ToString();
-                //          string Cell_Availability1 = groupedData[i].Cell_Availability.ToString();
-                //          string CSFB_Success_Rate1 = groupedData[i].CSFB_Success_Rate.ToString();
-                //          string Volte_Traffic1 = groupedData[i].Volte_Traffic.ToString();
-                //          string ERAB_Drop_Rate1 = groupedData[i].ERAB_Drop_Rate.ToString();
-                //          string Intra_Freq_HO_SR1 = groupedData[i].Intra_Freq_HO_SR.ToString();
-                //          string RRC_Connection_SR1 = groupedData[i].RRC_Connection_SR.ToString();
-                //          string PS_Traffic_Daily1 = groupedData[i].PS_Traffic_Daily.ToString();
-
-                //          Data_Table_4G.Rows.Add(Date1, Cell_Name1, ERAB_Setup_SR1, UE_DL_THR1, Cell_Availability1, CSFB_Success_Rate1, Volte_Traffic1, ERAB_Drop_Rate1, Intra_Freq_HO_SR1, RRC_Connection_SR1, PS_Traffic_Daily1,  -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, Site1);
-
-
-                //      }
-
 
 
 
@@ -4669,27 +3941,11 @@ inner join (SELECT [Datetime]
 
 
 
-                //dataGridView1.ColumnCount = 12;
                 dataGridView1.Invoke(new Action(() => dataGridView1.ColumnCount = 13));
 
-                //dataGridView1.Rows.Clear();
                 dataGridView1.Invoke(new Action(() => dataGridView1.Rows.Clear()));
 
-                //dataGridView1.RowCount = Data_Table_4G.Rows.Count + 1;
                 dataGridView1.Invoke(new Action(() => dataGridView1.RowCount = Data_Table_4G.Rows.Count + 1));
-
-                //dataGridView1.Rows[0].Cells[0].Value = "Date"; dataGridView1.Columns[0].Width = 100;
-                //dataGridView1.Rows[0].Cells[1].Value = "Site"; dataGridView1.Columns[1].Width = 100;
-                //dataGridView1.Rows[0].Cells[2].Value = "Sector"; dataGridView1.Columns[2].Width = 100;
-                //dataGridView1.Rows[0].Cells[3].Value = "UE DL THR (Mbps)"; dataGridView1.Columns[3].Width = 100;
-                //dataGridView1.Rows[0].Cells[4].Value = "UE UL THR (Mbps)"; dataGridView1.Columns[4].Width = 100;
-                //dataGridView1.Rows[0].Cells[5].Value = "ERAB Drop Rate"; dataGridView1.Columns[5].Width = 100;
-                //dataGridView1.Rows[0].Cells[6].Value = "ERAB Setup SR"; dataGridView1.Columns[6].Width = 100;
-                //dataGridView1.Rows[0].Cells[7].Value = "Intra Freq HO SR"; dataGridView1.Columns[7].Width = 100;
-                //dataGridView1.Rows[0].Cells[8].Value = "RRC Connection SR"; dataGridView1.Columns[8].Width = 100;
-                //dataGridView1.Rows[0].Cells[9].Value = "Cell Availability"; dataGridView1.Columns[9].Width = 100;
-                //dataGridView1.Rows[0].Cells[10].Value = "Daily PS Traffic (GB)"; dataGridView1.Columns[10].Width = 100;
-                //dataGridView1.Rows[0].Cells[11].Value = "Cell Status"; dataGridView1.Columns[11].Width = 100;
 
 
 
@@ -4734,33 +3990,28 @@ inner join (SELECT [Datetime]
 
                 if (Data_Table_4G.Rows.Count != 0)
                 {
-                    //  progressBar1.Maximum = Data_Table_4G.Rows.Count - 1;
                     progressBar1.Invoke(new Action(() => progressBar1.Maximum = Data_Table_4G.Rows.Count - 1));
                     for (int k = 0; k < Data_Table_4G.Rows.Count; k++)
                     {
                         int result = 0;
 
                         // Date
-                        //dataGridView1.Rows[k + 1].Cells[0].Value = Data_Table_4G.Rows[k][0];
                         dataGridView1.Invoke(new Action(() => dataGridView1.Rows[k + 1].Cells[0].Value = Data_Table_4G.Rows[k][0]));
 
 
                         // Site
                         string Cell = Data_Table_4G.Rows[k][1].ToString();
-                        //  dataGridView1.Rows[k + 1].Cells[1].Value = Cell.Substring(0, 8);
                         dataGridView1.Invoke(new Action(() => dataGridView1.Rows[k + 1].Cells[1].Value = Cell.Substring(0, 8)));
                         Data_Table_4G.Rows[k][21] = Cell.Substring(0, 8);
 
 
                         // Cell
-                        //dataGridView1.Rows[k + 1].Cells[2].Value = Data_Table_4G.Rows[k][1];
                         dataGridView1.Invoke(new Action(() => dataGridView1.Rows[k + 1].Cells[2].Value = Data_Table_4G.Rows[k][1]));
 
 
 
 
                         // ERAB Setup SR
-                        // dataGridView1.Rows[k + 1].Cells[6].Value = Data_Table_4G.Rows[k][3];
                         dataGridView1.Invoke(new Action(() => dataGridView1.Rows[k + 1].Cells[3].Value = Data_Table_4G.Rows[k][2]));
                         if (Data_Table_4G.Rows[k][2].ToString() == "")
                         {
@@ -4778,7 +4029,6 @@ inner join (SELECT [Datetime]
 
 
                         // UE DL THR
-                        //  dataGridView1.Rows[k + 1].Cells[3].Value = Data_Table_4G.Rows[k][2];
                         dataGridView1.Invoke(new Action(() => dataGridView1.Rows[k + 1].Cells[4].Value = Data_Table_4G.Rows[k][3]));
                         if (Data_Table_4G.Rows[k][3].ToString() == "")
                         {
@@ -4795,7 +4045,6 @@ inner join (SELECT [Datetime]
 
 
                         // Cell Availability
-                        // dataGridView1.Rows[k + 1].Cells[9].Value = Data_Table_4G.Rows[k][3];
                         dataGridView1.Invoke(new Action(() => dataGridView1.Rows[k + 1].Cells[5].Value = Data_Table_4G.Rows[k][4]));
                         if (Data_Table_4G.Rows[k][4].ToString() == "")
                         {
@@ -4813,7 +4062,6 @@ inner join (SELECT [Datetime]
 
 
                         // CSFB SR
-                        // dataGridView1.Rows[k + 1].Cells[5].Value = Data_Table_4G.Rows[k][4];
                         dataGridView1.Invoke(new Action(() => dataGridView1.Rows[k + 1].Cells[6].Value = Data_Table_4G.Rows[k][5]));
                         if (Data_Table_4G.Rows[k][5].ToString() == "")
                         {
@@ -4832,7 +4080,6 @@ inner join (SELECT [Datetime]
 
 
                         // Volte
-                        // dataGridView1.Rows[k + 1].Cells[5].Value = Data_Table_4G.Rows[k][4];
                         dataGridView1.Invoke(new Action(() => dataGridView1.Rows[k + 1].Cells[7].Value = Data_Table_4G.Rows[k][6]));
                         if (Data_Table_4G.Rows[k][6].ToString() == "")
                         {
@@ -4851,7 +4098,6 @@ inner join (SELECT [Datetime]
 
 
                         // ERAB Drop Rate
-                        // dataGridView1.Rows[k + 1].Cells[5].Value = Data_Table_4G.Rows[k][4];
                         dataGridView1.Invoke(new Action(() => dataGridView1.Rows[k + 1].Cells[8].Value = Data_Table_4G.Rows[k][7]));
                         if (Data_Table_4G.Rows[k][7].ToString() == "")
                         {
@@ -4871,7 +4117,6 @@ inner join (SELECT [Datetime]
 
 
                         // Intra Freq HO SR
-                        //  dataGridView1.Rows[k + 1].Cells[7].Value = Data_Table_4G.Rows[k][3];
                         dataGridView1.Invoke(new Action(() => dataGridView1.Rows[k + 1].Cells[9].Value = Data_Table_4G.Rows[k][8]));
                         if (Data_Table_4G.Rows[k][8].ToString() == "")
                         {
@@ -4888,7 +4133,6 @@ inner join (SELECT [Datetime]
 
 
                         // RRC Connection SR
-                        //dataGridView1.Rows[k + 1].Cells[8].Value = Data_Table_4G.Rows[k][3];
                         dataGridView1.Invoke(new Action(() => dataGridView1.Rows[k + 1].Cells[10].Value = Data_Table_4G.Rows[k][9]));
                         if (Data_Table_4G.Rows[k][9].ToString() == "")
                         {
@@ -4908,7 +4152,6 @@ inner join (SELECT [Datetime]
 
 
                         // Daily PS Traffic (GB)
-                        // dataGridView1.Rows[k + 1].Cells[10].Value = Data_Table_4G.Rows[k][3];
                         dataGridView1.Invoke(new Action(() => dataGridView1.Rows[k + 1].Cells[11].Value = Data_Table_4G.Rows[k][10]));
                         if (Data_Table_4G.Rows[k][10].ToString() == "")
                         {
@@ -4942,7 +4185,7 @@ inner join (SELECT [Datetime]
 
 
                         progressBar1.Invoke(new Action(() => progressBar1.Value = k));
-                        //progressBar1.Value = k;
+
                     }
 
 
@@ -5027,7 +4270,7 @@ inner join (SELECT [Datetime]
 
                 IXLWorksheet Source_worksheet1 = wb.Worksheet("Result");
                 int number_of_rows1 = Source_worksheet1.RowsUsed().Count();
-                ///Source_worksheet1.Cell(0, 3).Value = "Rejected Cell List";
+
                 for (int k = 1; k <= number_of_rows1; k++)  // Sheet of Results (Source_worksheet1)
                 {
                     string site = Source_worksheet1.Cell(k, 1).Value.ToString();
@@ -5044,7 +4287,7 @@ inner join (SELECT [Datetime]
                         {
                             if (!cell_list.Contains(Cell))
                             {
-                                //Source_worksheet1.Cell(k, cell_indexer + 2).Value = Cell;
+
                                 Cells = Cells + Cell + ", ";
                                 Source_worksheet1.Cell(k, 3).Value = Cells;
                                 cell_list[cell_indexer - 1] = Cell;
@@ -5107,7 +4350,7 @@ inner join (SELECT [Datetime]
 
                 IXLWorksheet Source_worksheet1 = wb.Worksheet("Result");
                 int number_of_rows1 = Source_worksheet1.RowsUsed().Count();
-                ///Source_worksheet1.Cell(0, 3).Value = "Rejected Cell List";
+
                 for (int k = 1; k <= number_of_rows1; k++)  // Sheet of Results (Source_worksheet1)
                 {
                     string site = Source_worksheet1.Cell(k, 1).Value.ToString();
@@ -5124,7 +4367,6 @@ inner join (SELECT [Datetime]
                         {
                             if (!cell_list.Contains(Cell))
                             {
-                                //Source_worksheet1.Cell(k, cell_indexer + 2).Value = Cell;
                                 Cells = Cells + Cell + ", ";
                                 Source_worksheet1.Cell(k, 3).Value = Cells;
                                 cell_list[cell_indexer - 1] = Cell;
@@ -5207,7 +4449,6 @@ inner join (SELECT [Datetime]
                         {
                             if (!cell_list.Contains(Cell))
                             {
-                                //Source_worksheet1.Cell(k, cell_indexer + 2).Value = Cell;
                                 Cells = Cells + Cell + ", ";
                                 Source_worksheet1.Cell(k, 3).Value = Cells;
                                 cell_list[cell_indexer - 1] = Cell;
@@ -5277,7 +4518,6 @@ inner join (SELECT [Datetime]
                         {
                             if (!cell_list.Contains(Cell))
                             {
-                                //Source_worksheet1.Cell(k, cell_indexer + 2).Value = Cell;
                                 Cells = Cells + Cell + ", ";
                                 Source_worksheet1.Cell(k, 3).Value = Cells;
                                 cell_list[cell_indexer - 1] = Cell;
@@ -5349,7 +4589,6 @@ inner join (SELECT [Datetime]
                         {
                             if (!cell_list.Contains(Cell))
                             {
-                                //Source_worksheet1.Cell(k, cell_indexer + 2).Value = Cell;
                                 Cells = Cells + Cell + ", ";
                                 Source_worksheet1.Cell(k, 3).Value = Cells;
                                 cell_list[cell_indexer - 1] = Cell;
@@ -5388,9 +4627,6 @@ inner join (SELECT [Datetime]
             }
         }
 
-        private void textBox20_TextChanged(object sender, EventArgs e)
-        {
 
-        }
     }
 }

@@ -1,6 +1,6 @@
 ﻿namespace CWA
 {
-    partial class Form7
+    partial class CR
     {
         /// <summary>
         /// Required designer variable.

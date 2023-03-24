@@ -45,21 +45,21 @@ using System.Text.RegularExpressions;
 
 namespace CWA
 {
-    public partial class Form13 : Form
+    public partial class CustomerComplaint : Form
     {
-        public Form13()
+        public CustomerComplaint()
         {
             InitializeComponent();
         }
 
 
-        public Form1 form1;
+        public Main form1;
 
 
-        public Form13(Form form)
+        public CustomerComplaint(Form form)
         {
             InitializeComponent();
-            form1 = (Form1)form;
+            form1 = (Main)form;
         }
 
         private void Form13_Load(object sender, EventArgs e)
@@ -146,20 +146,13 @@ namespace CWA
 
 
 
-   
-
-
-
-
-
-
             // Last Date
             string Max_Date_Quary = @"Select max(Date) from Tehran_CC_Maintable";
             DataTable Max_Date_Table = Query_Execution_Table_Output(Max_Date_Quary);
             // Convert Last Date to String
             DateTime Last_Updated_Date = Convert.ToDateTime((Max_Date_Table.Rows[Max_Date_Table.Rows.Count - 1]).ItemArray[0]);
             string Last_Updated_Date_String = Date_ToString(Last_Updated_Date);
-
+            string Last_Updated_Date_String_90= Date_ToString(Last_Updated_Date.AddDays(-90));
 
 
 
@@ -306,6 +299,11 @@ namespace CWA
             }
 
 
+
+
+
+
+
             // for run from begining these lines run from 299 till 324
 
             //// Truncate [Tehran_CC_Remain]
@@ -337,10 +335,19 @@ namespace CWA
             //Query_Execution(Truncate_Tehran_CC_ReadyToCloseRemovePark_Detail_Quary);
 
 
-            //// Truncate [Tehran_CC_MTTR]
-            //string Truncate_Tehran_CC_MTTR_Quary = "Truncate table [Tehran_CC_MTTR]";
-            //Query_Execution(Truncate_Tehran_CC_MTTR_Quary);
+            //// Truncate [Tehran_CC_NPOMTTR]
+            //string Truncate_Tehran_CC_NPOMTTR_Quary = "Truncate table [Tehran_CC_NPOMTTR]";
+            //Query_Execution(Truncate_Tehran_CC_NPOMTTR_Quary);
 
+
+            //// Truncate [Tehran_CC_FOMTTR]
+            //string Truncate_Tehran_CC_FOMTTR_Quary = "Truncate table [Tehran_CC_FOMTTR]";
+            //Query_Execution(Truncate_Tehran_CC_FOMTTR_Quary);
+
+
+            //// Truncate [Tehran_CC_FOMTTR_90]
+            //string Truncate_Tehran_CC_FOMTTR_90_Quary = "Truncate table [Tehran_CC_FOMTTR_90]";
+            //Query_Execution(Truncate_Tehran_CC_FOMTTR_90_Quary);
 
 
             ////// **********************************
@@ -487,7 +494,7 @@ from Tehran_CC_Maintable where (cast([Ticket Status] as varchar)='باز داخ�
 
 
 
-            //MTTR of Tickets
+            //NPO MTTR of Tickets
             for (int i = 0; i < Date_Table.Rows.Count; i++)
             {
                 DateTime Date1 = Convert.ToDateTime((Date_Table.Rows[i]).ItemArray[0]);
@@ -529,7 +536,7 @@ MTTR1_Total.RNC=MTTR2_Total.RNC1  ) tble where [RNC MTTR] is not null";
                 DataTable MTTR_Table = Query_Execution_Table_Output(MTTR_Quary);
 
                 SqlBulkCopy objbulk_MTTR = new SqlBulkCopy(connection);
-                objbulk_MTTR.DestinationTableName = "Tehran_CC_MTTR";
+                objbulk_MTTR.DestinationTableName = "Tehran_CC_NPOMTTR";
                 objbulk_MTTR.ColumnMappings.Add("Date", "Date");
                 objbulk_MTTR.ColumnMappings.Add("RNC", "RNC");
                 objbulk_MTTR.ColumnMappings.Add("RNC MTTR Num", "RNC MTTR Num");
@@ -542,6 +549,172 @@ MTTR1_Total.RNC=MTTR2_Total.RNC1  ) tble where [RNC MTTR] is not null";
 
 
 
+            //NPO MTTR of Tickets Last 90 days
+            for (int i = 0; i < Date_Table.Rows.Count; i++)
+            {
+                DateTime Date1 = Convert.ToDateTime((Date_Table.Rows[i]).ItemArray[0]);
+                string Date = Date_ToString(Date1);
+
+                if (Date1 <= Last_Updated_Date_Incoming)
+                {
+                    continue;
+                }
+
+                if (Date1 >= Last_Updated_Date.AddDays(-90))
+                {
+
+                    string MTTR_Quary = @"select Date, RNC, [RNC MTTR Num], [RNC MTTR Den], [RNC MTTR] from (
+select MTTR1_Total.Date, MTTR1_Total.RNC, MTTR1_Total.[RNC MTTR Num], MTTR2_Total.[RNC MTTR Den], cast(MTTR1_Total.[RNC MTTR Num] as float)/cast(MTTR2_Total.[RNC MTTR Den] as float) as 'RNC MTTR' from (
+
+select '" +
+Date + @"' as Date, RNC, sum([RNC MTTR Num]) as 'RNC MTTR Num' from (
+select Date , RNC, Count(*) as 'RNC MTTR Num' from Tehran_CC_Maintable where (cast([Ticket Status] as varchar)='باز داخل باکس شخصی' or cast([Ticket Status] as varchar)='باز داخل باکس گروهی' ) and ( (cast([The Last Agent Name] as varchar)='Delayناک تهران' or [The Last Agent Name]='Mohamadreza Kazmi')) and Date>='" + Last_Updated_Date_String_90 + @"' and Date<='" +
+Date + @"'
+group by Date , RNC) tble group by RNC) MTTR1_Total
+left join( 
+
+select '" +
+Date + @"' as Date1, RNC1, Count(*) as 'RNC MTTR Den' from (
+select [TT Code], RNC as 'RNC1', Date from (
+  SELECT
+  RANK() OVER(PARTITION BY  [TT Code] ORDER BY Date desc) AS ranking,
+  [TT Code],
+  RNC,
+Date from Tehran_CC_Maintable where (cast([Ticket Status] as varchar)='باز داخل باکس شخصی' or cast([Ticket Status] as varchar)='باز داخل باکس گروهی' ) and ( (cast([The Last Agent Name] as varchar)='Delayناک تهران' or [The Last Agent Name]='Mohamadreza Kazmi')) and Date>='" + Last_Updated_Date_String_90 + @"' and Date<='" +
+Date + @"') tble
+where ranking=1
+
+) tbl group by RNC1) MTTR2_Total 
+
+on MTTR1_Total.Date=MTTR2_Total.Date1 and
+MTTR1_Total.RNC=MTTR2_Total.RNC1  ) tble where [RNC MTTR] is not null";
+
+
+
+                    DataTable MTTR_Table = Query_Execution_Table_Output(MTTR_Quary);
+
+                    SqlBulkCopy objbulk_MTTR = new SqlBulkCopy(connection);
+                    objbulk_MTTR.DestinationTableName = "Tehran_CC_NPOMTTR_90";
+                    objbulk_MTTR.ColumnMappings.Add("Date", "Date");
+                    objbulk_MTTR.ColumnMappings.Add("RNC", "RNC");
+                    objbulk_MTTR.ColumnMappings.Add("RNC MTTR Num", "RNC MTTR Num");
+                    objbulk_MTTR.ColumnMappings.Add("RNC MTTR Den", "RNC MTTR Den");
+                    objbulk_MTTR.ColumnMappings.Add("RNC MTTR", "RNC MTTR");
+                    objbulk_MTTR.WriteToServer(MTTR_Table);
+                }
+
+
+            }
+
+
+
+
+
+
+            //FO MTTR of Tickets
+            for (int i = 0; i < Date_Table.Rows.Count; i++)
+            {
+                DateTime Date1 = Convert.ToDateTime((Date_Table.Rows[i]).ItemArray[0]);
+                string Date = Date_ToString(Date1);
+
+                if (Date1 <= Last_Updated_Date_Incoming)
+                {
+                    continue;
+                }
+
+                string MTTR_Quary = @"select Date, RNC, [RNC MTTR Num], [RNC MTTR Den], [RNC MTTR] from (
+select MTTR1_Total.Date, MTTR1_Total.RNC, MTTR1_Total.[RNC MTTR Num], MTTR2_Total.[RNC MTTR Den], cast(MTTR1_Total.[RNC MTTR Num] as float)/cast(MTTR2_Total.[RNC MTTR Den] as float) as 'RNC MTTR' from (
+
+select '" +
+  Date + @"' as Date, RNC, sum([RNC MTTR Num]) as 'RNC MTTR Num' from (
+select Date , RNC, Count(*) as 'RNC MTTR Num' from Tehran_CC_Maintable where (cast([Ticket Status] as varchar)='باز داخل باکس شخصی' or cast([Ticket Status] as varchar)='باز داخل باکس گروهی' ) and ( (cast([The Last Agent Name] as varchar)!='Delayناک تهران' and [The Last Agent Name]!='Mohamadreza Kazmi')) and Date<='" +
+  Date + @"'
+group by Date , RNC) tble group by RNC) MTTR1_Total
+left join( 
+
+select '" +
+  Date + @"' as Date1, RNC1, Count(*) as 'RNC MTTR Den' from (
+select [TT Code], RNC as 'RNC1', Date from (
+  SELECT
+  RANK() OVER(PARTITION BY  [TT Code] ORDER BY Date desc) AS ranking,
+  [TT Code],
+  RNC,
+Date from Tehran_CC_Maintable where (cast([Ticket Status] as varchar)='باز داخل باکس شخصی' or cast([Ticket Status] as varchar)='باز داخل باکس گروهی' ) and ( (cast([The Last Agent Name] as varchar)!='Delayناک تهران' and [The Last Agent Name]!='Mohamadreza Kazmi')) and Date<='" +
+  Date + @"') tble
+where ranking=1
+
+) tbl group by RNC1) MTTR2_Total 
+
+on MTTR1_Total.Date=MTTR2_Total.Date1 and
+MTTR1_Total.RNC=MTTR2_Total.RNC1  ) tble where [RNC MTTR] is not null";
+
+
+
+                DataTable MTTR_Table = Query_Execution_Table_Output(MTTR_Quary);
+
+                SqlBulkCopy objbulk_MTTR = new SqlBulkCopy(connection);
+                objbulk_MTTR.DestinationTableName = "Tehran_CC_FOMTTR";
+                objbulk_MTTR.ColumnMappings.Add("Date", "Date");
+                objbulk_MTTR.ColumnMappings.Add("RNC", "RNC");
+                objbulk_MTTR.ColumnMappings.Add("RNC MTTR Num", "RNC MTTR Num");
+                objbulk_MTTR.ColumnMappings.Add("RNC MTTR Den", "RNC MTTR Den");
+                objbulk_MTTR.ColumnMappings.Add("RNC MTTR", "RNC MTTR");
+                objbulk_MTTR.WriteToServer(MTTR_Table);
+            }
+
+
+
+
+            //FO MTTR of Tickets LAst 90 Days
+            for (int i = 0; i < Date_Table.Rows.Count; i++)
+            {
+                DateTime Date1 = Convert.ToDateTime((Date_Table.Rows[i]).ItemArray[0]);
+                string Date = Date_ToString(Date1);
+
+                if (Date1 <= Last_Updated_Date_Incoming)
+                {
+                    continue;
+                }
+
+                string MTTR_Quary = @"select Date, RNC, [RNC MTTR Num], [RNC MTTR Den], [RNC MTTR] from (
+select MTTR1_Total.Date, MTTR1_Total.RNC, MTTR1_Total.[RNC MTTR Num], MTTR2_Total.[RNC MTTR Den], cast(MTTR1_Total.[RNC MTTR Num] as float)/cast(MTTR2_Total.[RNC MTTR Den] as float) as 'RNC MTTR' from (
+
+select '" +
+  Date + @"' as Date, RNC, sum([RNC MTTR Num]) as 'RNC MTTR Num' from (
+select Date , RNC, Count(*) as 'RNC MTTR Num' from Tehran_CC_Maintable where (cast([Ticket Status] as varchar)='باز داخل باکس شخصی' or cast([Ticket Status] as varchar)='باز داخل باکس گروهی' ) and ( (cast([The Last Agent Name] as varchar)!='Delayناک تهران' and [The Last Agent Name]!='Mohamadreza Kazmi')) and Date>='" + Last_Updated_Date_String_90 + @"' and Date<='" +
+  Date + @"'
+group by Date , RNC) tble group by RNC) MTTR1_Total
+left join( 
+
+select '" +
+  Date + @"' as Date1, RNC1, Count(*) as 'RNC MTTR Den' from (
+select [TT Code], RNC as 'RNC1', Date from (
+  SELECT
+  RANK() OVER(PARTITION BY  [TT Code] ORDER BY Date desc) AS ranking,
+  [TT Code],
+  RNC,
+Date from Tehran_CC_Maintable where (cast([Ticket Status] as varchar)='باز داخل باکس شخصی' or cast([Ticket Status] as varchar)='باز داخل باکس گروهی' ) and ( (cast([The Last Agent Name] as varchar)!='Delayناک تهران' and [The Last Agent Name]!='Mohamadreza Kazmi')) and Date>='" + Last_Updated_Date_String_90 + @"' and Date<='" +
+  Date + @"') tble
+where ranking=1
+
+) tbl group by RNC1) MTTR2_Total 
+
+on MTTR1_Total.Date=MTTR2_Total.Date1 and
+MTTR1_Total.RNC=MTTR2_Total.RNC1  ) tble where [RNC MTTR] is not null";
+
+
+
+                DataTable MTTR_Table = Query_Execution_Table_Output(MTTR_Quary);
+
+                SqlBulkCopy objbulk_MTTR = new SqlBulkCopy(connection);
+                objbulk_MTTR.DestinationTableName = "Tehran_CC_FOMTTR_90";
+                objbulk_MTTR.ColumnMappings.Add("Date", "Date");
+                objbulk_MTTR.ColumnMappings.Add("RNC", "RNC");
+                objbulk_MTTR.ColumnMappings.Add("RNC MTTR Num", "RNC MTTR Num");
+                objbulk_MTTR.ColumnMappings.Add("RNC MTTR Den", "RNC MTTR Den");
+                objbulk_MTTR.ColumnMappings.Add("RNC MTTR", "RNC MTTR");
+                objbulk_MTTR.WriteToServer(MTTR_Table);
+            }
 
 
 

@@ -1,6 +1,6 @@
 ﻿namespace CWA
 {
-    partial class Form6
+    partial class KPIZero
     {
         /// <summary>
         /// Required designer variable.
@@ -67,10 +67,7 @@
             this.label35 = new System.Windows.Forms.Label();
             this.label34 = new System.Windows.Forms.Label();
             this.label27 = new System.Windows.Forms.Label();
-            this.textBox18 = new System.Windows.Forms.TextBox();
-            this.label26 = new System.Windows.Forms.Label();
             this.textBox17 = new System.Windows.Forms.TextBox();
-            this.label25 = new System.Windows.Forms.Label();
             this.label24 = new System.Windows.Forms.Label();
             this.textBox16 = new System.Windows.Forms.TextBox();
             this.textBox15 = new System.Windows.Forms.TextBox();
@@ -364,10 +361,7 @@
             this.groupBox2.Controls.Add(this.label35);
             this.groupBox2.Controls.Add(this.label34);
             this.groupBox2.Controls.Add(this.label27);
-            this.groupBox2.Controls.Add(this.textBox18);
-            this.groupBox2.Controls.Add(this.label26);
             this.groupBox2.Controls.Add(this.textBox17);
-            this.groupBox2.Controls.Add(this.label25);
             this.groupBox2.Controls.Add(this.label24);
             this.groupBox2.Controls.Add(this.textBox16);
             this.groupBox2.Controls.Add(this.textBox15);
@@ -471,7 +465,6 @@
             this.textBox20.Size = new System.Drawing.Size(50, 20);
             this.textBox20.TabIndex = 49;
             this.textBox20.Text = "0.5";
-            this.textBox20.TextChanged += new System.EventHandler(this.textBox20_TextChanged);
             // 
             // textBox19
             // 
@@ -564,41 +557,14 @@
             this.label27.TabIndex = 39;
             this.label27.Text = "4G:";
             // 
-            // textBox18
-            // 
-            this.textBox18.Enabled = false;
-            this.textBox18.Location = new System.Drawing.Point(464, 174);
-            this.textBox18.Name = "textBox18";
-            this.textBox18.ReadOnly = true;
-            this.textBox18.Size = new System.Drawing.Size(39, 20);
-            this.textBox18.TabIndex = 38;
-            // 
-            // label26
-            // 
-            this.label26.AutoSize = true;
-            this.label26.Location = new System.Drawing.Point(417, 177);
-            this.label26.Name = "label26";
-            this.label26.Size = new System.Drawing.Size(42, 13);
-            this.label26.TabIndex = 37;
-            this.label26.Text = "U2100:";
-            // 
             // textBox17
             // 
-            this.textBox17.Enabled = false;
-            this.textBox17.Location = new System.Drawing.Point(464, 151);
+            this.textBox17.Location = new System.Drawing.Point(453, 151);
             this.textBox17.Name = "textBox17";
             this.textBox17.ReadOnly = true;
-            this.textBox17.Size = new System.Drawing.Size(39, 20);
+            this.textBox17.Size = new System.Drawing.Size(50, 20);
             this.textBox17.TabIndex = 36;
-            // 
-            // label25
-            // 
-            this.label25.AutoSize = true;
-            this.label25.Location = new System.Drawing.Point(416, 155);
-            this.label25.Name = "label25";
-            this.label25.Size = new System.Drawing.Size(36, 13);
-            this.label25.TabIndex = 35;
-            this.label25.Text = "U900:";
+            this.textBox17.Text = "-90";
             // 
             // label24
             // 
@@ -982,7 +948,7 @@
             this.label43.Size = new System.Drawing.Size(0, 18);
             this.label43.TabIndex = 19;
             // 
-            // Form6
+            // KPIZero
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
@@ -996,7 +962,7 @@
             this.Controls.Add(this.button4);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
-            this.Name = "Form6";
+            this.Name = "KPIZero";
             this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
             this.Text = "KPI Zero";
             this.Load += new System.EventHandler(this.Form6_Load);
@@ -1037,10 +1003,7 @@
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
-        private System.Windows.Forms.TextBox textBox18;
-        private System.Windows.Forms.Label label26;
         private System.Windows.Forms.TextBox textBox17;
-        private System.Windows.Forms.Label label25;
         private System.Windows.Forms.Label label24;
         private System.Windows.Forms.TextBox textBox16;
         private System.Windows.Forms.TextBox textBox15;

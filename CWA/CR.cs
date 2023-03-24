@@ -12,21 +12,21 @@ using System.Data.SqlClient;
 
 namespace CWA
 {
-    public partial class Form7 : Form
+    public partial class CR : Form
     {
-        public Form7()
+        public CR()
         {
             InitializeComponent();
         }
 
 
-        public Form1 form1;
+        public Main form1;
 
 
-        public Form7(Form form)
+        public CR(Form form)
         {
             InitializeComponent();
-            form1 = (Form1)form;
+            form1 = (Main)form;
         }
 
 
@@ -100,7 +100,7 @@ namespace CWA
 
 
         public int data_rows_count = 1;
-        public string[] Site_list = new string[500];
+        public string[] Site_list = new string[5000];
 
         private void button1_Click(object sender, EventArgs e)
         {
@@ -147,7 +147,7 @@ namespace CWA
                 FName = file;
                 var Source_workbook = new XLWorkbook(file, XLEventTracking.Disabled);
                 Source_worksheet = null;
-                Source_worksheet = Source_workbook.Worksheet("CR_Tehran");
+                Source_worksheet = Source_workbook.Worksheet("CR_Country");
 
                 label3.Text = "File's Loaded";
                 label3.BackColor = Color.GreenYellow;
@@ -182,7 +182,7 @@ namespace CWA
                 string Check_Type = Source_worksheet.Cell(k, 11).Value.ToString();
                 string Site = Source_worksheet.Cell(k, 1).Value.ToString();
                 string End_Date = Convert.ToString(Source_worksheet.Cell(k, 7).Value.ToString());
-                if (PE == Performance_Engineer && Check_Type == "")
+                if (PE == "Golshan")
                 {
                     listBox1.Items.Add(Site + " _ " + End_Date);
                 }
@@ -208,6 +208,7 @@ namespace CWA
             CR_Output_Table.Columns.Add("Site", typeof(string));
             CR_Output_Table.Columns.Add("Cell", typeof(string));
             CR_Output_Table.Columns.Add("Node", typeof(string));
+            CR_Output_Table.Columns.Add("Vendor", typeof(string));
             CR_Output_Table.Columns.Add("Technology", typeof(string));
             CR_Output_Table.Columns.Add("KPI", typeof(string));
             CR_Output_Table.Columns.Add("Vlaue After CR", typeof(string));
@@ -227,7 +228,7 @@ namespace CWA
 
             //   CR_Output_Table1 = CR_Output_Table;
 
-            dataGridView1.ColumnCount = 14;
+            dataGridView1.ColumnCount = 15;
 
             //dataGridView1.Rows.Clear();
             //dataGridView1.RowCount = Data_Table_4G.Rows.Count + 1;
@@ -278,9 +279,9 @@ namespace CWA
             string Data_Quary_4G = "";
 
             Data_Quary_2G = @"select [Date], [BSC],  substring([Cell],1,6) as 'Site' ,[Cell], [TCH_Traffic] as 'TCH_Traffic_Daily (Erlang)', [CSSR_MCI] as'CSSR', [CDR(not Affected by incoming Handovers from 3G)(Eric_CELL)] as 'Voice Drop Rate', [IHSR] as 'IHSR', [OHSR] as 'OHSR', [TCH_Congestion] as 'TCH Congestion Rate', [TCH_Assign_Fail_Rate(NAK)(Eric_CELL)] as 'TCH ASFR', [SDCCH_Access_Succ_Rate] as 'SDCCH SR', [SDCCH_Drop_Rate] as 'SDDH Drop Rate',  [TCH_Availability] as 'TCH Availability' , [SDCCH_Congestion] as 'SDCCH Cong' , [RxQual_DL] as 'RX_DL', [RxQual_UL] as 'RX_UL', 'Ericsson' as Vendor from [dbo].[CC2_Ericsson_Cell_Daily] where  (" + EH_sites_list_2G + ") and (" + "Date = '" + Check_Day + "' or Date='" + Check_Day_7 + "')" +
-                        @" union all select [Date], [BSC], substring([Cell],1,6) as 'Site', [Cell], [TCH_Traffic] as 'TCH_Traffic_Daily (Erlang)', [CSSR3] as'CSSR', [CDR3] as 'Voice Drop Rate', [IHSR2] as 'IHSR', [OHSR2] as 'OHSR', [TCH_Cong] as 'TCH Congestion Rate', [TCH_Assignment_FR] as 'TCH ASFR', [SDCCH_Access_Success_Rate2] as 'SDCCH SR', [SDCCH_Drop_Rate] as 'SDDH Drop Rate',    [TCH_Availability] as 'TCH Availability'  , [SDCCH_Congestion_Rate] as 'SDCCH Cong' , [RX_QUALITTY_DL_NEW] as 'RX_DL', [RX_QUALITTY_UL_NEW] as 'RX_UL', 'Huawei' as Vendor from [dbo].[CC2_Huawei_Cell_Daily] where (" + EH_sites_list_2G + ") and (" + "Date = '" + Check_Day + "' or Date='" + Check_Day_7 + "')" +
-                        @" union all select [Date], [BSC] ,  substring([Cell],1,6) as 'Site', [Cell], [TCH_Traffic] as 'TCH_Traffic_Daily (Erlang)', [CSSR3] as'CSSR', [CDR3] as 'Voice Drop Rate', [IHSR2] as 'IHSR', [OHSR2] as 'OHSR', [TCH_Cong] as 'TCH Congestion Rate', [TCH_Assignment_FR] as 'TCH ASFR', [SDCCH_Access_Success_Rate2] as 'SDCCH SR', [SDCCH_Drop_Rate] as 'SDDH Drop Rate',    [TCH_Availability] as 'TCH Availability' , [SDCCH_Congestion_Rate] as 'SDCCH Cong' , [RX_QUALITTY_DL_NEW] as 'RX_DL', [RX_QUALITTY_UL_NEW] as 'RX_UL', 'Huawei' as Vendor from [dbo].[CC2_Huawei_Cell_Daily] where (" + H_sites_lis_2G + ") and (" + "Date = '" + Check_Day + "' or Date='" + Check_Day_7 + "')" +
-                        @" union all select [Date], [BSC],  substring([SEG],1,2)+substring([SEG],5,4) as 'Site', [SEG] as 'Cell', [TCH_Traffic] as 'TCH_Traffic_Daily (Erlang)', [CSSR_MCI] as'CSSR', [CDR(including_CS_IRAT_handovers_3G_to2G)(Nokia_SEG)] as 'Voicde  Drop Rate', [IHSR] as 'IHSR', [OHSR] AS 'OHSR', [TCH_Cong_Rate] as 'TCH Congestion Rate', [TCH_Assignment_FR] as 'TCH ASFR', [SDCCH_Access_Success_Rate] as 'SDCCH SR', [SDCCH_Drop_Rate] as 'SDDH Drop Rate',     [TCH_Availability] as 'TCH Availability' , [SDCCH_Congestion_Rate] as 'SDCCH Cong' , [RxQuality_DL] as 'RX_DL', [RxQuality_UL] as 'RX_UL', 'Nokia' as Vendor from [dbo].[CC2_Nokia_Cell_Daily] where (" + N_sites_list_2G + ") and (" + "Date = '" + Check_Day + "' or Date='" + Check_Day_7 + "')";
+                        @" union all select [Date], [BSC],   substring([Cell],1,6) as 'Site', [Cell], [TCH_Traffic] as 'TCH_Traffic_Daily (Erlang)', [CSSR3] as'CSSR', [CDR3] as 'Voice Drop Rate', [IHSR2] as 'IHSR', [OHSR2] as 'OHSR', [TCH_Cong] as 'TCH Congestion Rate', [TCH_Assignment_FR] as 'TCH ASFR', [SDCCH_Access_Success_Rate2] as 'SDCCH SR', [SDCCH_Drop_Rate] as 'SDDH Drop Rate',    [TCH_Availability] as 'TCH Availability'  , [SDCCH_Congestion_Rate] as 'SDCCH Cong' , [RX_QUALITTY_DL_NEW] as 'RX_DL', [RX_QUALITTY_UL_NEW] as 'RX_UL', 'Huawei' as Vendor from [dbo].[CC2_Huawei_Cell_Daily] where (" + EH_sites_list_2G + ") and (" + "Date = '" + Check_Day + "' or Date='" + Check_Day_7 + "')" +
+                        @" union all select [Date], [BSC] ,   substring([Cell],1,2)+substring([Cell],5,4) as 'Site', [Cell], [TCH_Traffic] as 'TCH_Traffic_Daily (Erlang)', [CSSR3] as'CSSR', [CDR3] as 'Voice Drop Rate', [IHSR2] as 'IHSR', [OHSR2] as 'OHSR', [TCH_Cong] as 'TCH Congestion Rate', [TCH_Assignment_FR] as 'TCH ASFR', [SDCCH_Access_Success_Rate2] as 'SDCCH SR', [SDCCH_Drop_Rate] as 'SDDH Drop Rate',    [TCH_Availability] as 'TCH Availability' , [SDCCH_Congestion_Rate] as 'SDCCH Cong' , [RX_QUALITTY_DL_NEW] as 'RX_DL', [RX_QUALITTY_UL_NEW] as 'RX_UL', 'Huawei' as Vendor from [dbo].[CC2_Huawei_Cell_Daily] where (" + H_sites_lis_2G + ") and (" + "Date = '" + Check_Day + "' or Date='" + Check_Day_7 + "')" +
+                        @" union all select [Date], [BSC],   substring([SEG],1,2)+substring([SEG],5,4) as 'Site', [SEG] as 'Cell', [TCH_Traffic] as 'TCH_Traffic_Daily (Erlang)', [CSSR_MCI] as'CSSR', [CDR(including_CS_IRAT_handovers_3G_to2G)(Nokia_SEG)] as 'Voicde  Drop Rate', [IHSR] as 'IHSR', [OHSR] AS 'OHSR', [TCH_Cong_Rate] as 'TCH Congestion Rate', [TCH_Assignment_FR] as 'TCH ASFR', [SDCCH_Access_Success_Rate] as 'SDCCH SR', [SDCCH_Drop_Rate] as 'SDDH Drop Rate',     [TCH_Availability] as 'TCH Availability' , [SDCCH_Congestion_Rate] as 'SDCCH Cong' , [RxQuality_DL] as 'RX_DL', [RxQuality_UL] as 'RX_UL', 'Nokia' as Vendor from [dbo].[CC2_Nokia_Cell_Daily] where (" + N_sites_list_2G + ") and (" + "Date = '" + Check_Day + "' or Date='" + Check_Day_7 + "')";
 
             SqlCommand Data_Quary1 = new SqlCommand(Data_Quary_2G, connection);
             Data_Quary1.CommandTimeout = 0;
@@ -290,8 +291,8 @@ namespace CWA
             Date_Table1.Fill(Data_Table_2G);
 
 
-            Data_Quary_3G_CS = @" select [Date], [ElementID] as 'RNC', substring([ElementID1],1,8) as 'Site', [ElementID1] as 'Cell', [CS_Traffic] as 'CS_Traffic_Daily (Erlang)', [Cs_RAB_Establish_Success_Rate] as 'CS RAB Establish', [CS_RRC_Setup_Success_Rate] as'CS RRC SR', [CS_Drop_Call_Rate] as 'Voice Drop Rate', [Cell_Availability_Rate_Exclude_Blocking(UCELL_Eric)] as 'Cell Availability' , [Soft_Handover_Succ_Rate] as 'Soft HO SR', 'Ericsson' as Vendor from [dbo].[CC3_Ericsson_Cell_Daily] where  (" + sites_list_3G + ") and (" + "Date = '" + Check_Day + "' or Date='" + Check_Day_7 + "')" +
-   @" union all select [Date],  [ElementID] as 'RNC',  substring([ElementID1],1,8) as 'Site', [ElementID1] as 'Cell', [CS_Erlang] as 'CS_Traffic_Daily (Erlang)', [CS_RAB_Setup_Success_Ratio] as 'CS RAB Establish', [CS_RRC_Connection_Establishment_SR] as'CS RRC SR',  [AMR_Call_Drop_Ratio_New(Hu_CELL)] as 'Voice Drop Rate',  [Radio_Network_Availability_Ratio(Hu_Cell)] as 'Cell Availability' , [Soft_Handover_Succ_Rate] as 'Soft HO SR', 'Huawei' as Vendor  from [dbo].[CC3_Huawei_Cell_Daily] where  (" + sites_list_3G + ") and (" + "Date = '" + Check_Day + "' or Date='" + Check_Day_7 + "')" +
+            Data_Quary_3G_CS = @" select [Date], [ElementID] as 'RNC',  substring([ElementID1],1,8) as 'Site', [ElementID1] as 'Cell', [CS_Traffic] as 'CS_Traffic_Daily (Erlang)', [Cs_RAB_Establish_Success_Rate] as 'CS RAB Establish', [CS_RRC_Setup_Success_Rate] as'CS RRC SR', [CS_Drop_Call_Rate] as 'Voice Drop Rate', [Cell_Availability_Rate_Exclude_Blocking(UCELL_Eric)] as 'Cell Availability' , [Soft_Handover_Succ_Rate] as 'Soft HO SR', 'Ericsson' as Vendor from [dbo].[CC3_Ericsson_Cell_Daily] where  (" + sites_list_3G + ") and (" + "Date = '" + Check_Day + "' or Date='" + Check_Day_7 + "')" +
+   @" union all select [Date],  [ElementID] as 'RNC', substring([ElementID1],1,8) as 'Site', [ElementID1] as 'Cell', [CS_Erlang] as 'CS_Traffic_Daily (Erlang)', [CS_RAB_Setup_Success_Ratio] as 'CS RAB Establish', [CS_RRC_Connection_Establishment_SR] as'CS RRC SR',  [AMR_Call_Drop_Ratio_New(Hu_CELL)] as 'Voice Drop Rate',  [Radio_Network_Availability_Ratio(Hu_Cell)] as 'Cell Availability' , [Soft_Handover_Succ_Rate] as 'Soft HO SR', 'Huawei' as Vendor  from [dbo].[CC3_Huawei_Cell_Daily] where  (" + sites_list_3G + ") and (" + "Date = '" + Check_Day + "' or Date='" + Check_Day_7 + "')" +
    @" union all select [Date], [ElementID] as 'RNC',  substring([ElementID1],1,8) as 'Site', [ElementID1] as 'Cell', [CS_Traffic] as 'CS_Traffic_Daily (Erlang)', [CS_RAB_Establish_Success_Rate] as 'CS RAB Establish', [CS_RRC_SETUP_SR_WITHOUT_REPEAT(CELL_NOKIA)] as 'CS RRC SR', [CS_Drop_Call_Rate] as 'Voice Drop Rate', [Cell_Availability_excluding_blocked_by_user_state] as 'Cell Availability' , [Soft_Handover_Succ_Rate] as 'Soft HO SR', 'Nokia' as Vendor  from [dbo].[CC3_Nokia_Cell_Daily] where  (" + sites_list_3G + ") and (" + "Date = '" + Check_Day + "' or Date='" + Check_Day_7 + "')";
 
             SqlCommand Data_Quary2 = new SqlCommand(Data_Quary_3G_CS, connection);
@@ -302,8 +303,8 @@ namespace CWA
             Date_Table2.Fill(Data_Table_3G_CS);
 
 
-            Data_Quary_3G_PS = @" select [Date], [ElementID] as 'RNC', substring([ElementID1],1,8) as 'Site', [ElementID1] as 'Cell', [PS_Volume(GB)(UCell_Eric)] as 'PS_Traffic_Daily (GB)', [Ps_RAB_Establish_Success_Rate] as 'PS RAB Establish', [PS_RRC_Setup_Success_Rate(UCell_Eric)] as'PS RRC SR', [PS_Drop_Call_Rate(UCell_Eric)] as 'PS Drop Rate', [HS_USER_Throughput_NET_PQ(Mbps)(UCell_Eric)] as '3G User THR' , [HSDPA_Cell_Scheduled_Throughput(mbps)(UCell_Eric)] as '3G Cell THR' , 'Ericsson' as Vendor from [dbo].[RD3_Ericsson_Cell_Daily] where  (" + sites_list_3G + ") and (" + "Date = '" + Check_Day + "' or Date='" + Check_Day_7 + "')" +
- @" union all select [Date], [ElementID] as 'RNC',  substring([ElementID1],1,8) as 'Site', [ElementID1] as 'Cell', [PAYLOAD] as 'PS_Traffic_Daily (GB)', [PS_RAB_Setup_Success_Ratio] as 'PS RAB Establish', [PS_RRC_Connection_success_Rate_repeatless(Hu_Cell)] as'PS RRC SR',  [PS_Call_Drop_Ratio] as 'PS Drop Rate',  [AVERAGE_HSDPA_USER_THROUGHPUT_DC+SC(Mbit/s)(CELL_HUAWEI)] as '3G User THR' , [HSDPA_SCHEDULING_Cell_throughput(CELL_HUAWEI)] as '3G Cell THR'  , 'Huawei' as Vendor from [dbo].[RD3_Huawei_Cell_Daily] where  (" + sites_list_3G + ") and (" + "Date = '" + Check_Day + "' or Date='" + Check_Day_7 + "')" +
+            Data_Quary_3G_PS = @" select [Date], [ElementID] as 'RNC',  substring([ElementID1],1,8) as 'Site', [ElementID1] as 'Cell', [PS_Volume(GB)(UCell_Eric)] as 'PS_Traffic_Daily (GB)', [Ps_RAB_Establish_Success_Rate] as 'PS RAB Establish', [PS_RRC_Setup_Success_Rate(UCell_Eric)] as'PS RRC SR', [PS_Drop_Call_Rate(UCell_Eric)] as 'PS Drop Rate', [HS_USER_Throughput_NET_PQ(Mbps)(UCell_Eric)] as '3G User THR' , [HSDPA_Cell_Scheduled_Throughput(mbps)(UCell_Eric)] as '3G Cell THR' , 'Ericsson' as Vendor from [dbo].[RD3_Ericsson_Cell_Daily] where  (" + sites_list_3G + ") and (" + "Date = '" + Check_Day + "' or Date='" + Check_Day_7 + "')" +
+ @" union all select [Date], [ElementID] as 'RNC',    substring([ElementID1],1,8) as 'Site', [ElementID1] as 'Cell', [PAYLOAD] as 'PS_Traffic_Daily (GB)', [PS_RAB_Setup_Success_Ratio] as 'PS RAB Establish', [PS_RRC_Connection_success_Rate_repeatless(Hu_Cell)] as'PS RRC SR',  [PS_Call_Drop_Ratio] as 'PS Drop Rate',  [AVERAGE_HSDPA_USER_THROUGHPUT_DC+SC(Mbit/s)(CELL_HUAWEI)] as '3G User THR' , [HSDPA_SCHEDULING_Cell_throughput(CELL_HUAWEI)] as '3G Cell THR'  , 'Huawei' as Vendor from [dbo].[RD3_Huawei_Cell_Daily] where  (" + sites_list_3G + ") and (" + "Date = '" + Check_Day + "' or Date='" + Check_Day_7 + "')" +
  @" union all select [Date], [ElementID] as 'RNC',  substring([ElementID1],1,8) as 'Site', [ElementID1] as 'Cell', [PS_Payload_Total(HS+R99)(Nokia_CELL)_GB] as 'PS_Traffic_Daily (GB)', [RAB_Setup_and_Access_Complete_Ratio_for_NRT_Service_from_User_pe] as 'PS RAB Establish', [PS_RRCSETUP_SR] as 'PS RRC SR', [Packet_Session_Drop_Ratio_NOKIA(CELL_NOKIA)] as 'PS Drop Rate', [AVERAGE_HSDPA_USER_THROUGHPUT_DC+SC(Mbit/s)(Nokia_CELL)] as '3G User THR' , [Active_HS-DSCH_cell_throughput_mbs(CELL_nokia)] as '3G Cell THR' , 'Nokia' as Vendor from [dbo].[RD3_Nokia_Cell_Daily] where  (" + sites_list_3G + ") and (" + "Date = '" + Check_Day + "' or Date='" + Check_Day_7 + "')";
 
 
@@ -315,9 +316,9 @@ namespace CWA
             Date_Table3.Fill(Data_Table_3G_PS);
 
 
-            Data_Quary_4G = @" select [Datetime], substring([eNodeB],1,8) as 'Site', [eNodeB] as 'Cell', [Total_Volume(UL+DL)(GB)(eNodeB_Eric)] as 'PS_Traffic_Daily (GB)', [Average_UE_DL_Throughput(Mbps)(eNodeB_Eric)] as 'UE DL THR (Mbps)', [Average_UE_UL_Throughput(Mbps)(eNodeB_Eric)] as'UE UL THR (Mbps)', [E_RAB_Drop_Rate(eNodeB_Eric)] as 'ERAB Drop Rate', [E-RAB_Setup_SR_incl_added_New(EUCell_Eric)] as 'ERAB Setup SR', [IntraF_Handover_Execution(eNodeB_Eric)] as 'Intra Freq HO SR' , [RRC_Estab_Success_Rate(ReAtt)(EUCell_Eric)] as 'RRC Connection SR' , [Cell_Availability_Rate_Exclude_Blocking(Cell_EricLTE)] as 'Cell Availability' , [Average_UE_DL_Latency(ms)(eNodeB_Eric)] as 'DL Latency', [Average_UE_Ul_Packet_Loss_Rate(eNodeB_Eric)] as 'UL Packet Loss Rate', [LTE_Service_Success_Rate(eNodeB_Eric)] as 'Service SR' , 'Ericsson' as Vendor from [dbo].[TBL_LTE_CELL_Daily_E] where  (" + EH_sites_list_4G + ") and (" + "Datetime = '" + Check_Day + "' or Datetime='" + Check_Day_7 + "')" +
-@" union all select [Datetime],  substring([eNodeB],1,8) as 'Siite', [eNodeB] as 'Cell', [Total_Traffic_Volume(GB)] as 'PS_Traffic_Daily (GB)', [Average_Downlink_User_Throughput(Mbit/s)] as 'UE DL THR (Mbps)', [Average_UPlink_User_Throughput(Mbit/s)] as'UE UL THR (Mbps)',  [Call_Drop_Rate] as 'ERAB Drop Rate',  [E-RAB_Setup_Success_Rate(Hu_Cell)] as 'ERAB Setup SR'  , [IntraF_HOOut_SR] as 'Intra Freq HO SR' , [RRC_Connection_Setup_Success_Rate_service] as 'RRC Connection SR' , [Cell_Availability_Rate_Exclude_Blocking(Cell_Hu)] as 'Cell Availability' , [Average_DL_Latency_ms(Huawei_LTE_EUCell)] as 'DL Latency', [Average_UL_Packet_Loss_%(Huawei_LTE_UCell)] as 'UL Packet Loss Rate', [CSSR(ALL)] as 'Service SR' , 'Huawei' as Vendor from [dbo].[TBL_LTE_CELL_Daily_H] where  (" + EH_sites_list_4G + ") and (" + "Datetime = '" + Check_Day + "' or Datetime='" + Check_Day_7 + "')" +
-@" union all select [Date],  substring([ElementID1],1,8) as 'Site', [ElementID1] as 'Cell', [Total_Payload_GB(Nokia_LTE_CELL)] as 'PS_Traffic_Daily (GB)', [User_Throughput_DL_mbps(Nokia_LTE_CELL)] as 'UE DL THR (Mbps)', [User_Throughput_UL_mbps(Nokia_LTE_CELL)] as 'UE UL THR (Mbps)', [E-RAB_Drop_Ratio_RAN_View(Nokia_LTE_CELL)] as 'ERAB Drop Rate', [E-RAB_Setup_SR_incl_added(Nokia_LTE_CELL)] as 'ERAB Setup SR' , [HO_Success_Ratio_intra_eNB(Nokia_LTE_CELL)] as 'Intra Freq HO SR' , [RRC_Connection_Setup_Success_Ratio(Nokia_LTE_CELL)] as 'RRC Connection SR' , [cell_availability_exclude_manual_blocking(Nokia_LTE_CELL)] as 'Cell Availability', [Average_Latency_DL_ms(Nokia_LTE_CELL)] as 'DL Latency', [Packet_loss_UL(Nokia_EUCELL)] as 'UL Packet Loss Rate', [Initial_E-RAB_Accessibility(Nokia_LTE_CELL)] as 'Service SR'  , 'Nokia' as Vendor from [dbo].[TBL_LTE_CELL_Daily_N] where  (" + N_sites_list_4G + ") and (" + "Date= '" + Check_Day + "' or Date='" + Check_Day_7 + "')";
+            Data_Quary_4G = @" select [Datetime],  substring([eNodeB],1,8) as 'Site', [eNodeB] as 'Cell', [Total_Volume(UL+DL)(GB)(eNodeB_Eric)] as 'PS_Traffic_Daily (GB)', [Average_UE_DL_Throughput(Mbps)(eNodeB_Eric)] as 'UE DL THR (Mbps)', [Average_UE_UL_Throughput(Mbps)(eNodeB_Eric)] as'UE UL THR (Mbps)', [E_RAB_Drop_Rate(eNodeB_Eric)] as 'ERAB Drop Rate', [E-RAB_Setup_SR_incl_added_New(EUCell_Eric)] as 'ERAB Setup SR', [IntraF_Handover_Execution(eNodeB_Eric)] as 'Intra Freq HO SR' , [RRC_Estab_Success_Rate(ReAtt)(EUCell_Eric)] as 'RRC Connection SR' , [Cell_Availability_Rate_Exclude_Blocking(Cell_EricLTE)] as 'Cell Availability' , [Average_UE_DL_Latency(ms)(eNodeB_Eric)] as 'DL Latency', [Average_UE_Ul_Packet_Loss_Rate(eNodeB_Eric)] as 'UL Packet Loss Rate', [LTE_Service_Success_Rate(eNodeB_Eric)] as 'Service SR' , 'Ericsson' as Vendor from [dbo].[TBL_LTE_CELL_Daily_E] where  (" + EH_sites_list_4G + ") and (" + "Datetime = '" + Check_Day + "' or Datetime='" + Check_Day_7 + "')" +
+@" union all select [Datetime],    substring([eNodeB],1,8) as 'Siite', [eNodeB] as 'Cell', [Total_Traffic_Volume(GB)] as 'PS_Traffic_Daily (GB)', [Average_Downlink_User_Throughput(Mbit/s)] as 'UE DL THR (Mbps)', [Average_UPlink_User_Throughput(Mbit/s)] as'UE UL THR (Mbps)',  [Call_Drop_Rate] as 'ERAB Drop Rate',  [E-RAB_Setup_Success_Rate(Hu_Cell)] as 'ERAB Setup SR'  , [IntraF_HOOut_SR] as 'Intra Freq HO SR' , [RRC_Connection_Setup_Success_Rate_service] as 'RRC Connection SR' , [Cell_Availability_Rate_Exclude_Blocking(Cell_Hu)] as 'Cell Availability' , [Average_DL_Latency_ms(Huawei_LTE_EUCell)] as 'DL Latency', [Average_UL_Packet_Loss_%(Huawei_LTE_UCell)] as 'UL Packet Loss Rate', [CSSR(ALL)] as 'Service SR' , 'Huawei' as Vendor from [dbo].[TBL_LTE_CELL_Daily_H] where  (" + EH_sites_list_4G + ") and (" + "Datetime = '" + Check_Day + "' or Datetime='" + Check_Day_7 + "')" +
+@" union all select [Date], substring([ElementID1],1,8) as 'Site', [ElementID1] as 'Cell', [Total_Payload_GB(Nokia_LTE_CELL)] as 'PS_Traffic_Daily (GB)', [User_Throughput_DL_mbps(Nokia_LTE_CELL)] as 'UE DL THR (Mbps)', [User_Throughput_UL_mbps(Nokia_LTE_CELL)] as 'UE UL THR (Mbps)', [E-RAB_Drop_Ratio_RAN_View(Nokia_LTE_CELL)] as 'ERAB Drop Rate', [E-RAB_Setup_SR_incl_added(Nokia_LTE_CELL)] as 'ERAB Setup SR' , [HO_Success_Ratio_intra_eNB(Nokia_LTE_CELL)] as 'Intra Freq HO SR' , [RRC_Connection_Setup_Success_Ratio(Nokia_LTE_CELL)] as 'RRC Connection SR' , [cell_availability_exclude_manual_blocking(Nokia_LTE_CELL)] as 'Cell Availability', [Average_Latency_DL_ms(Nokia_LTE_CELL)] as 'DL Latency', [Packet_loss_UL(Nokia_EUCELL)] as 'UL Packet Loss Rate', [Initial_E-RAB_Accessibility(Nokia_LTE_CELL)] as 'Service SR'  , 'Nokia' as Vendor from [dbo].[TBL_LTE_CELL_Daily_N] where  (" + N_sites_list_4G + ") and (" + "Date= '" + Check_Day + "' or Date='" + Check_Day_7 + "')";
 
 
 
@@ -445,12 +446,12 @@ namespace CWA
                             {
                                 if (100 * (CSSR_2G_Day2 - CSSR_2G_Day1) / CSSR_2G_Day1 < -5)
                                 {
-                                    CR_Output_Table.Rows.Add(cell_data[1].ItemArray[2], cell_data[1].ItemArray[3], cell_data[1].ItemArray[1], "2G", KPI_Name, CSSR_2G_Day2, CSSR_2G_Day1, "", Eng, CR, SD, ED, Status, Description);
+                                    CR_Output_Table.Rows.Add(cell_data[1].ItemArray[2], cell_data[1].ItemArray[3], cell_data[1].ItemArray[1], Vendor, "2G", KPI_Name, CSSR_2G_Day2, CSSR_2G_Day1, "", Eng, CR, SD, ED, Status, Description);
                                 }
                             }
                             if (CSSR_2G_Day1 == 0)
                             {
-                                CR_Output_Table.Rows.Add(cell_data[1].ItemArray[2], cell_data[1].ItemArray[3], cell_data[1].ItemArray[1], "2G", KPI_Name, CSSR_2G_Day2, CSSR_2G_Day1, "", Eng, CR, SD, ED, Status, Description);
+                                CR_Output_Table.Rows.Add(cell_data[1].ItemArray[2], cell_data[1].ItemArray[3], cell_data[1].ItemArray[1], Vendor, "2G", KPI_Name, CSSR_2G_Day2, CSSR_2G_Day1, "", Eng, CR, SD, ED, Status, Description);
                             }
                         }
                     }
@@ -479,12 +480,12 @@ namespace CWA
                             {
                                 if (100 * (CDR_2G_Day2 - CDR_2G_Day1) / CDR_2G_Day1 > 30)
                                 {
-                                    CR_Output_Table.Rows.Add(cell_data[1].ItemArray[2], cell_data[1].ItemArray[3], cell_data[1].ItemArray[1], "2G", KPI_Name, CDR_2G_Day2, CDR_2G_Day1, "", Eng, CR, SD, ED, Status, Description);
+                                    CR_Output_Table.Rows.Add(cell_data[1].ItemArray[2], cell_data[1].ItemArray[3], cell_data[1].ItemArray[1], Vendor, "2G", KPI_Name, CDR_2G_Day2, CDR_2G_Day1, "", Eng, CR, SD, ED, Status, Description);
                                 }
                             }
                             if (CDR_2G_Day1 == 0)
                             {
-                                CR_Output_Table.Rows.Add(cell_data[1].ItemArray[2], cell_data[1].ItemArray[3], cell_data[1].ItemArray[1], "2G", KPI_Name, CDR_2G_Day2, CDR_2G_Day1, "", Eng, CR, SD, ED, Status, Description);
+                                CR_Output_Table.Rows.Add(cell_data[1].ItemArray[2], cell_data[1].ItemArray[3], cell_data[1].ItemArray[1], Vendor, "2G", KPI_Name, CDR_2G_Day2, CDR_2G_Day1, "", Eng, CR, SD, ED, Status, Description);
                             }
                         }
                     }
@@ -514,12 +515,12 @@ namespace CWA
                             {
                                 if (100 * (IHSR_2G_Day2 - IHSR_2G_Day1) / IHSR_2G_Day1 < -5)
                                 {
-                                    CR_Output_Table.Rows.Add(cell_data[1].ItemArray[2], cell_data[1].ItemArray[3], cell_data[1].ItemArray[1], "2G", KPI_Name, IHSR_2G_Day2, IHSR_2G_Day1, "", Eng, CR, SD, ED, Status, Description);
+                                    CR_Output_Table.Rows.Add(cell_data[1].ItemArray[2], cell_data[1].ItemArray[3], cell_data[1].ItemArray[1], Vendor, "2G", KPI_Name, IHSR_2G_Day2, IHSR_2G_Day1, "", Eng, CR, SD, ED, Status, Description);
                                 }
                             }
                             if (IHSR_2G_Day1 == 0)
                             {
-                                CR_Output_Table.Rows.Add(cell_data[1].ItemArray[2], cell_data[1].ItemArray[3], cell_data[1].ItemArray[1], "2G", KPI_Name, IHSR_2G_Day2, IHSR_2G_Day1, "", Eng, CR, SD, ED, Status, Description);
+                                CR_Output_Table.Rows.Add(cell_data[1].ItemArray[2], cell_data[1].ItemArray[3], cell_data[1].ItemArray[1], Vendor, "2G", KPI_Name, IHSR_2G_Day2, IHSR_2G_Day1, "", Eng, CR, SD, ED, Status, Description);
                             }
                         }
                     }
@@ -549,12 +550,12 @@ namespace CWA
                             {
                                 if (100 * (OHSR_2G_Day2 - OHSR_2G_Day1) / OHSR_2G_Day1 < -5)
                                 {
-                                    CR_Output_Table.Rows.Add(cell_data[1].ItemArray[2], cell_data[1].ItemArray[3], cell_data[1].ItemArray[1], "2G", KPI_Name, OHSR_2G_Day2, OHSR_2G_Day1, "", Eng, CR, SD, ED, Status, Description);
+                                    CR_Output_Table.Rows.Add(cell_data[1].ItemArray[2], cell_data[1].ItemArray[3], cell_data[1].ItemArray[1], Vendor, "2G", KPI_Name, OHSR_2G_Day2, OHSR_2G_Day1, "", Eng, CR, SD, ED, Status, Description);
                                 }
                             }
                             if (OHSR_2G_Day1 == 0)
                             {
-                                CR_Output_Table.Rows.Add(cell_data[1].ItemArray[2], cell_data[1].ItemArray[3], cell_data[1].ItemArray[1], "2G", KPI_Name, OHSR_2G_Day2, OHSR_2G_Day1, "", Eng, CR, SD, ED, Status, Description);
+                                CR_Output_Table.Rows.Add(cell_data[1].ItemArray[2], cell_data[1].ItemArray[3], cell_data[1].ItemArray[1], Vendor, "2G", KPI_Name, OHSR_2G_Day2, OHSR_2G_Day1, "", Eng, CR, SD, ED, Status, Description);
                             }
                         }
                     }
@@ -584,12 +585,12 @@ namespace CWA
                             {
                                 if (100 * (TCH_Cong_2G_Day2 - TCH_Cong_2G_Day1) / TCH_Cong_2G_Day1 > 30)
                                 {
-                                    CR_Output_Table.Rows.Add(cell_data[1].ItemArray[2], cell_data[1].ItemArray[3], cell_data[1].ItemArray[1], "2G", KPI_Name, TCH_Cong_2G_Day2, TCH_Cong_2G_Day1, "", Eng, CR, SD, ED, Status, Description);
+                                    CR_Output_Table.Rows.Add(cell_data[1].ItemArray[2], cell_data[1].ItemArray[3], cell_data[1].ItemArray[1], Vendor, "2G", KPI_Name, TCH_Cong_2G_Day2, TCH_Cong_2G_Day1, "", Eng, CR, SD, ED, Status, Description);
                                 }
                             }
                             if (TCH_Cong_2G_Day1 == 0)
                             {
-                                CR_Output_Table.Rows.Add(cell_data[1].ItemArray[2], cell_data[1].ItemArray[3], cell_data[1].ItemArray[1], "2G", KPI_Name, TCH_Cong_2G_Day2, TCH_Cong_2G_Day1, "", Eng, CR, SD, ED, Status, Description);
+                                CR_Output_Table.Rows.Add(cell_data[1].ItemArray[2], cell_data[1].ItemArray[3], cell_data[1].ItemArray[1], Vendor, "2G", KPI_Name, TCH_Cong_2G_Day2, TCH_Cong_2G_Day1, "", Eng, CR, SD, ED, Status, Description);
                             }
                         }
                     }
@@ -619,12 +620,12 @@ namespace CWA
                             {
                                 if (100 * (TCH_ASFR_2G_Day2 - TCH_ASFR_2G_Day1) / TCH_ASFR_2G_Day1 > 30)
                                 {
-                                    CR_Output_Table.Rows.Add(cell_data[1].ItemArray[2], cell_data[1].ItemArray[3], cell_data[1].ItemArray[1], "2G", KPI_Name, TCH_ASFR_2G_Day2, TCH_ASFR_2G_Day1, "", Eng, CR, SD, ED, Status, Description);
+                                    CR_Output_Table.Rows.Add(cell_data[1].ItemArray[2], cell_data[1].ItemArray[3], cell_data[1].ItemArray[1], Vendor, "2G", KPI_Name, TCH_ASFR_2G_Day2, TCH_ASFR_2G_Day1, "", Eng, CR, SD, ED, Status, Description);
                                 }
                             }
                             if (TCH_ASFR_2G_Day1 == 0)
                             {
-                                CR_Output_Table.Rows.Add(cell_data[1].ItemArray[2], cell_data[1].ItemArray[3], cell_data[1].ItemArray[1], "2G", KPI_Name, TCH_ASFR_2G_Day2, TCH_ASFR_2G_Day1, "", Eng, CR, SD, ED, Status, Description);
+                                CR_Output_Table.Rows.Add(cell_data[1].ItemArray[2], cell_data[1].ItemArray[3], cell_data[1].ItemArray[1], Vendor, "2G", KPI_Name, TCH_ASFR_2G_Day2, TCH_ASFR_2G_Day1, "", Eng, CR, SD, ED, Status, Description);
                             }
                         }
                     }
@@ -653,12 +654,12 @@ namespace CWA
                             {
                                 if (100 * (SDCCH_SR_2G_Day2 - SDCCH_SR_2G_Day1) / SDCCH_SR_2G_Day1 < -5)
                                 {
-                                    CR_Output_Table.Rows.Add(cell_data[1].ItemArray[2], cell_data[1].ItemArray[3], cell_data[1].ItemArray[1], "2G", KPI_Name, SDCCH_SR_2G_Day2, SDCCH_SR_2G_Day1, "", Eng, CR, SD.Date, ED, Status, Description);
+                                    CR_Output_Table.Rows.Add(cell_data[1].ItemArray[2], cell_data[1].ItemArray[3], cell_data[1].ItemArray[1], Vendor, "2G", KPI_Name, SDCCH_SR_2G_Day2, SDCCH_SR_2G_Day1, "", Eng, CR, SD.Date, ED, Status, Description);
                                 }
                             }
                             if (SDCCH_SR_2G_Day1 == 0)
                             {
-                                CR_Output_Table.Rows.Add(cell_data[1].ItemArray[2], cell_data[1].ItemArray[3], cell_data[1].ItemArray[1], "2G", KPI_Name, SDCCH_SR_2G_Day2, SDCCH_SR_2G_Day1, "", Eng, CR, SD, ED, Status, Description);
+                                CR_Output_Table.Rows.Add(cell_data[1].ItemArray[2], cell_data[1].ItemArray[3], cell_data[1].ItemArray[1], Vendor, "2G", KPI_Name, SDCCH_SR_2G_Day2, SDCCH_SR_2G_Day1, "", Eng, CR, SD, ED, Status, Description);
                             }
                         }
                     }
@@ -687,12 +688,12 @@ namespace CWA
                             {
                                 if (100 * (SDCCH_Drop_2G_Day2 - SDCCH_Drop_2G_Day1) / SDCCH_Drop_2G_Day1 > 30)
                                 {
-                                    CR_Output_Table.Rows.Add(cell_data[1].ItemArray[2], cell_data[1].ItemArray[3], cell_data[1].ItemArray[1], "2G", KPI_Name, SDCCH_Drop_2G_Day2, SDCCH_Drop_2G_Day1, "", Eng, CR, SD, ED, Status, Description);
+                                    CR_Output_Table.Rows.Add(cell_data[1].ItemArray[2], cell_data[1].ItemArray[3], cell_data[1].ItemArray[1], Vendor, "2G", KPI_Name, SDCCH_Drop_2G_Day2, SDCCH_Drop_2G_Day1, "", Eng, CR, SD, ED, Status, Description);
                                 }
                             }
                             if (SDCCH_Drop_2G_Day1 == 0)
                             {
-                                CR_Output_Table.Rows.Add(cell_data[1].ItemArray[2], cell_data[1].ItemArray[3], cell_data[1].ItemArray[1], "2G", KPI_Name, SDCCH_Drop_2G_Day2, SDCCH_Drop_2G_Day1, "", Eng, CR, SD, ED, Status, Description);
+                                CR_Output_Table.Rows.Add(cell_data[1].ItemArray[2], cell_data[1].ItemArray[3], cell_data[1].ItemArray[1], Vendor, "2G", KPI_Name, SDCCH_Drop_2G_Day2, SDCCH_Drop_2G_Day1, "", Eng, CR, SD, ED, Status, Description);
                             }
                         }
                     }
@@ -722,12 +723,12 @@ namespace CWA
                             {
                                 if (100 * (Availability_2G_Day2 - Availability_2G_Day1) / Availability_2G_Day1 < -5)
                                 {
-                                    CR_Output_Table.Rows.Add(cell_data[1].ItemArray[2], cell_data[1].ItemArray[3], cell_data[1].ItemArray[1], "2G", KPI_Name, Availability_2G_Day2, Availability_2G_Day1, "", Eng, CR, SD.Date, ED, Status, Description);
+                                    CR_Output_Table.Rows.Add(cell_data[1].ItemArray[2], cell_data[1].ItemArray[3], cell_data[1].ItemArray[1], Vendor, "2G", KPI_Name, Availability_2G_Day2, Availability_2G_Day1, "", Eng, CR, SD.Date, ED, Status, Description);
                                 }
                             }
                             if (Availability_2G_Day1 == 0)
                             {
-                                CR_Output_Table.Rows.Add(cell_data[1].ItemArray[2], cell_data[1].ItemArray[3], cell_data[1].ItemArray[1], "2G", KPI_Name, Availability_2G_Day2, Availability_2G_Day1, "", Eng, CR, SD, ED, Status, Description);
+                                CR_Output_Table.Rows.Add(cell_data[1].ItemArray[2], cell_data[1].ItemArray[3], cell_data[1].ItemArray[1], Vendor, "2G", KPI_Name, Availability_2G_Day2, Availability_2G_Day1, "", Eng, CR, SD, ED, Status, Description);
                             }
                         }
                     }
@@ -757,12 +758,12 @@ namespace CWA
                             {
                                 if (100 * (SDCCH_Cong_2G_Day2 - SDCCH_Cong_2G_Day1) / SDCCH_Cong_2G_Day1 > 30)
                                 {
-                                    CR_Output_Table.Rows.Add(cell_data[1].ItemArray[2], cell_data[1].ItemArray[3], cell_data[1].ItemArray[1], "2G", KPI_Name, SDCCH_Cong_2G_Day2, SDCCH_Cong_2G_Day1, "", Eng, CR, SD, ED, Status, Description);
+                                    CR_Output_Table.Rows.Add(cell_data[1].ItemArray[2], cell_data[1].ItemArray[3], cell_data[1].ItemArray[1], Vendor, "2G", KPI_Name, SDCCH_Cong_2G_Day2, SDCCH_Cong_2G_Day1, "", Eng, CR, SD, ED, Status, Description);
                                 }
                             }
                             if (SDCCH_Cong_2G_Day1 == 0)
                             {
-                                CR_Output_Table.Rows.Add(cell_data[1].ItemArray[2], cell_data[1].ItemArray[3], cell_data[1].ItemArray[1], "2G", KPI_Name, SDCCH_Cong_2G_Day2, SDCCH_Cong_2G_Day1, "", Eng, CR, SD, ED, Status, Description);
+                                CR_Output_Table.Rows.Add(cell_data[1].ItemArray[2], cell_data[1].ItemArray[3], cell_data[1].ItemArray[1], Vendor, "2G", KPI_Name, SDCCH_Cong_2G_Day2, SDCCH_Cong_2G_Day1, "", Eng, CR, SD, ED, Status, Description);
                             }
                         }
                     }
@@ -792,12 +793,12 @@ namespace CWA
                             {
                                 if (100 * (RX_DL_2G_Day2 - RX_DL_2G_Day1) / RX_DL_2G_Day1 < -5)
                                 {
-                                    CR_Output_Table.Rows.Add(cell_data[1].ItemArray[2], cell_data[1].ItemArray[3], cell_data[1].ItemArray[1], "2G", KPI_Name, RX_DL_2G_Day2, RX_DL_2G_Day1, "", Eng, CR, SD, ED, Status, Description);
+                                    CR_Output_Table.Rows.Add(cell_data[1].ItemArray[2], cell_data[1].ItemArray[3], cell_data[1].ItemArray[1], Vendor, "2G", KPI_Name, RX_DL_2G_Day2, RX_DL_2G_Day1, "", Eng, CR, SD, ED, Status, Description);
                                 }
                             }
                             if (RX_DL_2G_Day1 == 0)
                             {
-                                CR_Output_Table.Rows.Add(cell_data[1].ItemArray[2], cell_data[1].ItemArray[3], cell_data[1].ItemArray[1], "2G", KPI_Name, RX_DL_2G_Day2, RX_DL_2G_Day1, "", Eng, CR, SD, ED, Status, Description);
+                                CR_Output_Table.Rows.Add(cell_data[1].ItemArray[2], cell_data[1].ItemArray[3], cell_data[1].ItemArray[1], Vendor, "2G", KPI_Name, RX_DL_2G_Day2, RX_DL_2G_Day1, "", Eng, CR, SD, ED, Status, Description);
                             }
                         }
                     }
@@ -828,12 +829,12 @@ namespace CWA
                             {
                                 if (100 * (RX_UL_2G_Day2 - RX_UL_2G_Day1) / RX_UL_2G_Day1 < -5)
                                 {
-                                    CR_Output_Table.Rows.Add(cell_data[1].ItemArray[2], cell_data[1].ItemArray[3], cell_data[1].ItemArray[1], "2G", KPI_Name, RX_UL_2G_Day2, RX_UL_2G_Day1, "", Eng, CR, SD, ED, Status, Description);
+                                    CR_Output_Table.Rows.Add(cell_data[1].ItemArray[2], cell_data[1].ItemArray[3], cell_data[1].ItemArray[1], Vendor, "2G", KPI_Name, RX_UL_2G_Day2, RX_UL_2G_Day1, "", Eng, CR, SD, ED, Status, Description);
                                 }
                             }
                             if (RX_UL_2G_Day1 == 0)
                             {
-                                CR_Output_Table.Rows.Add(cell_data[1].ItemArray[2], cell_data[1].ItemArray[3], cell_data[1].ItemArray[1], "2G", KPI_Name, RX_UL_2G_Day2, RX_UL_2G_Day1, "", Eng, CR, SD, ED, Status, Description);
+                                CR_Output_Table.Rows.Add(cell_data[1].ItemArray[2], cell_data[1].ItemArray[3], cell_data[1].ItemArray[1], Vendor, "2G", KPI_Name, RX_UL_2G_Day2, RX_UL_2G_Day1, "", Eng, CR, SD, ED, Status, Description);
                             }
                         }
                     }
@@ -899,12 +900,12 @@ namespace CWA
                             {
                                 if (100 * (CS_RAB_3G_Day2 - CS_RAB_3G_Day1) / CS_RAB_3G_Day1 < -2)
                                 {
-                                    CR_Output_Table.Rows.Add(cell_data[1].ItemArray[2], cell_data[1].ItemArray[3], cell_data[1].ItemArray[1], "3G", KPI_Name, CS_RAB_3G_Day2, CS_RAB_3G_Day1, "", Eng, CR, SD, ED, Status, Description);
+                                    CR_Output_Table.Rows.Add(cell_data[1].ItemArray[2], cell_data[1].ItemArray[3], cell_data[1].ItemArray[1], Vendor, "3G", KPI_Name, CS_RAB_3G_Day2, CS_RAB_3G_Day1, "", Eng, CR, SD, ED, Status, Description);
                                 }
                             }
                             if (CS_RAB_3G_Day1 == 0)
                             {
-                                CR_Output_Table.Rows.Add(cell_data[1].ItemArray[2], cell_data[1].ItemArray[3], cell_data[1].ItemArray[1], "3G", KPI_Name, CS_RAB_3G_Day2, CS_RAB_3G_Day1, "", Eng, CR, SD, ED, Status, Description);
+                                CR_Output_Table.Rows.Add(cell_data[1].ItemArray[2], cell_data[1].ItemArray[3], cell_data[1].ItemArray[1], Vendor, "3G", KPI_Name, CS_RAB_3G_Day2, CS_RAB_3G_Day1, "", Eng, CR, SD, ED, Status, Description);
                             }
                         }
                     }
@@ -934,12 +935,12 @@ namespace CWA
                             {
                                 if (100 * (CS_RRC_3G_Day2 - CS_RRC_3G_Day1) / CS_RRC_3G_Day1 < -2)
                                 {
-                                    CR_Output_Table.Rows.Add(cell_data[1].ItemArray[2], cell_data[1].ItemArray[3], cell_data[1].ItemArray[1], "3G", KPI_Name, CS_RRC_3G_Day2, CS_RRC_3G_Day1, "", Eng, CR, SD, ED, Status, Description);
+                                    CR_Output_Table.Rows.Add(cell_data[1].ItemArray[2], cell_data[1].ItemArray[3], cell_data[1].ItemArray[1], Vendor, "3G", KPI_Name, CS_RRC_3G_Day2, CS_RRC_3G_Day1, "", Eng, CR, SD, ED, Status, Description);
                                 }
                             }
                             if (CS_RRC_3G_Day1 == 0)
                             {
-                                CR_Output_Table.Rows.Add(cell_data[1].ItemArray[2], cell_data[1].ItemArray[3], cell_data[1].ItemArray[1], "3G", KPI_Name, CS_RRC_3G_Day2, CS_RRC_3G_Day1, "", Eng, CR, SD, ED, Status, Description);
+                                CR_Output_Table.Rows.Add(cell_data[1].ItemArray[2], cell_data[1].ItemArray[3], cell_data[1].ItemArray[1], Vendor, "3G", KPI_Name, CS_RRC_3G_Day2, CS_RRC_3G_Day1, "", Eng, CR, SD, ED, Status, Description);
                             }
                         }
                     }
@@ -968,12 +969,12 @@ namespace CWA
                             {
                                 if (100 * (CS_Drop_3G_Day2 - CS_Drop_3G_Day1) / CS_Drop_3G_Day1 > 30)
                                 {
-                                    CR_Output_Table.Rows.Add(cell_data[1].ItemArray[2], cell_data[1].ItemArray[3], cell_data[1].ItemArray[1], "3G", KPI_Name, CS_Drop_3G_Day2, CS_Drop_3G_Day1, "", Eng, CR, SD, ED, Status, Description);
+                                    CR_Output_Table.Rows.Add(cell_data[1].ItemArray[2], cell_data[1].ItemArray[3], cell_data[1].ItemArray[1], Vendor, "3G", KPI_Name, CS_Drop_3G_Day2, CS_Drop_3G_Day1, "", Eng, CR, SD, ED, Status, Description);
                                 }
                             }
                             if (CS_Drop_3G_Day1 == 0)
                             {
-                                CR_Output_Table.Rows.Add(cell_data[1].ItemArray[2], cell_data[1].ItemArray[3], cell_data[1].ItemArray[1], "3G", KPI_Name, CS_Drop_3G_Day2, CS_Drop_3G_Day1, "", Eng, CR, SD, ED, Status, Description);
+                                CR_Output_Table.Rows.Add(cell_data[1].ItemArray[2], cell_data[1].ItemArray[3], cell_data[1].ItemArray[1], Vendor, "3G", KPI_Name, CS_Drop_3G_Day2, CS_Drop_3G_Day1, "", Eng, CR, SD, ED, Status, Description);
                             }
                         }
                     }
@@ -1004,12 +1005,12 @@ namespace CWA
                             {
                                 if (100 * (Soft_HO_3G_Day2 - Soft_HO_3G_Day1) / Soft_HO_3G_Day1 < -5)
                                 {
-                                    CR_Output_Table.Rows.Add(cell_data[1].ItemArray[2], cell_data[1].ItemArray[3], cell_data[1].ItemArray[1], "3G", KPI_Name, Soft_HO_3G_Day2, Soft_HO_3G_Day1, "", Eng, CR, SD, ED, Status, Description);
+                                    CR_Output_Table.Rows.Add(cell_data[1].ItemArray[2], cell_data[1].ItemArray[3], cell_data[1].ItemArray[1], Vendor, "3G", KPI_Name, Soft_HO_3G_Day2, Soft_HO_3G_Day1, "", Eng, CR, SD, ED, Status, Description);
                                 }
                             }
                             if (Soft_HO_3G_Day1 == 0)
                             {
-                                CR_Output_Table.Rows.Add(cell_data[1].ItemArray[2], cell_data[1].ItemArray[3], cell_data[1].ItemArray[1], "3G", KPI_Name, Soft_HO_3G_Day2, Soft_HO_3G_Day1, "", Eng, CR, SD, ED, Status, Description);
+                                CR_Output_Table.Rows.Add(cell_data[1].ItemArray[2], cell_data[1].ItemArray[3], cell_data[1].ItemArray[1], Vendor, "3G", KPI_Name, Soft_HO_3G_Day2, Soft_HO_3G_Day1, "", Eng, CR, SD, ED, Status, Description);
                             }
                         }
                     }
@@ -1084,12 +1085,12 @@ namespace CWA
                             {
                                 if (100 * (PS_RAB_3G_Day2 - PS_RAB_3G_Day1) / PS_RAB_3G_Day1 < -2)
                                 {
-                                    CR_Output_Table.Rows.Add(cell_data[1].ItemArray[2], cell_data[1].ItemArray[3], cell_data[1].ItemArray[1], "3G", KPI_Name, PS_RAB_3G_Day2, PS_RAB_3G_Day1, "", Eng, CR, SD, ED, Status, Description);
+                                    CR_Output_Table.Rows.Add(cell_data[1].ItemArray[2], cell_data[1].ItemArray[3], cell_data[1].ItemArray[1], Vendor, "3G", KPI_Name, PS_RAB_3G_Day2, PS_RAB_3G_Day1, "", Eng, CR, SD, ED, Status, Description);
                                 }
                             }
                             if (PS_RAB_3G_Day1 == 0)
                             {
-                                CR_Output_Table.Rows.Add(cell_data[1].ItemArray[2], cell_data[1].ItemArray[3], cell_data[1].ItemArray[1], "3G", KPI_Name, PS_RAB_3G_Day2, PS_RAB_3G_Day1, "", Eng, CR, SD, ED, Status, Description);
+                                CR_Output_Table.Rows.Add(cell_data[1].ItemArray[2], cell_data[1].ItemArray[3], cell_data[1].ItemArray[1], Vendor, "3G", KPI_Name, PS_RAB_3G_Day2, PS_RAB_3G_Day1, "", Eng, CR, SD, ED, Status, Description);
                             }
                         }
                     }
@@ -1120,12 +1121,12 @@ namespace CWA
                             {
                                 if (100 * (PS_RRC_3G_Day2 - PS_RRC_3G_Day1) / PS_RRC_3G_Day1 < -2)
                                 {
-                                    CR_Output_Table.Rows.Add(cell_data[1].ItemArray[2], cell_data[1].ItemArray[3], cell_data[1].ItemArray[1], "3G", KPI_Name, PS_RRC_3G_Day2, PS_RRC_3G_Day1, "", Eng, CR, SD, ED, Status, Description);
+                                    CR_Output_Table.Rows.Add(cell_data[1].ItemArray[2], cell_data[1].ItemArray[3], cell_data[1].ItemArray[1], Vendor, "3G", KPI_Name, PS_RRC_3G_Day2, PS_RRC_3G_Day1, "", Eng, CR, SD, ED, Status, Description);
                                 }
                             }
                             if (PS_RRC_3G_Day1 == 0)
                             {
-                                CR_Output_Table.Rows.Add(cell_data[1].ItemArray[2], cell_data[1].ItemArray[3], cell_data[1].ItemArray[1], "3G", KPI_Name, PS_RRC_3G_Day2, PS_RRC_3G_Day1, "", Eng, CR, SD, ED, Status, Description);
+                                CR_Output_Table.Rows.Add(cell_data[1].ItemArray[2], cell_data[1].ItemArray[3], cell_data[1].ItemArray[1], Vendor, "3G", KPI_Name, PS_RRC_3G_Day2, PS_RRC_3G_Day1, "", Eng, CR, SD, ED, Status, Description);
                             }
                         }
                     }
@@ -1156,12 +1157,12 @@ namespace CWA
                             {
                                 if (100 * (PS_Drop_3G_Day2 - PS_Drop_3G_Day1) / PS_Drop_3G_Day1 > 30)
                                 {
-                                    CR_Output_Table.Rows.Add(cell_data[1].ItemArray[2], cell_data[1].ItemArray[3], cell_data[1].ItemArray[1], "3G", KPI_Name, PS_Drop_3G_Day2, PS_Drop_3G_Day1, "", Eng, CR, SD, ED, Status, Description);
+                                    CR_Output_Table.Rows.Add(cell_data[1].ItemArray[2], cell_data[1].ItemArray[3], cell_data[1].ItemArray[1], Vendor, "3G", KPI_Name, PS_Drop_3G_Day2, PS_Drop_3G_Day1, "", Eng, CR, SD, ED, Status, Description);
                                 }
                             }
                             if (PS_Drop_3G_Day1 == 0)
                             {
-                                CR_Output_Table.Rows.Add(cell_data[1].ItemArray[2], cell_data[1].ItemArray[3], cell_data[1].ItemArray[1], "3G", KPI_Name, PS_Drop_3G_Day2, PS_Drop_3G_Day1, "", Eng, CR, SD, ED, Status, Description);
+                                CR_Output_Table.Rows.Add(cell_data[1].ItemArray[2], cell_data[1].ItemArray[3], cell_data[1].ItemArray[1], Vendor, "3G", KPI_Name, PS_Drop_3G_Day2, PS_Drop_3G_Day1, "", Eng, CR, SD, ED, Status, Description);
                             }
                         }
                     }
@@ -1191,12 +1192,12 @@ namespace CWA
                             {
                                 if (100 * (User_THR_3G_Day2 - User_THR_3G_Day1) / User_THR_3G_Day1 < -30)
                                 {
-                                    CR_Output_Table.Rows.Add(cell_data[1].ItemArray[2], cell_data[1].ItemArray[3], cell_data[1].ItemArray[1], "3G", KPI_Name, User_THR_3G_Day2, User_THR_3G_Day1, "", Eng, CR, SD, ED, Status, Description);
+                                    CR_Output_Table.Rows.Add(cell_data[1].ItemArray[2], cell_data[1].ItemArray[3], cell_data[1].ItemArray[1], Vendor, "3G", KPI_Name, User_THR_3G_Day2, User_THR_3G_Day1, "", Eng, CR, SD, ED, Status, Description);
                                 }
                             }
                             if (User_THR_3G_Day1 == 0)
                             {
-                                CR_Output_Table.Rows.Add(cell_data[1].ItemArray[2], cell_data[1].ItemArray[3], cell_data[1].ItemArray[1], "3G", KPI_Name, User_THR_3G_Day2, User_THR_3G_Day1, "", Eng, CR, SD, ED, Status, Description);
+                                CR_Output_Table.Rows.Add(cell_data[1].ItemArray[2], cell_data[1].ItemArray[3], cell_data[1].ItemArray[1], Vendor, "3G", KPI_Name, User_THR_3G_Day2, User_THR_3G_Day1, "", Eng, CR, SD, ED, Status, Description);
                             }
                         }
                     }
@@ -1226,12 +1227,12 @@ namespace CWA
                             {
                                 if (100 * (Cell_THR_3G_Day2 - Cell_THR_3G_Day1) / Cell_THR_3G_Day1 < -30)
                                 {
-                                    CR_Output_Table.Rows.Add(cell_data[1].ItemArray[2], cell_data[1].ItemArray[3], cell_data[1].ItemArray[1], "3G", KPI_Name, Cell_THR_3G_Day2, Cell_THR_3G_Day1, "", Eng, CR, SD, ED, Status, Description);
+                                    CR_Output_Table.Rows.Add(cell_data[1].ItemArray[2], cell_data[1].ItemArray[3], cell_data[1].ItemArray[1], Vendor, "3G", KPI_Name, Cell_THR_3G_Day2, Cell_THR_3G_Day1, "", Eng, CR, SD, ED, Status, Description);
                                 }
                             }
                             if (Cell_THR_3G_Day1 == 0)
                             {
-                                CR_Output_Table.Rows.Add(cell_data[1].ItemArray[2], cell_data[1].ItemArray[3], cell_data[1].ItemArray[1], "3G", KPI_Name, Cell_THR_3G_Day2, Cell_THR_3G_Day1, "", Eng, CR, SD, ED, Status, Description);
+                                CR_Output_Table.Rows.Add(cell_data[1].ItemArray[2], cell_data[1].ItemArray[3], cell_data[1].ItemArray[1], Vendor, "3G", KPI_Name, Cell_THR_3G_Day2, Cell_THR_3G_Day1, "", Eng, CR, SD, ED, Status, Description);
                             }
                         }
                     }
@@ -1302,12 +1303,12 @@ namespace CWA
                             {
                                 if (100 * (UE_DL_4G_Day2 - UE_DL_4G_Day1) / UE_DL_4G_Day1 < -30)
                                 {
-                                    CR_Output_Table.Rows.Add(cell_data[1].ItemArray[1], cell_data[1].ItemArray[2], "", "4G", KPI_Name, UE_DL_4G_Day2, UE_DL_4G_Day1, "", Eng, CR, SD, ED, Status, Description);
+                                    CR_Output_Table.Rows.Add(cell_data[1].ItemArray[1], cell_data[1].ItemArray[2], "", Vendor, "4G", KPI_Name, UE_DL_4G_Day2, UE_DL_4G_Day1, "", Eng, CR, SD, ED, Status, Description);
                                 }
                             }
                             if (UE_DL_4G_Day1 == 0)
                             {
-                                CR_Output_Table.Rows.Add(cell_data[1].ItemArray[1], cell_data[1].ItemArray[2], "", "4G", KPI_Name, UE_DL_4G_Day2, UE_DL_4G_Day1, "", Eng, CR, SD, ED, Status, Description);
+                                CR_Output_Table.Rows.Add(cell_data[1].ItemArray[1], cell_data[1].ItemArray[2], "", Vendor, "4G", KPI_Name, UE_DL_4G_Day2, UE_DL_4G_Day1, "", Eng, CR, SD, ED, Status, Description);
                             }
                         }
                     }
@@ -1336,12 +1337,12 @@ namespace CWA
                             {
                                 if (100 * (UE_UL_4G_Day2 - UE_UL_4G_Day1) / UE_UL_4G_Day1 < -50)
                                 {
-                                    CR_Output_Table.Rows.Add(cell_data[1].ItemArray[1], cell_data[1].ItemArray[2], "", "4G", KPI_Name, UE_UL_4G_Day2, UE_UL_4G_Day1, "", Eng, CR, SD, ED, Status, Description);
+                                    CR_Output_Table.Rows.Add(cell_data[1].ItemArray[1], cell_data[1].ItemArray[2], "", Vendor, "4G", KPI_Name, UE_UL_4G_Day2, UE_UL_4G_Day1, "", Eng, CR, SD, ED, Status, Description);
                                 }
                             }
                             if (UE_UL_4G_Day1 == 0)
                             {
-                                CR_Output_Table.Rows.Add(cell_data[1].ItemArray[1], cell_data[1].ItemArray[2], "", "4G", KPI_Name, UE_UL_4G_Day2, UE_UL_4G_Day1, "", Eng, CR, SD, ED, Status, Description);
+                                CR_Output_Table.Rows.Add(cell_data[1].ItemArray[1], cell_data[1].ItemArray[2], "", Vendor, "4G", KPI_Name, UE_UL_4G_Day2, UE_UL_4G_Day1, "", Eng, CR, SD, ED, Status, Description);
                             }
                         }
                     }
@@ -1371,12 +1372,12 @@ namespace CWA
                             {
                                 if (100 * (ERAB_Drop_4G_Day2 - ERAB_Drop_4G_Day1) / ERAB_Drop_4G_Day1 > 30)
                                 {
-                                    CR_Output_Table.Rows.Add(cell_data[1].ItemArray[1], cell_data[1].ItemArray[2], "", "4G", KPI_Name, ERAB_Drop_4G_Day2, ERAB_Drop_4G_Day1, "", Eng, CR, SD, ED, Status, Description);
+                                    CR_Output_Table.Rows.Add(cell_data[1].ItemArray[1], cell_data[1].ItemArray[2], "", Vendor, "4G", KPI_Name, ERAB_Drop_4G_Day2, ERAB_Drop_4G_Day1, "", Eng, CR, SD, ED, Status, Description);
                                 }
                             }
                             if (ERAB_Drop_4G_Day1 == 0)
                             {
-                                CR_Output_Table.Rows.Add(cell_data[1].ItemArray[1], cell_data[1].ItemArray[2], "", "4G", KPI_Name, ERAB_Drop_4G_Day2, ERAB_Drop_4G_Day1, "", Eng, CR, SD, ED, Status, Description);
+                                CR_Output_Table.Rows.Add(cell_data[1].ItemArray[1], cell_data[1].ItemArray[2], "", Vendor, "4G", KPI_Name, ERAB_Drop_4G_Day2, ERAB_Drop_4G_Day1, "", Eng, CR, SD, ED, Status, Description);
                             }
                         }
                     }
@@ -1406,12 +1407,12 @@ namespace CWA
                             {
                                 if (100 * (ERAB_Setup_4G_Day2 - ERAB_Setup_4G_Day1) / ERAB_Setup_4G_Day1 < -5)
                                 {
-                                    CR_Output_Table.Rows.Add(cell_data[1].ItemArray[1], cell_data[1].ItemArray[2], "", "4G", KPI_Name, ERAB_Setup_4G_Day2, ERAB_Setup_4G_Day1, "", Eng, CR, SD, ED, Status, Description);
+                                    CR_Output_Table.Rows.Add(cell_data[1].ItemArray[1], cell_data[1].ItemArray[2], "", Vendor, "4G", KPI_Name, ERAB_Setup_4G_Day2, ERAB_Setup_4G_Day1, "", Eng, CR, SD, ED, Status, Description);
                                 }
                             }
                             if (ERAB_Setup_4G_Day1 == 0)
                             {
-                                CR_Output_Table.Rows.Add(cell_data[1].ItemArray[1], cell_data[1].ItemArray[2], "", "4G", KPI_Name, ERAB_Setup_4G_Day2, ERAB_Setup_4G_Day1, "", Eng, CR, SD, ED, Status, Description);
+                                CR_Output_Table.Rows.Add(cell_data[1].ItemArray[1], cell_data[1].ItemArray[2], "", Vendor, "4G", KPI_Name, ERAB_Setup_4G_Day2, ERAB_Setup_4G_Day1, "", Eng, CR, SD, ED, Status, Description);
                             }
                         }
                     }
@@ -1441,12 +1442,12 @@ namespace CWA
                             {
                                 if (100 * (IntraFreq_HO_4G_Day2 - IntraFreq_HO_4G_Day1) / IntraFreq_HO_4G_Day1 < -5)
                                 {
-                                    CR_Output_Table.Rows.Add(cell_data[1].ItemArray[1], cell_data[1].ItemArray[2], "", "4G", KPI_Name, IntraFreq_HO_4G_Day2, IntraFreq_HO_4G_Day1, "", Eng, CR, SD, ED, Status, Description);
+                                    CR_Output_Table.Rows.Add(cell_data[1].ItemArray[1], cell_data[1].ItemArray[2], "", Vendor, "4G", KPI_Name, IntraFreq_HO_4G_Day2, IntraFreq_HO_4G_Day1, "", Eng, CR, SD, ED, Status, Description);
                                 }
                             }
                             if (IntraFreq_HO_4G_Day1 == 0)
                             {
-                                CR_Output_Table.Rows.Add(cell_data[1].ItemArray[1], cell_data[1].ItemArray[2], "", "4G", KPI_Name, IntraFreq_HO_4G_Day2, IntraFreq_HO_4G_Day1, "", Eng, CR, SD, ED, Status, Description);
+                                CR_Output_Table.Rows.Add(cell_data[1].ItemArray[1], cell_data[1].ItemArray[2], "", Vendor, "4G", KPI_Name, IntraFreq_HO_4G_Day2, IntraFreq_HO_4G_Day1, "", Eng, CR, SD, ED, Status, Description);
                             }
                         }
                     }
@@ -1476,12 +1477,12 @@ namespace CWA
                             {
                                 if (100 * (RRC_SR_4G_Day2 - RRC_SR_4G_Day1) / RRC_SR_4G_Day1 < -5)
                                 {
-                                    CR_Output_Table.Rows.Add(cell_data[1].ItemArray[1], cell_data[1].ItemArray[2], "", "4G", KPI_Name, RRC_SR_4G_Day2, RRC_SR_4G_Day1, "", Eng, CR, SD, ED, Status, Description);
+                                    CR_Output_Table.Rows.Add(cell_data[1].ItemArray[1], cell_data[1].ItemArray[2], "", Vendor, "4G", KPI_Name, RRC_SR_4G_Day2, RRC_SR_4G_Day1, "", Eng, CR, SD, ED, Status, Description);
                                 }
                             }
                             if (RRC_SR_4G_Day1 == 0)
                             {
-                                CR_Output_Table.Rows.Add(cell_data[1].ItemArray[1], cell_data[1].ItemArray[2], "", "4G", KPI_Name, RRC_SR_4G_Day2, RRC_SR_4G_Day1, "", Eng, CR, SD, ED, Status, Description);
+                                CR_Output_Table.Rows.Add(cell_data[1].ItemArray[1], cell_data[1].ItemArray[2], "", Vendor, "4G", KPI_Name, RRC_SR_4G_Day2, RRC_SR_4G_Day1, "", Eng, CR, SD, ED, Status, Description);
                             }
                         }
                     }
@@ -1511,12 +1512,12 @@ namespace CWA
                             {
                                 if (100 * (DL_Latency_4G_Day2 - DL_Latency_4G_Day1) / DL_Latency_4G_Day1 > 50)
                                 {
-                                    CR_Output_Table.Rows.Add(cell_data[1].ItemArray[1], cell_data[1].ItemArray[2], "", "4G", KPI_Name, DL_Latency_4G_Day2, DL_Latency_4G_Day1, "", Eng, CR, SD, ED, Status, Description);
+                                    CR_Output_Table.Rows.Add(cell_data[1].ItemArray[1], cell_data[1].ItemArray[2], "", Vendor, "4G", KPI_Name, DL_Latency_4G_Day2, DL_Latency_4G_Day1, "", Eng, CR, SD, ED, Status, Description);
                                 }
                             }
                             if (DL_Latency_4G_Day1 == 0)
                             {
-                                CR_Output_Table.Rows.Add(cell_data[1].ItemArray[1], cell_data[1].ItemArray[2], "", "4G", KPI_Name, DL_Latency_4G_Day2, DL_Latency_4G_Day1, "", Eng, CR, SD, ED, Status, Description);
+                                CR_Output_Table.Rows.Add(cell_data[1].ItemArray[1], cell_data[1].ItemArray[2], "", Vendor, "4G", KPI_Name, DL_Latency_4G_Day2, DL_Latency_4G_Day1, "", Eng, CR, SD, ED, Status, Description);
                             }
                         }
                     }
@@ -1547,12 +1548,12 @@ namespace CWA
                             {
                                 if (100 * (UL_Packet_Loss_4G_Day2 - UL_Packet_Loss_4G_Day1) / UL_Packet_Loss_4G_Day1 > 30)
                                 {
-                                    CR_Output_Table.Rows.Add(cell_data[1].ItemArray[1], cell_data[1].ItemArray[2], "", "4G", KPI_Name, UL_Packet_Loss_4G_Day2, UL_Packet_Loss_4G_Day1, "", Eng, CR, SD, ED, Status, Description);
+                                    CR_Output_Table.Rows.Add(cell_data[1].ItemArray[1], cell_data[1].ItemArray[2], "", Vendor, "4G", KPI_Name, UL_Packet_Loss_4G_Day2, UL_Packet_Loss_4G_Day1, "", Eng, CR, SD, ED, Status, Description);
                                 }
                             }
                             if (UL_Packet_Loss_4G_Day1 == 0)
                             {
-                                CR_Output_Table.Rows.Add(cell_data[1].ItemArray[1], cell_data[1].ItemArray[2], "", "4G", KPI_Name, UL_Packet_Loss_4G_Day2, UL_Packet_Loss_4G_Day1, "", Eng, CR, SD, ED, Status, Description);
+                                CR_Output_Table.Rows.Add(cell_data[1].ItemArray[1], cell_data[1].ItemArray[2], "", Vendor, "4G", KPI_Name, UL_Packet_Loss_4G_Day2, UL_Packet_Loss_4G_Day1, "", Eng, CR, SD, ED, Status, Description);
                             }
                         }
                     }
@@ -1583,12 +1584,12 @@ namespace CWA
                             {
                                 if (100 * (CSSR_4G_Day2 - CSSR_4G_Day1) / CSSR_4G_Day1 < -5)
                                 {
-                                    CR_Output_Table.Rows.Add(cell_data[1].ItemArray[1], cell_data[1].ItemArray[2], "", "4G", KPI_Name, CSSR_4G_Day2, CSSR_4G_Day1, "", Eng, CR, SD, ED, Status, Description);
+                                    CR_Output_Table.Rows.Add(cell_data[1].ItemArray[1], cell_data[1].ItemArray[2], "", Vendor, "4G", KPI_Name, CSSR_4G_Day2, CSSR_4G_Day1, "", Eng, CR, SD, ED, Status, Description);
                                 }
                             }
                             if (CSSR_4G_Day1 == 0)
                             {
-                                CR_Output_Table.Rows.Add(cell_data[1].ItemArray[1], cell_data[1].ItemArray[2], "", "4G", KPI_Name, CSSR_4G_Day2, CSSR_4G_Day1, "", Eng, CR, SD, ED, Status, Description);
+                                CR_Output_Table.Rows.Add(cell_data[1].ItemArray[1], cell_data[1].ItemArray[2], "", Vendor, "4G", KPI_Name, CSSR_4G_Day2, CSSR_4G_Day1, "", Eng, CR, SD, ED, Status, Description);
                             }
                         }
                     }
@@ -1610,17 +1611,18 @@ namespace CWA
             dataGridView1.Rows[0].Cells[0].Value = "Site"; dataGridView1.Columns[0].Width = 70;
             dataGridView1.Rows[0].Cells[1].Value = "Cell"; dataGridView1.Columns[1].Width = 80;
             dataGridView1.Rows[0].Cells[2].Value = "Node"; dataGridView1.Columns[2].Width = 60;
-            dataGridView1.Rows[0].Cells[3].Value = "Tech"; dataGridView1.Columns[3].Width = 40;
-            dataGridView1.Rows[0].Cells[4].Value = "KPI"; dataGridView1.Columns[4].Width = 130;
-            dataGridView1.Rows[0].Cells[5].Value = "Vlaue After CR"; dataGridView1.Columns[5].Width = 95;
-            dataGridView1.Rows[0].Cells[6].Value = "Vlaue Before CR"; dataGridView1.Columns[6].Width = 95;
-            dataGridView1.Rows[0].Cells[7].Value = "Performance Comment"; dataGridView1.Columns[7].Width = 250;
-            dataGridView1.Rows[0].Cells[8].Value = "Owner"; dataGridView1.Columns[8].Width = 80;
-            dataGridView1.Rows[0].Cells[9].Value = "CR Num"; dataGridView1.Columns[9].Width = 80;
-            dataGridView1.Rows[0].Cells[10].Value = "Start Time"; dataGridView1.Columns[10].Width = 95;
-            dataGridView1.Rows[0].Cells[11].Value = "End Time"; dataGridView1.Columns[11].Width = 95;
-            dataGridView1.Rows[0].Cells[12].Value = "CR Statu"; dataGridView1.Columns[12].Width = 80;
-            dataGridView1.Rows[0].Cells[13].Value = "CR Description"; dataGridView1.Columns[13].Width = 150;
+            dataGridView1.Rows[0].Cells[3].Value = "Vendor"; dataGridView1.Columns[3].Width = 60;
+            dataGridView1.Rows[0].Cells[4].Value = "Tech"; dataGridView1.Columns[4].Width = 40;
+            dataGridView1.Rows[0].Cells[5].Value = "KPI"; dataGridView1.Columns[5].Width = 130;
+            dataGridView1.Rows[0].Cells[6].Value = "Vlaue After CR"; dataGridView1.Columns[6].Width = 95;
+            dataGridView1.Rows[0].Cells[7].Value = "Vlaue Before CR"; dataGridView1.Columns[7].Width = 95;
+            dataGridView1.Rows[0].Cells[8].Value = "Performance Comment"; dataGridView1.Columns[8].Width = 250;
+            dataGridView1.Rows[0].Cells[9].Value = "Owner"; dataGridView1.Columns[9].Width = 80;
+            dataGridView1.Rows[0].Cells[10].Value = "CR Num"; dataGridView1.Columns[10].Width = 80;
+            dataGridView1.Rows[0].Cells[11].Value = "Start Time"; dataGridView1.Columns[11].Width = 95;
+            dataGridView1.Rows[0].Cells[12].Value = "End Time"; dataGridView1.Columns[12].Width = 95;
+            dataGridView1.Rows[0].Cells[13].Value = "CR Statu"; dataGridView1.Columns[13].Width = 80;
+            dataGridView1.Rows[0].Cells[14].Value = "CR Description"; dataGridView1.Columns[14].Width = 150;
 
 
 
@@ -1643,6 +1645,7 @@ namespace CWA
                 dataGridView1.Rows[k + 1].Cells[11].Value = CR_Output_Table.Rows[k][11];
                 dataGridView1.Rows[k + 1].Cells[12].Value = CR_Output_Table.Rows[k][12];
                 dataGridView1.Rows[k + 1].Cells[13].Value = CR_Output_Table.Rows[k][13];
+                dataGridView1.Rows[k + 1].Cells[14].Value = CR_Output_Table.Rows[k][14];
             }
 
 
@@ -1692,6 +1695,7 @@ namespace CWA
                     CR_Output_Table1.Rows[k][11] = dataGridView1.Rows[k + 1].Cells[11].Value;
                     CR_Output_Table1.Rows[k][12] = dataGridView1.Rows[k + 1].Cells[12].Value;
                     CR_Output_Table1.Rows[k][13] = dataGridView1.Rows[k + 1].Cells[13].Value;
+                    CR_Output_Table1.Rows[k][14] = dataGridView1.Rows[k + 1].Cells[14].Value;
                 }
 
                 XLWorkbook wb = new XLWorkbook();

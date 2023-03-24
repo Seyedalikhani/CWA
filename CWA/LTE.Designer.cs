@@ -1,6 +1,6 @@
 ﻿namespace CWA
 {
-    partial class Form8
+    partial class LTE
     {
         /// <summary>
         /// Required designer variable.
