@@ -408,7 +408,12 @@ namespace CWA
                     index_finder = Site_list.Select((s, i) => new { i, s })
     .Where(t => t.s == site_code)
     .Select(t => t.i)
-    .ToList();
+    .ToList();  
+
+                    if (index_finder.Count==0)
+                    {
+                        continue;
+                    }
 
                     int index = index_finder[0] + 2;
                     string Eng = Source_worksheet.Cell(index, 4).Value.ToString();
@@ -864,7 +869,10 @@ namespace CWA
     .Where(t => t.s == site_code)
     .Select(t => t.i)
     .ToList();
-
+                    if (index_finder.Count == 0)
+                    {
+                        continue;
+                    }
                     int index = index_finder[0] + 2;
                     string Eng = Source_worksheet.Cell(index, 4).Value.ToString();
                     string CR = Source_worksheet.Cell(index, 5).Value.ToString();
@@ -1048,6 +1056,11 @@ namespace CWA
     .Where(t => t.s == site_code)
     .Select(t => t.i)
     .ToList();
+
+                    if (index_finder.Count == 0)
+                    {
+                        continue;
+                    }
 
                     int index = index_finder[0] + 2;
                     string Eng = Source_worksheet.Cell(index, 4).Value.ToString();
@@ -1267,6 +1280,11 @@ namespace CWA
     .Where(t => t.s == site_code)
     .Select(t => t.i)
     .ToList();
+
+                    if (index_finder.Count == 0)
+                    {
+                        continue;
+                    }
 
                     int index = index_finder[0] + 2;
                     string Eng = Source_worksheet.Cell(index, 4).Value.ToString();

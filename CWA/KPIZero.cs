@@ -123,9 +123,9 @@ namespace CWA
         private void Form6_Load(object sender, EventArgs e)
         {
 
-            //ConnectionString = @"Server=" + Server_Name + "; Database=" + DataBase_Name + "; User ID=cwpcApp;Password=cwpcApp@830625#Ahmad";
-            //connection = new SqlConnection(ConnectionString);
-            //connection.Open();
+            ConnectionString = @"Server=" + Server_Name + "; Database=" + DataBase_Name + "; User ID=cwpcApp;Password=cwpcApp@830625#Ahmad";
+            connection = new SqlConnection(ConnectionString);
+            connection.Open();
 
         }
 
@@ -1564,9 +1564,9 @@ inner join (SELECT [Day]
                 if (Technology == "4G")
                 {
 
-                    string Data_Quary3 = @" select [Datetime], substring([eNodeB],1,9) as 'Sector', [eNodeB] as 'Cell', [Total_Volume(UL+DL)(GB)(eNodeB_Eric)] as 'PS_Traffic_Daily (GB)', [Average_UE_DL_Throughput(Mbps)(eNodeB_Eric)] as 'UE DL THR (Mbps)', [Average_UE_UL_Throughput(Mbps)(eNodeB_Eric)] as'UE UL THR (Mbps)', [E_RAB_Drop_Rate(eNodeB_Eric)] as 'ERAB Drop Rate', [E-RAB_Setup_SR_incl_added_New(EUCell_Eric)] as 'ERAB Setup SR', [IntraF_Handover_Execution(eNodeB_Eric)] as 'Intra Freq HO SR' , [RRC_Estab_Success_Rate(ReAtt)(EUCell_Eric)] as 'RRC Connection SR' , [Cell_Availability_Rate_Exclude_Blocking(Cell_EricLTE)] as 'Cell Availability' from [dbo].[TBL_LTE_CELL_Daily_E] where  (" + EH_sites_list + ") and (" + EH_date_list + ")" +
-      @" union all select [Datetime],  substring([eNodeB],1,9) as 'Sector', [eNodeB] as 'Cell', [Total_Traffic_Volume(GB)] as 'PS_Traffic_Daily (GB)', [Average_Downlink_User_Throughput(Mbit/s)] as 'UE DL THR (Mbps)', [Average_UPlink_User_Throughput(Mbit/s)] as'UE UL THR (Mbps)',  [Call_Drop_Rate] as 'ERAB Drop Rate',  [E-RAB_Setup_Success_Rate(Hu_Cell)] as 'ERAB Setup SR'  , [IntraF_HOOut_SR] as 'Intra Freq HO SR' , [RRC_Connection_Setup_Success_Rate_service] as 'RRC Connection SR' , [Cell_Availability_Rate_Exclude_Blocking(Cell_Hu)] as 'Cell Availability' from [dbo].[TBL_LTE_CELL_Daily_H] where (" + EH_sites_list + ") and (" + EH_date_list + ")" +
-      @" union all select [Date],  substring([ElementID1],1,9) as 'Sector', [ElementID1] as 'Cell', [Total_Payload_GB(Nokia_LTE_CELL)] as 'PS_Traffic_Daily (GB)', [User_Throughput_DL_mbps(Nokia_LTE_CELL)] as 'UE DL THR (Mbps)', [User_Throughput_UL_mbps(Nokia_LTE_CELL)] as 'UE UL THR (Mbps)', [E-RAB_Drop_Ratio_RAN_View(Nokia_LTE_CELL)] as 'ERAB Drop Rate', [E-RAB_Setup_SR_incl_added(Nokia_LTE_CELL)] as 'ERAB Setup SR' , [HO_Success_Ratio_intra_eNB(Nokia_LTE_CELL)] as 'Intra Freq HO SR' , [RRC_Connection_Setup_Success_Ratio(Nokia_LTE_CELL)] as 'RRC Connection SR' , [cell_availability_exclude_manual_blocking(Nokia_LTE_CELL)] as 'Cell Availability' from [dbo].[TBL_LTE_CELL_Daily_N] where (" + N_sites_list + ") and (" + N_date_list + ")";
+                    string Data_Quary3 = @" select [Datetime], substring([eNodeB],1,9) as 'Sector', [eNodeB] as 'Cell', [Total_Volume(UL+DL)(GB)(eNodeB_Eric)] as 'PS_Traffic_Daily (GB)', [Average_UE_DL_Throughput(Mbps)(eNodeB_Eric)] as 'UE DL THR (Mbps)', [Average_UE_UL_Throughput(Mbps)(eNodeB_Eric)] as'UE UL THR (Mbps)', [E_RAB_Drop_Rate(eNodeB_Eric)] as 'ERAB Drop Rate', [E-RAB_Setup_SR_incl_added_New(EUCell_Eric)] as 'ERAB Setup SR', [IntraF_Handover_Execution(eNodeB_Eric)] as 'Intra Freq HO SR' , [RRC_Estab_Success_Rate(ReAtt)(EUCell_Eric)] as 'RRC Connection SR' , [Cell_Availability_Rate_Include_Blocking(Cell_EricLTE)] as 'Cell Availability' from [dbo].[TBL_LTE_CELL_Daily_E] where  (" + EH_sites_list + ") and (" + EH_date_list + ")" +
+      @" union all select [Datetime],  substring([eNodeB],1,9) as 'Sector', [eNodeB] as 'Cell', [Total_Traffic_Volume(GB)] as 'PS_Traffic_Daily (GB)', [Average_Downlink_User_Throughput(Mbit/s)] as 'UE DL THR (Mbps)', [Average_UPlink_User_Throughput(Mbit/s)] as'UE UL THR (Mbps)',  [Call_Drop_Rate] as 'ERAB Drop Rate',  [E-RAB_Setup_Success_Rate(Hu_Cell)] as 'ERAB Setup SR'  , [IntraF_HOOut_SR] as 'Intra Freq HO SR' , [RRC_Connection_Setup_Success_Rate_service] as 'RRC Connection SR' , [Cell_Availability_Rate_include_Blocking(Cell_Hu)] as 'Cell Availability' from [dbo].[TBL_LTE_CELL_Daily_H] where (" + EH_sites_list + ") and (" + EH_date_list + ")" +
+      @" union all select [Date],  substring([ElementID1],1,9) as 'Sector', [ElementID1] as 'Cell', [Total_Payload_GB(Nokia_LTE_CELL)] as 'PS_Traffic_Daily (GB)', [User_Throughput_DL_mbps(Nokia_LTE_CELL)] as 'UE DL THR (Mbps)', [User_Throughput_UL_mbps(Nokia_LTE_CELL)] as 'UE UL THR (Mbps)', [E-RAB_Drop_Ratio_RAN_View(Nokia_LTE_CELL)] as 'ERAB Drop Rate', [E-RAB_Setup_SR_incl_added(Nokia_LTE_CELL)] as 'ERAB Setup SR' , [HO_Success_Ratio_intra_eNB(Nokia_LTE_CELL)] as 'Intra Freq HO SR' , [RRC_Connection_Setup_Success_Ratio(Nokia_LTE_CELL)] as 'RRC Connection SR' , [cell_availability_include_manual_blocking(Nokia_LTE_CELL)] as 'Cell Availability' from [dbo].[TBL_LTE_CELL_Daily_N] where (" + N_sites_list + ") and (" + N_date_list + ")";
 
 
 
@@ -2777,7 +2777,7 @@ inner join (SELECT [Datetime]
 
             if (Input_Type == "FARAZ" && Technology == "3G")
             {
-              //  Technology = "3G-MCI";
+                //  Technology = "3G-MCI";
 
 
 
@@ -3585,7 +3585,7 @@ inner join (SELECT [Datetime]
                 //Technology = "4G-MCI";
 
 
-                DataTable Data_Table_4G = new DataTable();
+                Data_Table_4G = new DataTable();
                 DataTable Data_Table_4G1 = new DataTable();
 
                 Data_Table_4G1.Columns.Add("Date", typeof(DateTime));
@@ -3652,7 +3652,7 @@ inner join (SELECT [Datetime]
                     object[,] FARAZ_Data1 = (object[,])History_TT1.Value;
 
 
-                    if (FARAZ_Data1[1, 3].ToString() == "cell_availability_exclude_manual_blocking(Nokia_LTE_CELL)")
+                    if (FARAZ_Data1[1, 3].ToString() == "cell_availability_include_manual_blocking(Nokia_LTE_CELL)")
                     {
                         Vendor = "Nokia";
                     }
@@ -4261,8 +4261,8 @@ inner join (SELECT [Datetime]
                         string val = Source_worksheet.Cell(k, j + 9).Value.ToString();
                         if (val == "1")
                         {
-                            Source_worksheet.Cell(k, j + 3).Style.Fill.BackgroundColor = XLColor.Red;
-                            Source_worksheet.Cell(k, 16).Style.Fill.BackgroundColor = XLColor.Red;
+                            Source_worksheet.Cell(k, j + 2).Style.Fill.BackgroundColor = XLColor.Red;
+                            Source_worksheet.Cell(k, 19).Style.Fill.BackgroundColor = XLColor.Red;
                         }
                     }
 
@@ -4279,9 +4279,9 @@ inner join (SELECT [Datetime]
                     string Cells = "";
                     for (int i = 1; i <= number_of_rows; i++)     // Sheet if Data  (Source_worksheet)
                     {
-                        string site1 = Source_worksheet.Cell(i, 17).Value.ToString();
+                        string site1 = Source_worksheet.Cell(i, 19).Value.ToString();
                         string Cell = Source_worksheet.Cell(i, 3).Value.ToString();
-                        string val = Source_worksheet.Cell(i, 16).Value.ToString();
+                        string val = Source_worksheet.Cell(i, 18).Value.ToString();
 
                         if (site == site1 && val == "0")
                         {
@@ -4542,7 +4542,78 @@ inner join (SELECT [Datetime]
 
 
 
-            if (Technology == "4G")
+            if (Technology == "4G" && Input_Type == "FARAZ")
+            {
+                XLWorkbook wb = new XLWorkbook();
+                wb.Worksheets.Add(Data_Table_4G, "Data Table");
+                wb.Worksheets.Add(Site_Data_Table_4G, "Result");
+                var saveFileDialog = new SaveFileDialog
+                {
+                    FileName = "4G_KPI_Zero_Check",
+                    Filter = "Excel files|*.xlsx",
+                    Title = "Save an Excel File"
+                };
+
+                IXLWorksheet Source_worksheet = wb.Worksheet("Data Table");
+                int number_of_rows = Source_worksheet.RowsUsed().Count();
+
+                for (int k = 1; k <= number_of_rows; k++)
+                {
+                    for (int j = 1; j <= 8; j++)
+                    {
+                        string val = Source_worksheet.Cell(k, j + 10).Value.ToString();
+                        if (val == "1")
+                        {
+                            Source_worksheet.Cell(k, j + 1).Style.Fill.BackgroundColor = XLColor.Red;
+                            Source_worksheet.Cell(k, 22).Style.Fill.BackgroundColor = XLColor.Red;
+                        }
+                    }
+
+                }
+
+                IXLWorksheet Source_worksheet1 = wb.Worksheet("Result");
+                int number_of_rows1 = Source_worksheet1.RowsUsed().Count();
+                for (int k = 1; k <= number_of_rows1; k++)  // Sheet of Results (Source_worksheet1)
+                {
+                    string site = Source_worksheet1.Cell(k, 1).Value.ToString();
+                    int cell_indexer = 1;
+                    string[] cell_list = new string[10];
+                    string Cells = "";
+                    for (int i = 1; i <= number_of_rows; i++)     // Sheet if Data  (Source_worksheet)
+                    {
+                        string site1 = Source_worksheet.Cell(i, 22).Value.ToString();
+                        string Cell = Source_worksheet.Cell(i, 2).Value.ToString();
+                        string val = Source_worksheet.Cell(i, 21).Value.ToString();
+
+                        if (site == site1 && val == "0")
+                        {
+                            if (!cell_list.Contains(Cell))
+                            {
+                                Cells = Cells + Cell + ", ";
+                                Source_worksheet1.Cell(k, 3).Value = Cells;
+                                cell_list[cell_indexer - 1] = Cell;
+                                cell_indexer++;
+                            }
+                        }
+                    }
+
+                }
+
+
+
+
+                saveFileDialog.ShowDialog();
+
+                if (!String.IsNullOrWhiteSpace(saveFileDialog.FileName))
+                    wb.SaveAs(saveFileDialog.FileName);
+
+                MessageBox.Show("Finished");
+
+
+            }
+
+
+            if (Technology == "4G" && Input_Type == "DataBase")
             {
                 XLWorkbook wb = new XLWorkbook();
                 wb.Worksheets.Add(Data_Table_4G, "Data Table");
@@ -4600,6 +4671,8 @@ inner join (SELECT [Datetime]
                 }
 
 
+
+
                 saveFileDialog.ShowDialog();
 
                 if (!String.IsNullOrWhiteSpace(saveFileDialog.FileName))
@@ -4627,6 +4700,9 @@ inner join (SELECT [Datetime]
             }
         }
 
+        private void groupBox1_Enter(object sender, EventArgs e)
+        {
 
+        }
     }
 }

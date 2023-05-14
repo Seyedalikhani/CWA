@@ -25,9 +25,9 @@ namespace CWA
         private void Form1_Load(object sender, EventArgs e)
         {
 
-            //ConnectionString = @"Server=" + Server_Name + "; Database=" + DataBase_Name + "; User ID=cwpcApp; Password=cwpcApp@830625#Ahmad";
-            //connection = new SqlConnection(ConnectionString);
-            //connection.Open();
+            ConnectionString = @"Server=" + Server_Name + "; Database=" + DataBase_Name + "; User ID=cwpcApp; Password=cwpcApp@830625#Ahmad";
+            connection = new SqlConnection(ConnectionString);
+            connection.Open();
 
 
             string userName = System.Security.Principal.WindowsIdentity.GetCurrent().Name;
