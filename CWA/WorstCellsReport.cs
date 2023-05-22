@@ -5966,5 +5966,10 @@ from [dbo].[TBL_LTE_CELL_Daily_N] where
                 checkBox11.Checked = false;
             }
         }
+
+        private void listBox3_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
     }
 }

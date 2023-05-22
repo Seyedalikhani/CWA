@@ -378,6 +378,7 @@
             this.listBox3.Name = "listBox3";
             this.listBox3.Size = new System.Drawing.Size(136, 238);
             this.listBox3.TabIndex = 14;
+            this.listBox3.SelectedIndexChanged += new System.EventHandler(this.listBox3_SelectedIndexChanged);
             // 
             // listBox2
             // 
@@ -523,7 +524,7 @@
             this.label5.TabIndex = 1;
             this.label5.Text = "Province:";
             // 
-            // Form2
+            // WorstCellsReport
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
@@ -531,7 +532,7 @@
             this.ClientSize = new System.Drawing.Size(825, 416);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
-            this.Name = "Form2";
+            this.Name = "WorstCellsReport";
             this.Text = "Form2";
             this.Load += new System.EventHandler(this.Form2_Load);
             this.groupBox1.ResumeLayout(false);
