@@ -223,7 +223,7 @@ namespace CWA
                                        [Date],
                                        [NE],
                                        [MSS_Peak_Lic_Utilization(Nokia(Core)]*[MSS_Licence_Capacity(Nokia_Core)] / 100 as 'Nokia MSS VLR Use Value' from [Nokia_MSS]
-                                       WHERE CAST([Date] AS DATE)>='" + start_date_str + "' and CAST([Date] AS DATE) <'" + end_date_str + "' and substring([NE],9,3)= '221' ) tble group by[NE]) tble";
+                                       WHERE CAST([Date] AS DATE)>='" + start_date_str + "' and CAST([Date] AS DATE) <'" + end_date_str + "' and RIGHT(NE,3)='221' ) tble group by[NE]) tble";
 
 
             SqlCommand MSS_VLR_Nokia_Use_Quary = new SqlCommand(MSS_VLR_Nokia_Use_Quary_String, connection);
@@ -244,7 +244,7 @@ namespace CWA
                                        [Date],
                                        [NE],
                                        [MSS_Licence_Capacity(Nokia_Core)] as 'Nokia MSS VLR Capacity Value' from [Nokia_MSS]
-                                       WHERE CAST([Date] AS DATE)>='" + start_date_str + "' and CAST([Date] AS DATE) <'" + end_date_str + "' and substring([NE],9,3)= '221' ) tble group by[NE]) tble";
+                                       WHERE CAST([Date] AS DATE)>='" + start_date_str + "' and CAST([Date] AS DATE) <'" + end_date_str + "' and RIGHT(NE,3)='221' ) tble group by[NE]) tble";
 
 
             SqlCommand MSS_VLR_Nokia_Capacity_Quary = new SqlCommand(MSS_VLR_Nokia_Capacity_Quary_String, connection);
@@ -1368,7 +1368,7 @@ namespace CWA
             sheet1.Cells[Num_H_VLR_High_Utilization + Num_N_VLR_High_Utilization + Num_H_SGs_High_Utilization + 5, 3] = "SGs LICENSE";
             sheet1.Cells[Num_H_VLR_High_Utilization + Num_N_VLR_High_Utilization + Num_H_SGs_High_Utilization + 5, 4] = 80;
             sheet1.Cells[Num_H_VLR_High_Utilization + Num_N_VLR_High_Utilization + Num_H_SGs_High_Utilization + 5, 5] = Num_N_SGs_High_Utilization;
-            sheet1.Cells[Num_H_VLR_High_Utilization + Num_N_VLR_High_Utilization + Num_H_SGs_High_Utilization + 5, 9] = "SMS over SGs Utilization of " + Convert.ToString(Num_N_SGs_High_Utilization) + " of HUAWEI MSSs are over Threshhold";
+            sheet1.Cells[Num_H_VLR_High_Utilization + Num_N_VLR_High_Utilization + Num_H_SGs_High_Utilization + 5, 9] = "SMS over SGs Utilization of " + Convert.ToString(Num_N_SGs_High_Utilization) + " of NOKIA MSSs are over Threshhold";
 
 
             if (Num_N_SGs_High_Utilization >= 10)
@@ -3519,20 +3519,24 @@ where[Traffic_Per_Sub_mErl_HU] is not null  and CAST(Date AS DATE) >= '" + start
                         sheet5.Cells[9, 2] = Max_S_Khorasan;
                     }
                 }
-                //Esfahan
-                if (NE == "MSEFA")
+                if (NE.Length>5)
                 {
-                    Traffic_Esfahan = Convert.ToDouble(MSS_Traffic_Quary_Table.Rows[p].ItemArray[3]);
-                    sheet4.Cells[15, 4] = Traffic_Esfahan;
-                    sheet4.Cells[15, 1] = Convert.ToDateTime(MSS_Traffic_Quary_Table.Rows[p].ItemArray[0]);
-                    if (Traffic_Esfahan > Max_Esfahan)
+                    if ((NE == "MSC-CMSBRB") || (NE.Substring(4, 6) == "CMSBRB"))
                     {
-                        Max_Esfahan = Traffic_Esfahan;
-                        sheet4.Cells[15, 6] = Max_Esfahan;
-                        sheet5.Cells[10, 2] = Max_Esfahan;
+                        Traffic_S_Khorasan = Convert.ToDouble(MSS_Traffic_Quary_Table.Rows[p].ItemArray[3]);
+                        sheet4.Cells[15, 4] = Traffic_S_Khorasan;
+                        sheet4.Cells[15, 1] = Convert.ToDateTime(MSS_Traffic_Quary_Table.Rows[p].ItemArray[0]);
+                        if (Traffic_S_Khorasan > Max_S_Khorasan)
+                        {
+                            Max_S_Khorasan = Traffic_S_Khorasan;
+                            sheet4.Cells[14, 6] = Max_S_Khorasan;
+                            sheet5.Cells[9, 2] = Max_S_Khorasan;
+                        }
                     }
                 }
-                if (NE == "MSEFB")
+
+                //Esfahan
+                if (NE == "MSEFA")
                 {
                     Traffic_Esfahan = Convert.ToDouble(MSS_Traffic_Quary_Table.Rows[p].ItemArray[3]);
                     sheet4.Cells[16, 4] = Traffic_Esfahan;
@@ -3540,11 +3544,11 @@ where[Traffic_Per_Sub_mErl_HU] is not null  and CAST(Date AS DATE) >= '" + start
                     if (Traffic_Esfahan > Max_Esfahan)
                     {
                         Max_Esfahan = Traffic_Esfahan;
-                        sheet4.Cells[15, 6] = Max_Esfahan;
+                        sheet4.Cells[16, 6] = Max_Esfahan;
                         sheet5.Cells[10, 2] = Max_Esfahan;
                     }
                 }
-                if (NE == "MSEFC")
+                if (NE == "MSEFB")
                 {
                     Traffic_Esfahan = Convert.ToDouble(MSS_Traffic_Quary_Table.Rows[p].ItemArray[3]);
                     sheet4.Cells[17, 4] = Traffic_Esfahan;
@@ -3552,11 +3556,11 @@ where[Traffic_Per_Sub_mErl_HU] is not null  and CAST(Date AS DATE) >= '" + start
                     if (Traffic_Esfahan > Max_Esfahan)
                     {
                         Max_Esfahan = Traffic_Esfahan;
-                        sheet4.Cells[15, 6] = Max_Esfahan;
+                        sheet4.Cells[16, 6] = Max_Esfahan;
                         sheet5.Cells[10, 2] = Max_Esfahan;
                     }
                 }
-                if (NE == "MSEFD")
+                if (NE == "MSEFC")
                 {
                     Traffic_Esfahan = Convert.ToDouble(MSS_Traffic_Quary_Table.Rows[p].ItemArray[3]);
                     sheet4.Cells[18, 4] = Traffic_Esfahan;
@@ -3564,7 +3568,19 @@ where[Traffic_Per_Sub_mErl_HU] is not null  and CAST(Date AS DATE) >= '" + start
                     if (Traffic_Esfahan > Max_Esfahan)
                     {
                         Max_Esfahan = Traffic_Esfahan;
-                        sheet4.Cells[15, 6] = Max_Esfahan;
+                        sheet4.Cells[16, 6] = Max_Esfahan;
+                        sheet5.Cells[10, 2] = Max_Esfahan;
+                    }
+                }
+                if (NE == "MSEFD")
+                {
+                    Traffic_Esfahan = Convert.ToDouble(MSS_Traffic_Quary_Table.Rows[p].ItemArray[3]);
+                    sheet4.Cells[19, 4] = Traffic_Esfahan;
+                    sheet4.Cells[19, 1] = Convert.ToDateTime(MSS_Traffic_Quary_Table.Rows[p].ItemArray[0]);
+                    if (Traffic_Esfahan > Max_Esfahan)
+                    {
+                        Max_Esfahan = Traffic_Esfahan;
+                        sheet4.Cells[16, 6] = Max_Esfahan;
                         sheet5.Cells[10, 2] = Max_Esfahan;
                     }
                 }
@@ -3572,12 +3588,12 @@ where[Traffic_Per_Sub_mErl_HU] is not null  and CAST(Date AS DATE) >= '" + start
                 if (NE == "MSGOA")
                 {
                     Traffic_Golestan = Convert.ToDouble(MSS_Traffic_Quary_Table.Rows[p].ItemArray[3]);
-                    sheet4.Cells[19, 4] = Traffic_Golestan;
-                    sheet4.Cells[19, 1] = Convert.ToDateTime(MSS_Traffic_Quary_Table.Rows[p].ItemArray[0]);
+                    sheet4.Cells[20, 4] = Traffic_Golestan;
+                    sheet4.Cells[20, 1] = Convert.ToDateTime(MSS_Traffic_Quary_Table.Rows[p].ItemArray[0]);
                     if (Traffic_Golestan > Max_Golestan)
                     {
                         Max_Golestan = Traffic_Golestan;
-                        sheet4.Cells[19, 6] = Max_Golestan;
+                        sheet4.Cells[20, 6] = Max_Golestan;
                         sheet5.Cells[11, 2] = Max_Golestan;
                     }
                 }
@@ -3585,24 +3601,24 @@ where[Traffic_Per_Sub_mErl_HU] is not null  and CAST(Date AS DATE) >= '" + start
                 if (NE == "MSHNA")
                 {
                     Traffic_Hamedan = Convert.ToDouble(MSS_Traffic_Quary_Table.Rows[p].ItemArray[3]);
-                    sheet4.Cells[20, 4] = Traffic_Hamedan;
-                    sheet4.Cells[20, 1] = Convert.ToDateTime(MSS_Traffic_Quary_Table.Rows[p].ItemArray[0]);
+                    sheet4.Cells[21, 4] = Traffic_Hamedan;
+                    sheet4.Cells[21, 1] = Convert.ToDateTime(MSS_Traffic_Quary_Table.Rows[p].ItemArray[0]);
                     if (Traffic_Hamedan > Max_Hamedan)
                     {
                         Max_Hamedan = Traffic_Hamedan;
-                        sheet4.Cells[20, 6] = Max_Hamedan;
+                        sheet4.Cells[21, 6] = Max_Hamedan;
                         sheet5.Cells[12, 2] = Max_Hamedan;
                     }
                 }
                 if (NE == "MSHNB")
                 {
                     Traffic_Hamedan = Convert.ToDouble(MSS_Traffic_Quary_Table.Rows[p].ItemArray[3]);
-                    sheet4.Cells[21, 4] = Traffic_Hamedan;
-                    sheet4.Cells[21, 1] = Convert.ToDateTime(MSS_Traffic_Quary_Table.Rows[p].ItemArray[0]);
+                    sheet4.Cells[22, 4] = Traffic_Hamedan;
+                    sheet4.Cells[22, 1] = Convert.ToDateTime(MSS_Traffic_Quary_Table.Rows[p].ItemArray[0]);
                     if (Traffic_Hamedan > Max_Hamedan)
                     {
                         Max_Hamedan = Traffic_Hamedan;
-                        sheet4.Cells[20, 6] = Max_Hamedan;
+                        sheet4.Cells[21, 6] = Max_Hamedan;
                         sheet5.Cells[12, 2] = Max_Hamedan;
                     }
                 }
@@ -3610,12 +3626,12 @@ where[Traffic_Per_Sub_mErl_HU] is not null  and CAST(Date AS DATE) >= '" + start
                 if (NE == "MSILA")
                 {
                     Traffic_Ilam = Convert.ToDouble(MSS_Traffic_Quary_Table.Rows[p].ItemArray[3]);
-                    sheet4.Cells[22, 4] = Traffic_Ilam;
-                    sheet4.Cells[22, 1] = Convert.ToDateTime(MSS_Traffic_Quary_Table.Rows[p].ItemArray[0]);
+                    sheet4.Cells[23, 4] = Traffic_Ilam;
+                    sheet4.Cells[23, 1] = Convert.ToDateTime(MSS_Traffic_Quary_Table.Rows[p].ItemArray[0]);
                     if (Traffic_Ilam > Max_Ilam)
                     {
                         Max_Ilam = Traffic_Ilam;
-                        sheet4.Cells[22, 6] = Max_Ilam;
+                        sheet4.Cells[23, 6] = Max_Ilam;
                         sheet5.Cells[13, 2] = Max_Ilam;
                     }
                 }
@@ -3623,12 +3639,12 @@ where[Traffic_Per_Sub_mErl_HU] is not null  and CAST(Date AS DATE) >= '" + start
                 if (NE == "MSKHA")
                 {
                     Traffic_Lorestan = Convert.ToDouble(MSS_Traffic_Quary_Table.Rows[p].ItemArray[3]);
-                    sheet4.Cells[23, 4] = Traffic_Lorestan;
-                    sheet4.Cells[23, 1] = Convert.ToDateTime(MSS_Traffic_Quary_Table.Rows[p].ItemArray[0]);
+                    sheet4.Cells[24, 4] = Traffic_Lorestan;
+                    sheet4.Cells[24, 1] = Convert.ToDateTime(MSS_Traffic_Quary_Table.Rows[p].ItemArray[0]);
                     if (Traffic_Lorestan > Max_Lorestan)
                     {
                         Max_Lorestan = Traffic_Lorestan;
-                        sheet4.Cells[23, 6] = Max_Lorestan;
+                        sheet4.Cells[24, 6] = Max_Lorestan;
                         sheet5.Cells[14, 2] = Max_Lorestan;
                     }
                 }
@@ -3636,24 +3652,24 @@ where[Traffic_Per_Sub_mErl_HU] is not null  and CAST(Date AS DATE) >= '" + start
                 if (NE == "MSKRA")
                 {
                     Traffic_Kerman = Convert.ToDouble(MSS_Traffic_Quary_Table.Rows[p].ItemArray[3]);
-                    sheet4.Cells[24, 4] = Traffic_Kerman;
-                    sheet4.Cells[24, 1] = Convert.ToDateTime(MSS_Traffic_Quary_Table.Rows[p].ItemArray[0]);
+                    sheet4.Cells[25, 4] = Traffic_Kerman;
+                    sheet4.Cells[25, 1] = Convert.ToDateTime(MSS_Traffic_Quary_Table.Rows[p].ItemArray[0]);
                     if (Traffic_Kerman > Max_Kerman)
                     {
                         Max_Kerman = Traffic_Kerman;
-                        sheet4.Cells[24, 6] = Max_Kerman;
+                        sheet4.Cells[25, 6] = Max_Kerman;
                         sheet5.Cells[15, 2] = Max_Kerman;
                     }
                 }
                 if (NE == "MSKRB")
                 {
                     Traffic_Kerman = Convert.ToDouble(MSS_Traffic_Quary_Table.Rows[p].ItemArray[3]);
-                    sheet4.Cells[25, 4] = Traffic_Kerman;
-                    sheet4.Cells[25, 1] = Convert.ToDateTime(MSS_Traffic_Quary_Table.Rows[p].ItemArray[0]);
+                    sheet4.Cells[26, 4] = Traffic_Kerman;
+                    sheet4.Cells[26, 1] = Convert.ToDateTime(MSS_Traffic_Quary_Table.Rows[p].ItemArray[0]);
                     if (Traffic_Kerman > Max_Kerman)
                     {
                         Max_Kerman = Traffic_Kerman;
-                        sheet4.Cells[24, 6] = Max_Kerman;
+                        sheet4.Cells[25, 6] = Max_Kerman;
                         sheet5.Cells[15, 2] = Max_Kerman;
                     }
                 }
@@ -3661,12 +3677,12 @@ where[Traffic_Per_Sub_mErl_HU] is not null  and CAST(Date AS DATE) >= '" + start
                 if (NE == "MSKSA")
                 {
                     Traffic_Kermanshah = Convert.ToDouble(MSS_Traffic_Quary_Table.Rows[p].ItemArray[3]);
-                    sheet4.Cells[26, 4] = Traffic_Kermanshah;
-                    sheet4.Cells[26, 1] = Convert.ToDateTime(MSS_Traffic_Quary_Table.Rows[p].ItemArray[0]);
+                    sheet4.Cells[27, 4] = Traffic_Kermanshah;
+                    sheet4.Cells[27, 1] = Convert.ToDateTime(MSS_Traffic_Quary_Table.Rows[p].ItemArray[0]);
                     if (Traffic_Kermanshah > Max_Kermanshah)
                     {
                         Max_Kermanshah = Traffic_Kermanshah;
-                        sheet4.Cells[26, 6] = Max_Kermanshah;
+                        sheet4.Cells[27, 6] = Max_Kermanshah;
                         sheet5.Cells[16, 2] = Max_Kermanshah;
                     }
                 }
@@ -3674,28 +3690,16 @@ where[Traffic_Per_Sub_mErl_HU] is not null  and CAST(Date AS DATE) >= '" + start
                 if (NE == "MSMDA")
                 {
                     Traffic_R_Khorasan = Convert.ToDouble(MSS_Traffic_Quary_Table.Rows[p].ItemArray[3]);
-                    sheet4.Cells[27, 4] = Traffic_R_Khorasan;
-                    sheet4.Cells[27, 1] = Convert.ToDateTime(MSS_Traffic_Quary_Table.Rows[p].ItemArray[0]);
-                    if (Traffic_R_Khorasan > Max_R_Khorasan)
-                    {
-                        Max_R_Khorasan = Traffic_R_Khorasan;
-                        sheet4.Cells[27, 6] = Max_R_Khorasan;
-                        sheet5.Cells[17, 2] = Max_R_Khorasan;
-                    }
-                }
-                if (NE == "MSMDB")
-                {
-                    Traffic_R_Khorasan = Convert.ToDouble(MSS_Traffic_Quary_Table.Rows[p].ItemArray[3]);
                     sheet4.Cells[28, 4] = Traffic_R_Khorasan;
                     sheet4.Cells[28, 1] = Convert.ToDateTime(MSS_Traffic_Quary_Table.Rows[p].ItemArray[0]);
                     if (Traffic_R_Khorasan > Max_R_Khorasan)
                     {
                         Max_R_Khorasan = Traffic_R_Khorasan;
-                        sheet4.Cells[27, 6] = Max_R_Khorasan;
+                        sheet4.Cells[28, 6] = Max_R_Khorasan;
                         sheet5.Cells[17, 2] = Max_R_Khorasan;
                     }
                 }
-                if (NE == "MSMDC")
+                if (NE == "MSMDB")
                 {
                     Traffic_R_Khorasan = Convert.ToDouble(MSS_Traffic_Quary_Table.Rows[p].ItemArray[3]);
                     sheet4.Cells[29, 4] = Traffic_R_Khorasan;
@@ -3703,11 +3707,11 @@ where[Traffic_Per_Sub_mErl_HU] is not null  and CAST(Date AS DATE) >= '" + start
                     if (Traffic_R_Khorasan > Max_R_Khorasan)
                     {
                         Max_R_Khorasan = Traffic_R_Khorasan;
-                        sheet4.Cells[27, 6] = Max_R_Khorasan;
+                        sheet4.Cells[28, 6] = Max_R_Khorasan;
                         sheet5.Cells[17, 2] = Max_R_Khorasan;
                     }
                 }
-                if (NE == "MSMDD")
+                if (NE == "MSMDC")
                 {
                     Traffic_R_Khorasan = Convert.ToDouble(MSS_Traffic_Quary_Table.Rows[p].ItemArray[3]);
                     sheet4.Cells[30, 4] = Traffic_R_Khorasan;
@@ -3715,7 +3719,19 @@ where[Traffic_Per_Sub_mErl_HU] is not null  and CAST(Date AS DATE) >= '" + start
                     if (Traffic_R_Khorasan > Max_R_Khorasan)
                     {
                         Max_R_Khorasan = Traffic_R_Khorasan;
-                        sheet4.Cells[27, 6] = Max_R_Khorasan;
+                        sheet4.Cells[28, 6] = Max_R_Khorasan;
+                        sheet5.Cells[17, 2] = Max_R_Khorasan;
+                    }
+                }
+                if (NE == "MSMDD")
+                {
+                    Traffic_R_Khorasan = Convert.ToDouble(MSS_Traffic_Quary_Table.Rows[p].ItemArray[3]);
+                    sheet4.Cells[31, 4] = Traffic_R_Khorasan;
+                    sheet4.Cells[31, 1] = Convert.ToDateTime(MSS_Traffic_Quary_Table.Rows[p].ItemArray[0]);
+                    if (Traffic_R_Khorasan > Max_R_Khorasan)
+                    {
+                        Max_R_Khorasan = Traffic_R_Khorasan;
+                        sheet4.Cells[28, 6] = Max_R_Khorasan;
                         sheet5.Cells[17, 2] = Max_R_Khorasan;
                     }
                 }
@@ -3723,12 +3739,12 @@ where[Traffic_Per_Sub_mErl_HU] is not null  and CAST(Date AS DATE) >= '" + start
                 if (NE == "MSQMA")
                 {
                     Traffic_Qom = Convert.ToDouble(MSS_Traffic_Quary_Table.Rows[p].ItemArray[3]);
-                    sheet4.Cells[31, 4] = Traffic_Qom;
-                    sheet4.Cells[31, 1] = Convert.ToDateTime(MSS_Traffic_Quary_Table.Rows[p].ItemArray[0]);
+                    sheet4.Cells[32, 4] = Traffic_Qom;
+                    sheet4.Cells[32, 1] = Convert.ToDateTime(MSS_Traffic_Quary_Table.Rows[p].ItemArray[0]);
                     if (Traffic_Qom > Max_Qom)
                     {
                         Max_Qom = Traffic_Qom;
-                        sheet4.Cells[31, 6] = Max_Qom;
+                        sheet4.Cells[32, 6] = Max_Qom;
                         sheet5.Cells[18, 2] = Max_Qom;
                     }
                 }
@@ -3736,12 +3752,12 @@ where[Traffic_Per_Sub_mErl_HU] is not null  and CAST(Date AS DATE) >= '" + start
                 if (NE == "MSQZA")
                 {
                     Traffic_Qazvin = Convert.ToDouble(MSS_Traffic_Quary_Table.Rows[p].ItemArray[3]);
-                    sheet4.Cells[32, 4] = Traffic_Qazvin;
-                    sheet4.Cells[32, 1] = Convert.ToDateTime(MSS_Traffic_Quary_Table.Rows[p].ItemArray[0]);
+                    sheet4.Cells[33, 4] = Traffic_Qazvin;
+                    sheet4.Cells[33, 1] = Convert.ToDateTime(MSS_Traffic_Quary_Table.Rows[p].ItemArray[0]);
                     if (Traffic_Qazvin > Max_Qazvin)
                     {
                         Max_Qazvin = Traffic_Qazvin;
-                        sheet4.Cells[32, 6] = Max_Qazvin;
+                        sheet4.Cells[33, 6] = Max_Qazvin;
                         sheet5.Cells[19, 2] = Max_Qazvin;
                     }
                 }
@@ -3751,28 +3767,16 @@ where[Traffic_Per_Sub_mErl_HU] is not null  and CAST(Date AS DATE) >= '" + start
                 if (NE == "MSMDA")
                 {
                     Traffic_Tehran = Convert.ToDouble(MSS_Traffic_Quary_Table.Rows[p].ItemArray[3]);
-                    sheet4.Cells[33, 4] = Traffic_Tehran;
-                    sheet4.Cells[33, 1] = Convert.ToDateTime(MSS_Traffic_Quary_Table.Rows[p].ItemArray[0]);
-                    if (Traffic_Tehran > Max_Tehran)
-                    {
-                        Max_Tehran = Traffic_Tehran;
-                        sheet4.Cells[33, 6] = Max_Tehran;
-                        sheet5.Cells[20, 2] = Max_Tehran;
-                    }
-                }
-                if (NE == "MSMDB")
-                {
-                    Traffic_Tehran = Convert.ToDouble(MSS_Traffic_Quary_Table.Rows[p].ItemArray[3]);
                     sheet4.Cells[34, 4] = Traffic_Tehran;
                     sheet4.Cells[34, 1] = Convert.ToDateTime(MSS_Traffic_Quary_Table.Rows[p].ItemArray[0]);
                     if (Traffic_Tehran > Max_Tehran)
                     {
                         Max_Tehran = Traffic_Tehran;
-                        sheet4.Cells[33, 6] = Max_Tehran;
+                        sheet4.Cells[34, 6] = Max_Tehran;
                         sheet5.Cells[20, 2] = Max_Tehran;
                     }
                 }
-                if (NE == "MSMDC")
+                if (NE == "MSMDB")
                 {
                     Traffic_Tehran = Convert.ToDouble(MSS_Traffic_Quary_Table.Rows[p].ItemArray[3]);
                     sheet4.Cells[35, 4] = Traffic_Tehran;
@@ -3780,11 +3784,11 @@ where[Traffic_Per_Sub_mErl_HU] is not null  and CAST(Date AS DATE) >= '" + start
                     if (Traffic_Tehran > Max_Tehran)
                     {
                         Max_Tehran = Traffic_Tehran;
-                        sheet4.Cells[33, 6] = Max_Tehran;
+                        sheet4.Cells[34, 6] = Max_Tehran;
                         sheet5.Cells[20, 2] = Max_Tehran;
                     }
                 }
-                if (NE == "MSMDD")
+                if (NE == "MSMDC")
                 {
                     Traffic_Tehran = Convert.ToDouble(MSS_Traffic_Quary_Table.Rows[p].ItemArray[3]);
                     sheet4.Cells[36, 4] = Traffic_Tehran;
@@ -3792,7 +3796,19 @@ where[Traffic_Per_Sub_mErl_HU] is not null  and CAST(Date AS DATE) >= '" + start
                     if (Traffic_Tehran > Max_Tehran)
                     {
                         Max_Tehran = Traffic_Tehran;
-                        sheet4.Cells[33, 6] = Max_Tehran;
+                        sheet4.Cells[34, 6] = Max_Tehran;
+                        sheet5.Cells[20, 2] = Max_Tehran;
+                    }
+                }
+                if (NE == "MSMDD")
+                {
+                    Traffic_Tehran = Convert.ToDouble(MSS_Traffic_Quary_Table.Rows[p].ItemArray[3]);
+                    sheet4.Cells[37, 4] = Traffic_Tehran;
+                    sheet4.Cells[37, 1] = Convert.ToDateTime(MSS_Traffic_Quary_Table.Rows[p].ItemArray[0]);
+                    if (Traffic_Tehran > Max_Tehran)
+                    {
+                        Max_Tehran = Traffic_Tehran;
+                        sheet4.Cells[34, 6] = Max_Tehran;
                         sheet5.Cells[20, 2] = Max_Tehran;
                     }
                 }
@@ -3800,24 +3816,24 @@ where[Traffic_Per_Sub_mErl_HU] is not null  and CAST(Date AS DATE) >= '" + start
                 if (NE == "MSRSB")
                 {
                     Traffic_Gilan = Convert.ToDouble(MSS_Traffic_Quary_Table.Rows[p].ItemArray[3]);
-                    sheet4.Cells[37, 4] = Traffic_Gilan;
-                    sheet4.Cells[37, 1] = Convert.ToDateTime(MSS_Traffic_Quary_Table.Rows[p].ItemArray[0]);
+                    sheet4.Cells[38, 4] = Traffic_Gilan;
+                    sheet4.Cells[38, 1] = Convert.ToDateTime(MSS_Traffic_Quary_Table.Rows[p].ItemArray[0]);
                     if (Traffic_Gilan > Max_Gilan)
                     {
                         Max_Gilan = Traffic_Gilan;
-                        sheet4.Cells[37, 6] = Max_Gilan;
+                        sheet4.Cells[38, 6] = Max_Gilan;
                         sheet5.Cells[21, 2] = Max_Gilan;
                     }
                 }
                 if (NE == "MSLJA")
                 {
                     Traffic_Gilan = Convert.ToDouble(MSS_Traffic_Quary_Table.Rows[p].ItemArray[3]);
-                    sheet4.Cells[38, 4] = Traffic_Gilan;
-                    sheet4.Cells[38, 1] = Convert.ToDateTime(MSS_Traffic_Quary_Table.Rows[p].ItemArray[0]);
+                    sheet4.Cells[39, 4] = Traffic_Gilan;
+                    sheet4.Cells[39, 1] = Convert.ToDateTime(MSS_Traffic_Quary_Table.Rows[p].ItemArray[0]);
                     if (Traffic_Gilan > Max_Gilan)
                     {
                         Max_Gilan = Traffic_Gilan;
-                        sheet4.Cells[37, 6] = Max_Gilan;
+                        sheet4.Cells[38, 6] = Max_Gilan;
                         sheet5.Cells[21, 2] = Max_Gilan;
                     }
                 }
@@ -3825,12 +3841,12 @@ where[Traffic_Per_Sub_mErl_HU] is not null  and CAST(Date AS DATE) >= '" + start
                 if (NE == "MSSEB")
                 {
                     Traffic_Semnan = Convert.ToDouble(MSS_Traffic_Quary_Table.Rows[p].ItemArray[3]);
-                    sheet4.Cells[39, 4] = Traffic_Semnan;
-                    sheet4.Cells[39, 1] = Convert.ToDateTime(MSS_Traffic_Quary_Table.Rows[p].ItemArray[0]);
+                    sheet4.Cells[40, 4] = Traffic_Semnan;
+                    sheet4.Cells[40, 1] = Convert.ToDateTime(MSS_Traffic_Quary_Table.Rows[p].ItemArray[0]);
                     if (Traffic_Semnan > Max_Semnan)
                     {
                         Max_Semnan = Traffic_Semnan;
-                        sheet4.Cells[39, 6] = Max_Semnan;
+                        sheet4.Cells[40, 6] = Max_Semnan;
                         sheet5.Cells[22, 2] = Max_Semnan;
                     }
                 }
@@ -3838,12 +3854,12 @@ where[Traffic_Per_Sub_mErl_HU] is not null  and CAST(Date AS DATE) >= '" + start
                 if (NE == "MSSJA")
                 {
                     Traffic_Kordestan = Convert.ToDouble(MSS_Traffic_Quary_Table.Rows[p].ItemArray[3]);
-                    sheet4.Cells[40, 4] = Traffic_Kordestan;
-                    sheet4.Cells[40, 1] = Convert.ToDateTime(MSS_Traffic_Quary_Table.Rows[p].ItemArray[0]);
+                    sheet4.Cells[41, 4] = Traffic_Kordestan;
+                    sheet4.Cells[41, 1] = Convert.ToDateTime(MSS_Traffic_Quary_Table.Rows[p].ItemArray[0]);
                     if (Traffic_Kordestan > Max_Kordestan)
                     {
                         Max_Kordestan = Traffic_Kordestan;
-                        sheet4.Cells[40, 6] = Max_Kordestan;
+                        sheet4.Cells[41, 6] = Max_Kordestan;
                         sheet5.Cells[23, 2] = Max_Kordestan;
                     }
                 }
@@ -3851,12 +3867,12 @@ where[Traffic_Per_Sub_mErl_HU] is not null  and CAST(Date AS DATE) >= '" + start
                 if (NE == "MSSKA")
                 {
                     Traffic_Chahahr_Mahal = Convert.ToDouble(MSS_Traffic_Quary_Table.Rows[p].ItemArray[3]);
-                    sheet4.Cells[41, 4] = Traffic_Chahahr_Mahal;
-                    sheet4.Cells[41, 1] = Convert.ToDateTime(MSS_Traffic_Quary_Table.Rows[p].ItemArray[0]);
+                    sheet4.Cells[42, 4] = Traffic_Chahahr_Mahal;
+                    sheet4.Cells[42, 1] = Convert.ToDateTime(MSS_Traffic_Quary_Table.Rows[p].ItemArray[0]);
                     if (Traffic_Chahahr_Mahal > Max_Chahahr_Mahal)
                     {
                         Max_Chahahr_Mahal = Traffic_Chahahr_Mahal;
-                        sheet4.Cells[41, 6] = Max_Chahahr_Mahal;
+                        sheet4.Cells[42, 6] = Max_Chahahr_Mahal;
                         sheet5.Cells[24, 2] = Max_Chahahr_Mahal;
                     }
                 }
@@ -3864,28 +3880,16 @@ where[Traffic_Per_Sub_mErl_HU] is not null  and CAST(Date AS DATE) >= '" + start
                 if (NE == "MSSZB")
                 {
                     Traffic_Fars = Convert.ToDouble(MSS_Traffic_Quary_Table.Rows[p].ItemArray[3]);
-                    sheet4.Cells[42, 4] = Traffic_Fars;
-                    sheet4.Cells[42, 1] = Convert.ToDateTime(MSS_Traffic_Quary_Table.Rows[p].ItemArray[0]);
-                    if (Traffic_Fars > Max_Fars)
-                    {
-                        Max_Fars = Traffic_Fars;
-                        sheet4.Cells[42, 6] = Max_Fars;
-                        sheet5.Cells[25, 2] = Max_Fars;
-                    }
-                }
-                if (NE == "MSSZC")
-                {
-                    Traffic_Fars = Convert.ToDouble(MSS_Traffic_Quary_Table.Rows[p].ItemArray[3]);
                     sheet4.Cells[43, 4] = Traffic_Fars;
                     sheet4.Cells[43, 1] = Convert.ToDateTime(MSS_Traffic_Quary_Table.Rows[p].ItemArray[0]);
                     if (Traffic_Fars > Max_Fars)
                     {
                         Max_Fars = Traffic_Fars;
-                        sheet4.Cells[42, 6] = Max_Fars;
+                        sheet4.Cells[43, 6] = Max_Fars;
                         sheet5.Cells[25, 2] = Max_Fars;
                     }
                 }
-                if (NE == "MSSZD")
+                if (NE == "MSSZC")
                 {
                     Traffic_Fars = Convert.ToDouble(MSS_Traffic_Quary_Table.Rows[p].ItemArray[3]);
                     sheet4.Cells[44, 4] = Traffic_Fars;
@@ -3893,7 +3897,19 @@ where[Traffic_Per_Sub_mErl_HU] is not null  and CAST(Date AS DATE) >= '" + start
                     if (Traffic_Fars > Max_Fars)
                     {
                         Max_Fars = Traffic_Fars;
-                        sheet4.Cells[42, 6] = Max_Fars;
+                        sheet4.Cells[43, 6] = Max_Fars;
+                        sheet5.Cells[25, 2] = Max_Fars;
+                    }
+                }
+                if (NE == "MSSZD")
+                {
+                    Traffic_Fars = Convert.ToDouble(MSS_Traffic_Quary_Table.Rows[p].ItemArray[3]);
+                    sheet4.Cells[45, 4] = Traffic_Fars;
+                    sheet4.Cells[45, 1] = Convert.ToDateTime(MSS_Traffic_Quary_Table.Rows[p].ItemArray[0]);
+                    if (Traffic_Fars > Max_Fars)
+                    {
+                        Max_Fars = Traffic_Fars;
+                        sheet4.Cells[43, 6] = Max_Fars;
                         sheet5.Cells[25, 2] = Max_Fars;
                     }
                 }
@@ -3901,28 +3917,16 @@ where[Traffic_Per_Sub_mErl_HU] is not null  and CAST(Date AS DATE) >= '" + start
                 if (NE == "MSTZA")
                 {
                     Traffic_E_Azar = Convert.ToDouble(MSS_Traffic_Quary_Table.Rows[p].ItemArray[3]);
-                    sheet4.Cells[45, 4] = Traffic_E_Azar;
-                    sheet4.Cells[45, 1] = Convert.ToDateTime(MSS_Traffic_Quary_Table.Rows[p].ItemArray[0]);
-                    if (Traffic_E_Azar > Max_E_Azar)
-                    {
-                        Max_E_Azar = Traffic_E_Azar;
-                        sheet4.Cells[45, 6] = Max_E_Azar;
-                        sheet5.Cells[26, 2] = Max_E_Azar;
-                    }
-                }
-                if (NE == "MSTZB")
-                {
-                    Traffic_E_Azar = Convert.ToDouble(MSS_Traffic_Quary_Table.Rows[p].ItemArray[3]);
                     sheet4.Cells[46, 4] = Traffic_E_Azar;
                     sheet4.Cells[46, 1] = Convert.ToDateTime(MSS_Traffic_Quary_Table.Rows[p].ItemArray[0]);
                     if (Traffic_E_Azar > Max_E_Azar)
                     {
                         Max_E_Azar = Traffic_E_Azar;
-                        sheet4.Cells[45, 6] = Max_E_Azar;
+                        sheet4.Cells[46, 6] = Max_E_Azar;
                         sheet5.Cells[26, 2] = Max_E_Azar;
                     }
                 }
-                if (NE == "MSTZC")
+                if (NE == "MSTZB")
                 {
                     Traffic_E_Azar = Convert.ToDouble(MSS_Traffic_Quary_Table.Rows[p].ItemArray[3]);
                     sheet4.Cells[47, 4] = Traffic_E_Azar;
@@ -3930,7 +3934,19 @@ where[Traffic_Per_Sub_mErl_HU] is not null  and CAST(Date AS DATE) >= '" + start
                     if (Traffic_E_Azar > Max_E_Azar)
                     {
                         Max_E_Azar = Traffic_E_Azar;
-                        sheet4.Cells[45, 6] = Max_E_Azar;
+                        sheet4.Cells[46, 6] = Max_E_Azar;
+                        sheet5.Cells[26, 2] = Max_E_Azar;
+                    }
+                }
+                if (NE == "MSTZC")
+                {
+                    Traffic_E_Azar = Convert.ToDouble(MSS_Traffic_Quary_Table.Rows[p].ItemArray[3]);
+                    sheet4.Cells[48, 4] = Traffic_E_Azar;
+                    sheet4.Cells[48, 1] = Convert.ToDateTime(MSS_Traffic_Quary_Table.Rows[p].ItemArray[0]);
+                    if (Traffic_E_Azar > Max_E_Azar)
+                    {
+                        Max_E_Azar = Traffic_E_Azar;
+                        sheet4.Cells[46, 6] = Max_E_Azar;
                         sheet5.Cells[26, 2] = Max_E_Azar;
                     }
                 }
@@ -3938,24 +3954,24 @@ where[Traffic_Per_Sub_mErl_HU] is not null  and CAST(Date AS DATE) >= '" + start
                 if (NE == "MSURA")
                 {
                     Traffic_W_Azar = Convert.ToDouble(MSS_Traffic_Quary_Table.Rows[p].ItemArray[3]);
-                    sheet4.Cells[48, 4] = Traffic_W_Azar;
-                    sheet4.Cells[48, 1] = Convert.ToDateTime(MSS_Traffic_Quary_Table.Rows[p].ItemArray[0]);
+                    sheet4.Cells[49, 4] = Traffic_W_Azar;
+                    sheet4.Cells[49, 1] = Convert.ToDateTime(MSS_Traffic_Quary_Table.Rows[p].ItemArray[0]);
                     if (Traffic_W_Azar > Max_W_Azar)
                     {
                         Max_W_Azar = Traffic_W_Azar;
-                        sheet4.Cells[48, 6] = Max_W_Azar;
+                        sheet4.Cells[49, 6] = Max_W_Azar;
                         sheet5.Cells[27, 2] = Max_W_Azar;
                     }
                 }
                 if (NE == "MSURB")
                 {
                     Traffic_W_Azar = Convert.ToDouble(MSS_Traffic_Quary_Table.Rows[p].ItemArray[3]);
-                    sheet4.Cells[49, 4] = Traffic_W_Azar;
-                    sheet4.Cells[49, 1] = Convert.ToDateTime(MSS_Traffic_Quary_Table.Rows[p].ItemArray[0]);
+                    sheet4.Cells[50, 4] = Traffic_W_Azar;
+                    sheet4.Cells[50, 1] = Convert.ToDateTime(MSS_Traffic_Quary_Table.Rows[p].ItemArray[0]);
                     if (Traffic_W_Azar > Max_W_Azar)
                     {
                         Max_W_Azar = Traffic_W_Azar;
-                        sheet4.Cells[48, 6] = Max_W_Azar;
+                        sheet4.Cells[49, 6] = Max_W_Azar;
                         sheet5.Cells[27, 2] = Max_W_Azar;
                     }
                 }
@@ -3963,12 +3979,12 @@ where[Traffic_Per_Sub_mErl_HU] is not null  and CAST(Date AS DATE) >= '" + start
                 if (NE == "MSYJA")
                 {
                     Traffic_Kohgilooyeh = Convert.ToDouble(MSS_Traffic_Quary_Table.Rows[p].ItemArray[3]);
-                    sheet4.Cells[50, 4] = Traffic_Kohgilooyeh;
-                    sheet4.Cells[50, 1] = Convert.ToDateTime(MSS_Traffic_Quary_Table.Rows[p].ItemArray[0]);
+                    sheet4.Cells[51, 4] = Traffic_Kohgilooyeh;
+                    sheet4.Cells[51, 1] = Convert.ToDateTime(MSS_Traffic_Quary_Table.Rows[p].ItemArray[0]);
                     if (Traffic_Kohgilooyeh > Max_Kohgilooyeh)
                     {
                         Max_Kohgilooyeh = Traffic_Kohgilooyeh;
-                        sheet4.Cells[50, 6] = Max_Kohgilooyeh;
+                        sheet4.Cells[51, 6] = Max_Kohgilooyeh;
                         sheet5.Cells[28, 2] = Max_Kohgilooyeh;
                     }
                 }
@@ -3976,24 +3992,24 @@ where[Traffic_Per_Sub_mErl_HU] is not null  and CAST(Date AS DATE) >= '" + start
                 if (NE == "MSYZA")
                 {
                     Traffic_Yazd = Convert.ToDouble(MSS_Traffic_Quary_Table.Rows[p].ItemArray[3]);
-                    sheet4.Cells[51, 4] = Traffic_Yazd;
-                    sheet4.Cells[51, 1] = Convert.ToDateTime(MSS_Traffic_Quary_Table.Rows[p].ItemArray[0]);
+                    sheet4.Cells[52, 4] = Traffic_Yazd;
+                    sheet4.Cells[52, 1] = Convert.ToDateTime(MSS_Traffic_Quary_Table.Rows[p].ItemArray[0]);
                     if (Traffic_Yazd > Max_Yazd)
                     {
                         Max_Yazd = Traffic_Yazd;
-                        sheet4.Cells[51, 6] = Max_Yazd;
+                        sheet4.Cells[52, 6] = Max_Yazd;
                         sheet5.Cells[29, 2] = Max_Yazd;
                     }
                 }
                 if (NE == "MSYZB")
                 {
                     Traffic_Yazd = Convert.ToDouble(MSS_Traffic_Quary_Table.Rows[p].ItemArray[3]);
-                    sheet4.Cells[52, 4] = Traffic_Yazd;
-                    sheet4.Cells[52, 1] = Convert.ToDateTime(MSS_Traffic_Quary_Table.Rows[p].ItemArray[0]);
+                    sheet4.Cells[53, 4] = Traffic_Yazd;
+                    sheet4.Cells[53, 1] = Convert.ToDateTime(MSS_Traffic_Quary_Table.Rows[p].ItemArray[0]);
                     if (Traffic_Yazd > Max_Yazd)
                     {
                         Max_Yazd = Traffic_Yazd;
-                        sheet4.Cells[51, 6] = Max_Yazd;
+                        sheet4.Cells[52, 6] = Max_Yazd;
                         sheet5.Cells[29, 2] = Max_Yazd;
                     }
                 }
@@ -4001,12 +4017,24 @@ where[Traffic_Per_Sub_mErl_HU] is not null  and CAST(Date AS DATE) >= '" + start
                 if (NE == "MSZHB")
                 {
                     Traffic_Sistan_Baloch = Convert.ToDouble(MSS_Traffic_Quary_Table.Rows[p].ItemArray[3]);
-                    sheet4.Cells[53, 4] = Traffic_Sistan_Baloch;
-                    sheet4.Cells[53, 1] = Convert.ToDateTime(MSS_Traffic_Quary_Table.Rows[p].ItemArray[0]);
+                    sheet4.Cells[54, 4] = Traffic_Sistan_Baloch;
+                    sheet4.Cells[54, 1] = Convert.ToDateTime(MSS_Traffic_Quary_Table.Rows[p].ItemArray[0]);
                     if (Traffic_Sistan_Baloch > Max_Sistan_Baloch)
                     {
                         Max_Sistan_Baloch = Traffic_Sistan_Baloch;
-                        sheet4.Cells[53, 6] = Max_Sistan_Baloch;
+                        sheet4.Cells[54, 6] = Max_Sistan_Baloch;
+                        sheet5.Cells[30, 2] = Max_Sistan_Baloch;
+                    }
+                }
+                if (NE == "MSZHC")
+                {
+                    Traffic_Sistan_Baloch = Convert.ToDouble(MSS_Traffic_Quary_Table.Rows[p].ItemArray[3]);
+                    sheet4.Cells[55, 4] = Traffic_Sistan_Baloch;
+                    sheet4.Cells[55, 1] = Convert.ToDateTime(MSS_Traffic_Quary_Table.Rows[p].ItemArray[0]);
+                    if (Traffic_Sistan_Baloch > Max_Sistan_Baloch)
+                    {
+                        Max_Sistan_Baloch = Traffic_Sistan_Baloch;
+                        sheet4.Cells[54, 6] = Max_Sistan_Baloch;
                         sheet5.Cells[30, 2] = Max_Sistan_Baloch;
                     }
                 }
@@ -4014,12 +4042,12 @@ where[Traffic_Per_Sub_mErl_HU] is not null  and CAST(Date AS DATE) >= '" + start
                 if (NE == "MSZJA")
                 {
                     Traffic_Zanjan = Convert.ToDouble(MSS_Traffic_Quary_Table.Rows[p].ItemArray[3]);
-                    sheet4.Cells[54, 4] = Traffic_Zanjan;
-                    sheet4.Cells[54, 1] = Convert.ToDateTime(MSS_Traffic_Quary_Table.Rows[p].ItemArray[0]);
+                    sheet4.Cells[56, 4] = Traffic_Zanjan;
+                    sheet4.Cells[56, 1] = Convert.ToDateTime(MSS_Traffic_Quary_Table.Rows[p].ItemArray[0]);
                     if (Traffic_Zanjan > Max_Zanjan)
                     {
                         Max_Zanjan = Traffic_Zanjan;
-                        sheet4.Cells[54, 6] = Max_Zanjan;
+                        sheet4.Cells[56, 6] = Max_Zanjan;
                         sheet5.Cells[31, 2] = Max_Zanjan;
                     }
                 }

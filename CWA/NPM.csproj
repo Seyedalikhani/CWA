@@ -9,9 +9,10 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>CWA</RootNamespace>
     <AssemblyName>CWA</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -62,6 +63,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AutomaticReports.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AutomaticReports.Designer.cs">
+      <DependentUpon>AutomaticReports.cs</DependentUpon>
+    </Compile>
     <Compile Include="DataClasses1.designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -76,6 +83,12 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>DataClasses3.dbml</DependentUpon>
+    </Compile>
+    <Compile Include="KML.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="KML.Designer.cs">
+      <DependentUpon>KML.cs</DependentUpon>
     </Compile>
     <Compile Include="Main.cs">
       <SubType>Form</SubType>
@@ -150,6 +163,12 @@
     <None Include="DataClasses3.dbml.layout">
       <DependentUpon>DataClasses3.dbml</DependentUpon>
     </None>
+    <EmbeddedResource Include="AutomaticReports.resx">
+      <DependentUpon>AutomaticReports.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="KML.resx">
+      <DependentUpon>KML.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Main.resx">
       <DependentUpon>Main.cs</DependentUpon>
     </EmbeddedResource>

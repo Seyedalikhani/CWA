@@ -134,15 +134,26 @@ namespace CWA
         {
 
 
-            Server_Name = "PERFORMANCEDB01";
+            label1.Text = "Please wait while It is running";
+            label1.BackColor = Color.GreenYellow;
+            Thread th1 = new Thread(my_thread1);
+            th1.Start();
+
+        }
+
+
+
+        void my_thread1()
+        {
+
+
+            Server_Name = "PERFORMANCEDB";
             DataBase_Name = "Performance_NAK";
 
 
             ConnectionString = @"Server=" + Server_Name + "; Database=" + DataBase_Name + "; User ID=cwpcApp;Password=cwpcApp@830625#Ahmad";
             connection = new SqlConnection(ConnectionString);
             connection.Open();
-
-
 
 
 
@@ -152,20 +163,62 @@ namespace CWA
             // Convert Last Date to String
             DateTime Last_Updated_Date = Convert.ToDateTime((Max_Date_Table.Rows[Max_Date_Table.Rows.Count - 1]).ItemArray[0]);
             string Last_Updated_Date_String = Date_ToString(Last_Updated_Date);
-            string Last_Updated_Date_String_90= Date_ToString(Last_Updated_Date.AddDays(-90));
-
-
+            string Last_Updated_Date_String_90 = Date_ToString(Last_Updated_Date.AddDays(-90));
 
 
             // Date Table 
             string Date_Quary = @"Select Distinct Date from Tehran_CC_Maintable where cast(Date as Date)>='2022-07-31' order by Date";                        // From mBegining
             //string Date_Quary = @"Select Distinct Date from Tehran_CC_Maintable where cast(Date as Date)>'"+ Last_Updated_Date_String+"' order by Date";    // From Last Date
-            DataTable Date_Table= Query_Execution_Table_Output(Date_Quary);
+            DataTable Date_Table = Query_Execution_Table_Output(Date_Quary);
 
+
+
+            // Last Date of Tehran_CC_NPOMTTR
+            string Max_Date_Quary_Tehran_CC_NPOMTTR = @"Select max(Date) from Tehran_CC_NPOMTTR";
+            DataTable Max_Date_Table_Tehran_CC_NPOMTTR = Query_Execution_Table_Output(Max_Date_Quary_Tehran_CC_NPOMTTR);
+            // Convert Last Date to String
+            DateTime Last_Updated_Date_Tehran_CC_NPOMTTR = Convert.ToDateTime((Max_Date_Table_Tehran_CC_NPOMTTR.Rows[Max_Date_Table_Tehran_CC_NPOMTTR.Rows.Count - 1]).ItemArray[0]);
+
+
+            // Last Date of Tehran_CC_NPOMTTR_90
+            //string Max_Date_Quary_Tehran_CC_NPOMTTR_90 = @"Select cast(max(Date) as datetime)-90 from Tehran_CC_NPOMTTR_90";
+            string Max_Date_Quary_Tehran_CC_NPOMTTR_90 = @"Select cast(max(Date) as datetime)-90 from Tehran_CC_NPOMTTR";
+            DataTable Max_Date_Table_Tehran_CC_NPOMTTR_90 = Query_Execution_Table_Output(Max_Date_Quary_Tehran_CC_NPOMTTR_90);
+            // Convert Last Date to String
+            DateTime Last_Updated_Date_Tehran_CC_NPOMTTR_90 = Convert.ToDateTime((Max_Date_Table_Tehran_CC_NPOMTTR_90.Rows[Max_Date_Table_Tehran_CC_NPOMTTR_90.Rows.Count - 1]).ItemArray[0]);
+
+
+
+            // Last Date of Tehran_CC_FOMTTR
+            string Max_Date_Quary_Tehran_CC_FOMTTR = @"Select max(Date) from Tehran_CC_FOMTTR";
+            DataTable Max_Date_Table_Tehran_CC_FOMTTR = Query_Execution_Table_Output(Max_Date_Quary_Tehran_CC_FOMTTR);
+            // Convert Last Date to String
+            DateTime Last_Updated_Date_Tehran_CC_FOMTTR = Convert.ToDateTime((Max_Date_Table_Tehran_CC_FOMTTR.Rows[Max_Date_Table_Tehran_CC_FOMTTR.Rows.Count - 1]).ItemArray[0]);
+
+
+            //Last Date of Tehran_CC_FOMTTR_90
+            //string Max_Date_Quary_Tehran_CC_FOMTTR_90 = @"Select cast(max(Date) as datetime)-90 from Tehran_CC_FOMTTR_90";
+            string Max_Date_Quary_Tehran_CC_FOMTTR_90 = @"Select cast(max(Date) as datetime)-90 from Tehran_CC_FOMTTR";
+            DataTable Max_Date_Table_Tehran_CC_FOMTTR_90 = Query_Execution_Table_Output(Max_Date_Quary_Tehran_CC_FOMTTR_90);
+            // Convert Last Date to String
+            DateTime Last_Updated_Date_Tehran_CC_FOMTTR_90 = Convert.ToDateTime((Max_Date_Table_Tehran_CC_FOMTTR_90.Rows[Max_Date_Table_Tehran_CC_FOMTTR_90.Rows.Count - 1]).ItemArray[0]);
+
+
+            // Last Date of Tehran_CC_Open_NotBlong_ToCQ
+            string Max_Date_Quary_Tehran_CC_Open_NotBlong_ToCQ = @"Select max(Date) from Tehran_CC_Open_NotBlong_ToCQ";
+            DataTable Max_Date_Table_Tehran_CC_Open_NotBlong_ToCQ = Query_Execution_Table_Output(Max_Date_Quary_Tehran_CC_Open_NotBlong_ToCQ);
+            // Convert Last Date to String
+            DateTime Last_Updated_Date_Tehran_CC_Open_NotBlong_ToCQ = Convert.ToDateTime((Max_Date_Table_Tehran_CC_Open_NotBlong_ToCQ.Rows[Max_Date_Table_Tehran_CC_Open_NotBlong_ToCQ.Rows.Count - 1]).ItemArray[0]);
+
+
+
+
+            Query_Execution("truncate table Tehran_CC_NPOMTTR_90");
+            Query_Execution("truncate table Tehran_CC_FOMTTR_90");
 
             // RNC Table
             string RNC_Quary = @"Select Distinct RNC from Tehran_CC_Maintable where substring(RNC,1,1)='R'";
-            DataTable RNC_Table= Query_Execution_Table_Output(RNC_Quary);
+            DataTable RNC_Table = Query_Execution_Table_Output(RNC_Quary);
 
 
 
@@ -174,324 +227,18 @@ namespace CWA
             DataTable TT_Table = Query_Execution_Table_Output(TT_Quary);
 
 
-            // We define them beacuse we must fill 0 in cases that data is null
-            DataTable RemainTTs_Table_Default = new DataTable();
-            RemainTTs_Table_Default.Columns.Add("Date", typeof(DateTime));
-            RemainTTs_Table_Default.Columns.Add("RNC", typeof(String));
-            RemainTTs_Table_Default.Columns.Add("NewTTs", typeof(int));
 
-
-            DataTable ReadyToCloseTTs_Table_Default = new DataTable();
-            ReadyToCloseTTs_Table_Default.Columns.Add("Date", typeof(DateTime));
-            ReadyToCloseTTs_Table_Default.Columns.Add("RNC", typeof(String));
-            ReadyToCloseTTs_Table_Default.Columns.Add("ReadyToCloseTTs", typeof(int));
-
-
-
-            DataTable CloseTTs_Table_Default = new DataTable();
-            CloseTTs_Table_Default.Columns.Add("Date", typeof(DateTime));
-            CloseTTs_Table_Default.Columns.Add("RNC", typeof(String));
-            CloseTTs_Table_Default.Columns.Add("CloseTTs", typeof(int));
-
-            // Remove Park contains reals close TTs that [Ticket Status] is not 'پارک'  or 'پارک سررسید گذشته'
-            DataTable CloseTTsRemovePark_Table_Default = new DataTable();
-            CloseTTsRemovePark_Table_Default.Columns.Add("Date", typeof(DateTime));
-            CloseTTsRemovePark_Table_Default.Columns.Add("RNC", typeof(String));
-            CloseTTsRemovePark_Table_Default.Columns.Add("CloseTTs", typeof(int));
-
-
-
-            // شاخصای اینکامینگ و ردی تو کلوز چون به گذشته و حال مربوط میشوند فقط در تاریخهای جدید به روز میشوند 
-            //اما در شاخص کلوز چون به زمان آینده مربوط میشود هر بار از ابتدا نیاز به انجام محاسبات است
-
-
-            // Date of Incoming Table
-            string Incoming_Date_Quary = @"Select Distinct Date from Tehran_CC_Remain where cast(Date as Date)>='2022-07-31' order by Date";
+            // Date of MTTR
+            string Incoming_Date_Quary = @"Select Distinct Date from Tehran_CC_NPOMTTR where cast(Date as Date)>='2022-07-31' order by Date";
             DataTable Incoming_Date_Table = Query_Execution_Table_Output(Incoming_Date_Quary);
             DateTime Last_Updated_Date_Incoming = Convert.ToDateTime((Incoming_Date_Table.Rows[Incoming_Date_Table.Rows.Count - 1]).ItemArray[0]);
-            // اگر تاریخی در جدول اصلی باشد که در ریمن نباشد فقط برای آن جدول تمام صفر را را ایجاد میکنیم
-            int New_Incoming_candidate_date = 0;
-            //DateTime candidate_date_Incoming = Last_Updated_Date;
-            for (int k = 1; k < Date_Table.Rows.Count; k++)
-            {
-                New_Incoming_candidate_date = 0;
-                DateTime candidate_date = Convert.ToDateTime((Date_Table.Rows[k]).ItemArray[0]);
-                for (int i = 0; i < Incoming_Date_Table.Rows.Count; i++)
-                {
-                    DateTime candidate_date_Incoming = Convert.ToDateTime((Incoming_Date_Table.Rows[i]).ItemArray[0]);
-                    if (candidate_date == candidate_date_Incoming)
-                    {
-                        New_Incoming_candidate_date++;
-                    }
 
-                }
-                if (New_Incoming_candidate_date == 0)
-                {
-                    for (int j = 0; j < RNC_Table.Rows.Count; j++)
-                    {
-                        string RNC = Convert.ToString((RNC_Table.Rows[j]).ItemArray[0]);
-                        RemainTTs_Table_Default.Rows.Add(candidate_date, RNC, 0);
-                    }
-                }
-            }
 
-            SqlBulkCopy objbulk_Remain = new SqlBulkCopy(connection);
-            objbulk_Remain.DestinationTableName = "Tehran_CC_Remain";
-            objbulk_Remain.ColumnMappings.Add("Date", "Date");
-            objbulk_Remain.ColumnMappings.Add("RNC", "RNC");
-            objbulk_Remain.ColumnMappings.Add("NewTTs", "NewTTs");
-            objbulk_Remain.WriteToServer(RemainTTs_Table_Default);
 
-
-
-
-
-
-            //Date of ReadyToClose Table
-            string ReadyToClose_Date_Quary = @"Select Distinct Date from Tehran_CC_ReadyToClose where cast(Date as Date)>='2022-07-31' order by Date";
-            DataTable ReadyToClose_Date_Table = Query_Execution_Table_Output(ReadyToClose_Date_Quary);
-            DateTime Last_Updated_Date_ReadyToClose = Convert.ToDateTime((ReadyToClose_Date_Table.Rows[ReadyToClose_Date_Table.Rows.Count - 1]).ItemArray[0]);
-            // اگر تاریخی در جدول اصلی باشد که در ریمن نباشد فقط برای آن جدول تمام صفر را را ایجاد میکنیم
-            int New_ReadyToClose_candidate_date = 0;
-            //DateTime candidate_date_ReadyToClose = Last_Updated_Date;
-            for (int k = 1; k < Date_Table.Rows.Count; k++)
-            {
-                New_ReadyToClose_candidate_date = 0;
-                DateTime candidate_date = Convert.ToDateTime((Date_Table.Rows[k]).ItemArray[0]);
-                for (int i = 0; i < ReadyToClose_Date_Table.Rows.Count; i++)
-                {
-                    DateTime candidate_date_ReadyToClose = Convert.ToDateTime((ReadyToClose_Date_Table.Rows[i]).ItemArray[0]);
-                    if (candidate_date == candidate_date_ReadyToClose)
-                    {
-                        New_ReadyToClose_candidate_date++;
-                    }
-
-                }
-                if (New_ReadyToClose_candidate_date == 0)
-                {
-                    for (int j = 0; j < RNC_Table.Rows.Count; j++)
-                    {
-                        string RNC = Convert.ToString((RNC_Table.Rows[j]).ItemArray[0]);
-                        ReadyToCloseTTs_Table_Default.Rows.Add(candidate_date, RNC, 0);
-                    }
-                }
-            }
-
-            SqlBulkCopy objbulk_ReadyToClose = new SqlBulkCopy(connection);
-            objbulk_ReadyToClose.DestinationTableName = "Tehran_CC_ReadyToClose";
-            objbulk_ReadyToClose.ColumnMappings.Add("Date", "Date");
-            objbulk_ReadyToClose.ColumnMappings.Add("RNC", "RNC");
-            objbulk_ReadyToClose.ColumnMappings.Add("ReadyToCloseTTs", "ReadyToCloseTTs");
-            objbulk_ReadyToClose.WriteToServer(ReadyToCloseTTs_Table_Default);
-
-
-            for (int k = 0; k < Date_Table.Rows.Count; k++)
-            {
-                for (int j = 0; j < RNC_Table.Rows.Count; j++)
-                {
-                    DateTime Date1 = Convert.ToDateTime((Date_Table.Rows[k]).ItemArray[0]);
-                    string RNC = Convert.ToString((RNC_Table.Rows[j]).ItemArray[0]);
-                    //RemainTTs_Table_Default.Rows.Add(Date1, RNC, 0);
-                    //ReadyToCloseTTs_Table_Default.Rows.Add(Date1, RNC, 0);
-                    CloseTTs_Table_Default.Rows.Add(Date1, RNC, 0);
-                    CloseTTsRemovePark_Table_Default.Rows.Add(Date1, RNC, 0);
-                }
-            }
-
-
-
-
-
-
-
-            // for run from begining these lines run from 299 till 324
-
-            //// Truncate [Tehran_CC_Remain]
-            //string Truncate_Tehran_CC_Remain_Quary = "Truncate table [Tehran_CC_Remain]";
-            //Query_Execution(Truncate_Tehran_CC_Remain_Quary);
-
-            ////Truncate[Tehran_CC_Remain_Detail]
-            //string Truncate_Tehran_CC_Remain_Detail_Quary = "Truncate table [Tehran_CC_Remain_Detail]";
-            //Query_Execution(Truncate_Tehran_CC_Remain_Detail_Quary);
-
-            //// **********************************
-
-            //// Truncate [Tehran_CC_ReadyToClose]
-            //string Truncate_Tehran_CC_ReadyToClose_Quary = "Truncate table [Tehran_CC_ReadyToClose]";
-            //Query_Execution(Truncate_Tehran_CC_ReadyToClose_Quary);
-
-
-            //// Truncate [Tehran_CC_ReadyToClose_Details]
-            //string Truncate_Tehran_CC_ReadyToClose_Details_Quary = "Truncate table [Tehran_CC_ReadyToClose_Details]";
-            //Query_Execution(Truncate_Tehran_CC_ReadyToClose_Details_Quary);
-
-            //// Truncate [Tehran_CC_ReadyToClose_Detail]
-            //string Truncate_Tehran_CC_ReadyToClose_Detail_Quary = "Truncate table [Tehran_CC_ReadyToClose_Detail]";
-            //Query_Execution(Truncate_Tehran_CC_ReadyToClose_Detail_Quary);
-
-
-            //// Truncate [ReadyToCloseTTsRemovePark_Detail_Table]
-            //string Truncate_Tehran_CC_ReadyToCloseRemovePark_Detail_Quary = "Truncate table [Tehran_CC_ReadyToCloseRemovePark_Detail]";
-            //Query_Execution(Truncate_Tehran_CC_ReadyToCloseRemovePark_Detail_Quary);
-
-
-            //// Truncate [Tehran_CC_NPOMTTR]
-            //string Truncate_Tehran_CC_NPOMTTR_Quary = "Truncate table [Tehran_CC_NPOMTTR]";
-            //Query_Execution(Truncate_Tehran_CC_NPOMTTR_Quary);
-
-
-            //// Truncate [Tehran_CC_FOMTTR]
-            //string Truncate_Tehran_CC_FOMTTR_Quary = "Truncate table [Tehran_CC_FOMTTR]";
-            //Query_Execution(Truncate_Tehran_CC_FOMTTR_Quary);
-
-
-            //// Truncate [Tehran_CC_FOMTTR_90]
-            //string Truncate_Tehran_CC_FOMTTR_90_Quary = "Truncate table [Tehran_CC_FOMTTR_90]";
-            //Query_Execution(Truncate_Tehran_CC_FOMTTR_90_Quary);
-
-
-            ////// **********************************
-
-            // Truncate [Tehran_CC_Close]
-            string Truncate_Tehran_CC_Close_Quary = "Truncate table [Tehran_CC_Close]";
-            Query_Execution(Truncate_Tehran_CC_Close_Quary);
-
-            // Truncate [Tehran_CC_CloseRemovePark]
-            string Truncate_Tehran_CC_CloseRemovePark_Quary = "Truncate table [Tehran_CC_CloseRemovePark]";
-            Query_Execution(Truncate_Tehran_CC_CloseRemovePark_Quary);
-
-
-            // Truncate [Tehran_CC_Close_Detail]
-            string Truncate_Tehran_CC_Close_Detail_Quary = "Truncate table [Tehran_CC_Close_Detail]";
-            Query_Execution(Truncate_Tehran_CC_Close_Detail_Quary);
-
-
-            // Truncate [Tehran_CC_CloseNIExcluded_Detail]
-            string Truncate_Tehran_CC_CloseNIExcluded_Detail_Quary = "Truncate table [Tehran_CC_CloseNIExcluded_Detail]";
-            Query_Execution(Truncate_Tehran_CC_CloseNIExcluded_Detail_Quary);
-
-            // Truncate [Tehran_CC_Generated]
-            string Truncate_Tehran_CC_Generated_Quary = "Truncate table [Tehran_CC_Generated]";
-            Query_Execution(Truncate_Tehran_CC_Generated_Quary);
-
-            // Truncate [Tehran_CC_NPOGenerated]
-            string Truncate_Tehran_CC_NPOGenerated_Quary = "Truncate table [Tehran_CC_NPOGenerated]";
-            Query_Execution(Truncate_Tehran_CC_NPOGenerated_Quary);
-
-
-            // Truncate [Tehran_CC_FOGenerated]
-            string Truncate_Tehran_CC_FOGenerated_Quary = "Truncate table [Tehran_CC_FOGenerated]";
-            Query_Execution(Truncate_Tehran_CC_FOGenerated_Quary);
-
-
-            // Insert Zero Values to Defulat Tables
-
-            SqlBulkCopy objbulk_Close = new SqlBulkCopy(connection);
-            objbulk_Close.DestinationTableName = "Tehran_CC_Close";
-            objbulk_Close.ColumnMappings.Add("Date", "Date");
-            objbulk_Close.ColumnMappings.Add("RNC", "RNC");
-            objbulk_Close.ColumnMappings.Add("CloseTTs", "CloseTTs");
-            objbulk_Close.WriteToServer(CloseTTs_Table_Default);
-
-
-            SqlBulkCopy objbulk_CloseRemovePark = new SqlBulkCopy(connection);
-            objbulk_CloseRemovePark.DestinationTableName = "Tehran_CC_CloseRemovePark";
-            objbulk_CloseRemovePark.ColumnMappings.Add("Date", "Date");
-            objbulk_CloseRemovePark.ColumnMappings.Add("RNC", "RNC");
-            objbulk_CloseRemovePark.ColumnMappings.Add("CloseTTs", "CloseTTs");
-            objbulk_CloseRemovePark.WriteToServer(CloseTTsRemovePark_Table_Default);
-
-
-            // Generated TTs (Remove duplicated on TTs with ordered Date)
-            string Tehran_CC_Generated_Quary = @"select [TT Code] as 'GeneratedTTs', '' as 'GeneratedDate', RNC
- from (
-select distinct [TT Code],  RNC ,  
-RN = ROW_NUMBER()OVER(PARTITION BY [TT Code] ORDER BY [TT Code] )
-from Tehran_CC_Maintable  ) tbl where RN=1";
-            DataTable Generated_Table = Query_Execution_Table_Output(Tehran_CC_Generated_Quary);
-
-            for (int n = 0; n < Generated_Table.Rows.Count; n++)
-            {
-                string String_TT = Convert.ToString((Generated_Table.Rows[n]).ItemArray[0]);
-                string String_Date = String_TT.Substring(0, 8);
-                DateTime Date = Convert.ToDateTime(String_TT.Substring(0, 4) + "-" + String_TT.Substring(4, 2) + "-" + String_TT.Substring(6, 2));
-                //DateTime Date_of_File = Convert.ToDateTime((Generated_Table.Rows[n]).ItemArray[3]);
-                string RNC_Name = Convert.ToString((Generated_Table.Rows[n]).ItemArray[2]);
-                Generated_Table.Rows[n][1] = Date;
-                //Generated_Table.Rows.Add(String_TT, Date, RNC_Name, Date_of_File);
-            }
-
-            SqlBulkCopy objbulk_Generated = new SqlBulkCopy(connection);
-            objbulk_Generated.DestinationTableName = "Tehran_CC_Generated";
-            objbulk_Generated.ColumnMappings.Add("GeneratedTTs", "GeneratedTTs");
-            objbulk_Generated.ColumnMappings.Add("GeneratedDate", "GeneratedDate");
-            objbulk_Generated.ColumnMappings.Add("RNC", "RNC");
-            //objbulk_Generated.ColumnMappings.Add("Date", "Date");
-            objbulk_Generated.WriteToServer(Generated_Table);
-
-
-
-
-
-            // NPO Generated TTs(Remove duplicated on TTs with ordered Date)
-            string Tehran_CC_NPOGenerated_Quary = @"select [TT Code] as 'NPOGeneratedTTs', '' as 'GeneratedDate', RNC	
- from (
-select distinct [TT Code],  RNC ,  
-RN = ROW_NUMBER()OVER(PARTITION BY [TT Code] ORDER BY [TT Code] )
-from Tehran_CC_Maintable where (cast([Ticket Status] as varchar)='باز داخل باکس شخصی' or cast([Ticket Status] as varchar)='باز داخل باکس گروهی' ) and ( (cast([The Last Agent Name] as varchar)='Delayناک تهران' or [The Last Agent Name]='Mohamadreza Kazmi')) ) tbl where RN=1";
-            DataTable NPOGenerated_Table = Query_Execution_Table_Output(Tehran_CC_NPOGenerated_Quary);
-
-            for (int n = 0; n < NPOGenerated_Table.Rows.Count; n++)
-            {
-                string String_TT = Convert.ToString((NPOGenerated_Table.Rows[n]).ItemArray[0]);
-                string String_Date = String_TT.Substring(0, 8);
-                DateTime Date = Convert.ToDateTime(String_TT.Substring(0, 4) + "-" + String_TT.Substring(4, 2) + "-" + String_TT.Substring(6, 2));
-                //DateTime Date_of_File = Convert.ToDateTime((NPOGenerated_Table.Rows[n]).ItemArray[3]);
-                string RNC_Name = Convert.ToString((NPOGenerated_Table.Rows[n]).ItemArray[2]);
-                NPOGenerated_Table.Rows[n][1] = Date;
-                //Generated_Table.Rows.Add(String_TT, Date, RNC_Name, Date_of_File);
-            }
-
-            SqlBulkCopy objbulk_NPOGenerated = new SqlBulkCopy(connection);
-            objbulk_NPOGenerated.DestinationTableName = "Tehran_CC_NPOGenerated";
-            objbulk_NPOGenerated.ColumnMappings.Add("NPOGeneratedTTs", "NPOGeneratedTTs");
-            objbulk_NPOGenerated.ColumnMappings.Add("GeneratedDate", "GeneratedDate");
-            objbulk_NPOGenerated.ColumnMappings.Add("RNC", "RNC");
-            //objbulk_NPOGenerated.ColumnMappings.Add("Date", "Date");
-            objbulk_NPOGenerated.WriteToServer(NPOGenerated_Table);
-
-
-
-
-            // FO Generated TTs(Remove duplicated on TTs with ordered Date)
-            string Tehran_CC_FOGenerated_Quary = @"select [TT Code] as 'FOGeneratedTTs', '' as 'GeneratedDate', RNC	
- from (
-select distinct [TT Code],  RNC ,  
-RN = ROW_NUMBER()OVER(PARTITION BY [TT Code] ORDER BY [TT Code] )
-from Tehran_CC_Maintable where (cast([Ticket Status] as varchar)='باز داخل باکس شخصی' or cast([Ticket Status] as varchar)='باز داخل باکس گروهی' ) and ( (cast([The Last Agent Name] as varchar)!='Delayناک تهران' and [The Last Agent Name]!='Mohamadreza Kazmi')) ) tbl where RN=1";
-            DataTable FOGenerated_Table = Query_Execution_Table_Output(Tehran_CC_FOGenerated_Quary);
-
-            for (int n = 0; n < FOGenerated_Table.Rows.Count; n++)
-            {
-                string String_TT = Convert.ToString((FOGenerated_Table.Rows[n]).ItemArray[0]);
-                string String_Date = String_TT.Substring(0, 8);
-                DateTime Date = Convert.ToDateTime(String_TT.Substring(0, 4) + "-" + String_TT.Substring(4, 2) + "-" + String_TT.Substring(6, 2));
-                //DateTime Date_of_File = Convert.ToDateTime((NPOGenerated_Table.Rows[n]).ItemArray[3]);
-                string RNC_Name = Convert.ToString((FOGenerated_Table.Rows[n]).ItemArray[2]);
-                FOGenerated_Table.Rows[n][1] = Date;
-                //Generated_Table.Rows.Add(String_TT, Date, RNC_Name, Date_of_File);
-            }
-
-            SqlBulkCopy objbulk_FOGenerated = new SqlBulkCopy(connection);
-            objbulk_FOGenerated.DestinationTableName = "Tehran_CC_FOGenerated";
-            objbulk_FOGenerated.ColumnMappings.Add("FOGeneratedTTs", "FOGeneratedTTs");
-            objbulk_FOGenerated.ColumnMappings.Add("GeneratedDate", "GeneratedDate");
-            objbulk_FOGenerated.ColumnMappings.Add("RNC", "RNC");
-            //objbulk_FOGenerated.ColumnMappings.Add("Date", "Date");
-            objbulk_FOGenerated.WriteToServer(FOGenerated_Table);
-
-
-
+            // Date of QDate
+            string QDate_Date_Quary = @"Select Distinct Date from Tehran_CC_Open_NotBlong_ToCQ where cast(Date as Date)>='2022-07-31' order by Date";
+            DataTable QDate_Date_Table = Query_Execution_Table_Output(QDate_Date_Quary);
+            DateTime Last_QDate_Date_Table = Convert.ToDateTime((QDate_Date_Table.Rows[QDate_Date_Table.Rows.Count - 1]).ItemArray[0]);
 
 
             //NPO MTTR of Tickets
@@ -500,36 +247,52 @@ from Tehran_CC_Maintable where (cast([Ticket Status] as varchar)='باز داخ�
                 DateTime Date1 = Convert.ToDateTime((Date_Table.Rows[i]).ItemArray[0]);
                 string Date = Date_ToString(Date1);
 
-                if (Date1 <= Last_Updated_Date_Incoming)
+                if (Date1 <= Last_Updated_Date_Tehran_CC_NPOMTTR)
                 {
                     continue;
                 }
 
-                string MTTR_Quary = @"select Date, RNC, [RNC MTTR Num], [RNC MTTR Den], [RNC MTTR] from (
-select MTTR1_Total.Date, MTTR1_Total.RNC, MTTR1_Total.[RNC MTTR Num], MTTR2_Total.[RNC MTTR Den], cast(MTTR1_Total.[RNC MTTR Num] as float)/cast(MTTR2_Total.[RNC MTTR Den] as float) as 'RNC MTTR' from (
+                string MTTR_Quary = @"select MTTR90.Date, MTTR90.[TT Code], MTTR90.GeneratedDate, MTTR90.RNC, Tehran_CC_RNC_Owner.[RNC Owner], MTTR90.[Count of TT] from (
 
-select '" +
-  Date + @"' as Date, RNC, sum([RNC MTTR Num]) as 'RNC MTTR Num' from (
-select Date , RNC, Count(*) as 'RNC MTTR Num' from Tehran_CC_Maintable where (cast([Ticket Status] as varchar)='باز داخل باکس شخصی' or cast([Ticket Status] as varchar)='باز داخل باکس گروهی' ) and ( (cast([The Last Agent Name] as varchar)='Delayناک تهران' or [The Last Agent Name]='Mohamadreza Kazmi')) and Date<='" +
-  Date + @"'
-group by Date , RNC) tble group by RNC) MTTR1_Total
-left join( 
 
-select '" +
-  Date + @"' as Date1, RNC1, Count(*) as 'RNC MTTR Den' from (
-select [TT Code], RNC as 'RNC1', Date from (
-  SELECT
-  RANK() OVER(PARTITION BY  [TT Code] ORDER BY Date desc) AS ranking,
-  [TT Code],
-  RNC,
-Date from Tehran_CC_Maintable where (cast([Ticket Status] as varchar)='باز داخل باکس شخصی' or cast([Ticket Status] as varchar)='باز داخل باکس گروهی' ) and ( (cast([The Last Agent Name] as varchar)='Delayناک تهران' or [The Last Agent Name]='Mohamadreza Kazmi')) and Date<='" +
-  Date + @"') tble
-where ranking=1
+                                    select '" +
+                                      Date + @"' as Date, TBL1.[TT Code],  TBL1.GeneratedDate, TBL1.RNC, TBL2.[Count of TT] from (
 
-) tbl group by RNC1) MTTR2_Total 
+                                    select[TT Code], Date , GeneratedDate, RNC from(
 
-on MTTR1_Total.Date=MTTR2_Total.Date1 and
-MTTR1_Total.RNC=MTTR2_Total.RNC1  ) tble where [RNC MTTR] is not null";
+                                    select 
+                                      RANK() OVER(PARTITION BY  [TT Code] ORDER BY Date desc) AS ranking,
+                                      [TT Code],
+                                      GeneratedDate,
+                                      RNC,
+                                      Date from (
+
+                                    select [TT Code], Date , GeneratedDate, RNC, DATEDIFF(day, Date,GeneratedDate) as DateDiff from (
+                                    select [TT Code], Date , RNC,
+                                    TRY_CAST(CAST(CAST(SUBSTRING(CONVERT (VARCHAR(50), [TT Code], 128), 1, 9)*1e7 AS INT) AS VARCHAR(8)) AS DATE) as 'GeneratedDate' 
+                                    from Tehran_CC_Maintable where 
+                                    (cast([Ticket Status] as varchar)='باز داخل باکس شخصی' or cast([Ticket Status] as varchar)='باز داخل باکس گروهی' ) and 
+                                    (cast([The Last Agent Name] as varchar)='Delayناک تهران' or [The Last Agent Name]='Mohamadreza Kazmi')  )tbl 
+
+                                    )tbl ) tbl where ranking=1
+                                    ) TBL1
+
+                                    left join
+                                    (
+                                    select [TT Code],  count(*) 'Count of TT' from Tehran_CC_Maintable where 
+                                    (cast([Ticket Status] as varchar)='باز داخل باکس شخصی' or cast([Ticket Status] as varchar)='باز داخل باکس گروهی' ) and 
+                                    (cast([The Last Agent Name] as varchar)='Delayناک تهران' or [The Last Agent Name]='Mohamadreza Kazmi')
+                                    group by [TT Code]) TBL2
+
+                                    on
+
+                                    TBL1.[TT Code]=TBL2.[TT Code]
+
+                                    ) MTTR90 left join Tehran_CC_RNC_Owner
+
+                                    on
+                                    MTTR90.RNC=Tehran_CC_RNC_Owner.[RNC Name]";
+
 
 
 
@@ -538,16 +301,19 @@ MTTR1_Total.RNC=MTTR2_Total.RNC1  ) tble where [RNC MTTR] is not null";
                 SqlBulkCopy objbulk_MTTR = new SqlBulkCopy(connection);
                 objbulk_MTTR.DestinationTableName = "Tehran_CC_NPOMTTR";
                 objbulk_MTTR.ColumnMappings.Add("Date", "Date");
+                objbulk_MTTR.ColumnMappings.Add("TT Code", "[TT Code]");
+                objbulk_MTTR.ColumnMappings.Add("GeneratedDate", "GeneratedDate");
                 objbulk_MTTR.ColumnMappings.Add("RNC", "RNC");
-                objbulk_MTTR.ColumnMappings.Add("RNC MTTR Num", "RNC MTTR Num");
-                objbulk_MTTR.ColumnMappings.Add("RNC MTTR Den", "RNC MTTR Den");
-                objbulk_MTTR.ColumnMappings.Add("RNC MTTR", "RNC MTTR");
+                objbulk_MTTR.ColumnMappings.Add("RNC Owner", "[RNC Owner]");
+                objbulk_MTTR.ColumnMappings.Add("Count of TT", "[Count of TT]");
                 objbulk_MTTR.WriteToServer(MTTR_Table);
+
+
             }
 
 
-
-
+            //checkBox1.Checked = true;
+            checkBox1.Invoke(new Action(() => checkBox1.Checked = true));
 
             //NPO MTTR of Tickets Last 90 days
             for (int i = 0; i < Date_Table.Rows.Count; i++)
@@ -555,61 +321,224 @@ MTTR1_Total.RNC=MTTR2_Total.RNC1  ) tble where [RNC MTTR] is not null";
                 DateTime Date1 = Convert.ToDateTime((Date_Table.Rows[i]).ItemArray[0]);
                 string Date = Date_ToString(Date1);
 
-                if (Date1 <= Last_Updated_Date_Incoming)
+                if (Date1 <= Last_Updated_Date_Tehran_CC_NPOMTTR_90)
                 {
                     continue;
                 }
 
-                if (Date1 >= Last_Updated_Date.AddDays(-90))
-                {
-
-                    string MTTR_Quary = @"select Date, RNC, [RNC MTTR Num], [RNC MTTR Den], [RNC MTTR] from (
-select MTTR1_Total.Date, MTTR1_Total.RNC, MTTR1_Total.[RNC MTTR Num], MTTR2_Total.[RNC MTTR Den], cast(MTTR1_Total.[RNC MTTR Num] as float)/cast(MTTR2_Total.[RNC MTTR Den] as float) as 'RNC MTTR' from (
-
-select '" +
-Date + @"' as Date, RNC, sum([RNC MTTR Num]) as 'RNC MTTR Num' from (
-select Date , RNC, Count(*) as 'RNC MTTR Num' from Tehran_CC_Maintable where (cast([Ticket Status] as varchar)='باز داخل باکس شخصی' or cast([Ticket Status] as varchar)='باز داخل باکس گروهی' ) and ( (cast([The Last Agent Name] as varchar)='Delayناک تهران' or [The Last Agent Name]='Mohamadreza Kazmi')) and Date>='" + Last_Updated_Date_String_90 + @"' and Date<='" +
-Date + @"'
-group by Date , RNC) tble group by RNC) MTTR1_Total
-left join( 
-
-select '" +
-Date + @"' as Date1, RNC1, Count(*) as 'RNC MTTR Den' from (
-select [TT Code], RNC as 'RNC1', Date from (
-  SELECT
-  RANK() OVER(PARTITION BY  [TT Code] ORDER BY Date desc) AS ranking,
-  [TT Code],
-  RNC,
-Date from Tehran_CC_Maintable where (cast([Ticket Status] as varchar)='باز داخل باکس شخصی' or cast([Ticket Status] as varchar)='باز داخل باکس گروهی' ) and ( (cast([The Last Agent Name] as varchar)='Delayناک تهران' or [The Last Agent Name]='Mohamadreza Kazmi')) and Date>='" + Last_Updated_Date_String_90 + @"' and Date<='" +
-Date + @"') tble
-where ranking=1
-
-) tbl group by RNC1) MTTR2_Total 
-
-on MTTR1_Total.Date=MTTR2_Total.Date1 and
-MTTR1_Total.RNC=MTTR2_Total.RNC1  ) tble where [RNC MTTR] is not null";
 
 
+                string MTTR_Quary = @"select MTTR90.Date, MTTR90.[TT Code], MTTR90.GeneratedDate, MTTR90.RNC, Tehran_CC_RNC_Owner.[RNC Owner], MTTR90.[Count of TT] from (
 
-                    DataTable MTTR_Table = Query_Execution_Table_Output(MTTR_Quary);
+                                    select '" +
+                                     Date + @"' as Date, TBL1.[TT Code],  TBL1.GeneratedDate, TBL1.RNC, TBL2.[Count of TT] from (
 
-                    SqlBulkCopy objbulk_MTTR = new SqlBulkCopy(connection);
-                    objbulk_MTTR.DestinationTableName = "Tehran_CC_NPOMTTR_90";
-                    objbulk_MTTR.ColumnMappings.Add("Date", "Date");
-                    objbulk_MTTR.ColumnMappings.Add("RNC", "RNC");
-                    objbulk_MTTR.ColumnMappings.Add("RNC MTTR Num", "RNC MTTR Num");
-                    objbulk_MTTR.ColumnMappings.Add("RNC MTTR Den", "RNC MTTR Den");
-                    objbulk_MTTR.ColumnMappings.Add("RNC MTTR", "RNC MTTR");
-                    objbulk_MTTR.WriteToServer(MTTR_Table);
-                }
+                                    select[TT Code], Date , GeneratedDate, RNC from(
+
+                                    select 
+                                      RANK() OVER(PARTITION BY  [TT Code] ORDER BY Date desc) AS ranking,
+                                      [TT Code],
+                                      GeneratedDate,
+                                      RNC,
+                                      Date from (
+
+                                    select [TT Code], Date , GeneratedDate, RNC, DATEDIFF(day, Date,GeneratedDate) as DateDiff from (
+                                    select [TT Code], Date , RNC,
+                                    TRY_CAST(CAST(CAST(SUBSTRING(CONVERT (VARCHAR(50), [TT Code], 128), 1, 9)*1e7 AS INT) AS VARCHAR(8)) AS DATE) as 'GeneratedDate' 
+                                    from Tehran_CC_Maintable where 
+                                    (cast([Ticket Status] as varchar)='باز داخل باکس شخصی' or cast([Ticket Status] as varchar)='باز داخل باکس گروهی' ) and 
+                                    (cast([The Last Agent Name] as varchar)='Delayناک تهران' or [The Last Agent Name]='Mohamadreza Kazmi')  )tbl where DATEDIFF(day, '" + Date + @"',GeneratedDate)>=-90 
+
+                                    )tbl ) tbl where ranking=1
+                                    ) TBL1
+
+                                    left join
+                                    (
+                                    select [TT Code],  count(*) 'Count of TT' from Tehran_CC_Maintable where 
+                                    (cast([Ticket Status] as varchar)='باز داخل باکس شخصی' or cast([Ticket Status] as varchar)='باز داخل باکس گروهی' ) and 
+                                    (cast([The Last Agent Name] as varchar)='Delayناک تهران' or [The Last Agent Name]='Mohamadreza Kazmi')
+                                    group by [TT Code]) TBL2
+
+                                    on
+
+                                    TBL1.[TT Code]=TBL2.[TT Code]
+
+                                    ) MTTR90 left join Tehran_CC_RNC_Owner
+
+                                    on
+                                    MTTR90.RNC=Tehran_CC_RNC_Owner.[RNC Name]";
+
+
+
+
+                DataTable MTTR_Table = Query_Execution_Table_Output(MTTR_Quary);
+
+                SqlBulkCopy objbulk_MTTR = new SqlBulkCopy(connection);
+                objbulk_MTTR.DestinationTableName = "Tehran_CC_NPOMTTR_90";
+                objbulk_MTTR.ColumnMappings.Add("Date", "Date");
+                objbulk_MTTR.ColumnMappings.Add("TT Code", "TT Code");
+                objbulk_MTTR.ColumnMappings.Add("GeneratedDate", "GeneratedDate");
+                objbulk_MTTR.ColumnMappings.Add("RNC", "RNC");
+                objbulk_MTTR.ColumnMappings.Add("RNC Owner", "RNC Owner");
+                objbulk_MTTR.ColumnMappings.Add("Count of TT", "Count of TT");
+                objbulk_MTTR.WriteToServer(MTTR_Table);
 
 
             }
 
+            checkBox2.Invoke(new Action(() => checkBox2.Checked = true));
+
+            //NPO MTTR of Tickets Last 90 days  DailyResults
+
+            string Last_GDate_Str = @"select max(GeneratedDate) from Tehran_CC_NPOMTTR_90";
+            DataTable Last_GDate_Table = Query_Execution_Table_Output(Last_GDate_Str);
+            DateTime Last_GDate = Convert.ToDateTime((Last_GDate_Table.Rows[Last_GDate_Table.Rows.Count - 1]).ItemArray[0]);
+            Last_GDate = Last_GDate.AddDays(-90);
+            string Last_GDate_String = Date_ToString(Last_GDate);
+
+            string GDate_Str = @"select distinct GeneratedDate from Tehran_CC_NPOMTTR_90 where GeneratedDate>='" + Last_GDate_String + "'";
+            DataTable GDate_Table = Query_Execution_Table_Output(GDate_Str);
+
+
+            Query_Execution("delete from Tehran_CC_NPOMTTR_DailyResults_90 where GeneratedDate>='" + Last_GDate_String + "'");
+            Query_Execution("delete from Tehran_CC_NPOMTTR_DailyResultsLess15_90 where GeneratedDate>='" + Last_GDate_String + "'");
+
+
+            for (int i = 0; i < GDate_Table.Rows.Count; i++)
+            {
+                DateTime D1 = Convert.ToDateTime((GDate_Table.Rows[i]).ItemArray[0]);
+                DateTime D2 = D1.AddDays(-90);
+                string D1_String = Date_ToString(D1);
+                string D2_String = Date_ToString(D2);
+
+                string GDate_Daily_Str = @"select '" + D1_String + @"' as 'GeneratedDate', [RNC], [RNC Owner], count([TT Code]) as 'Count of TT' from(
+               select TBL1.RNC, TBL1.[TT Code], Tehran_CC_RNC_Owner.[RNC Owner] from(
+               select distinct[TT Code], [RNC] from Tehran_CC_NPOMTTR_90
+               where [GeneratedDate] >= '" + D2_String + "' and[GeneratedDate] <= '" + D1_String + "') TBL1 left join Tehran_CC_RNC_Owner on TBL1.RNC = Tehran_CC_RNC_Owner.[RNC Name]) tbl group by [RNC], [RNC Owner]";
+
+
+
+                DataTable GDate_Daily_Table = Query_Execution_Table_Output(GDate_Daily_Str);
+
+
+                SqlBulkCopy objbulk_GDate = new SqlBulkCopy(connection);
+                objbulk_GDate.DestinationTableName = "Tehran_CC_NPOMTTR_DailyResults_90";
+                objbulk_GDate.ColumnMappings.Add("GeneratedDate", "GeneratedDate");
+                objbulk_GDate.ColumnMappings.Add("RNC", "RNC");
+                objbulk_GDate.ColumnMappings.Add("RNC Owner", "RNC Owner");
+                objbulk_GDate.ColumnMappings.Add("Count of TT", "Count of TT");
+                objbulk_GDate.WriteToServer(GDate_Daily_Table);
 
 
 
 
+                string GDateLess15_Daily_Str = @"select '" + D1_String + @"' as 'GeneratedDate', [RNC], [RNC Owner], count([TT Code]) as 'Count of TT' from(
+               select TBL1.RNC, TBL1.[TT Code], Tehran_CC_RNC_Owner.[RNC Owner] from(
+               select distinct[TT Code], [RNC] from Tehran_CC_NPOMTTR_90
+               where [GeneratedDate] >= '" + D2_String + "' and[GeneratedDate] <= '" + D1_String + "' and [Count of TT]<16) TBL1 left join Tehran_CC_RNC_Owner on TBL1.RNC = Tehran_CC_RNC_Owner.[RNC Name]) tbl group by [RNC], [RNC Owner]";
+
+                DataTable GDateLess15_Daily_Table = Query_Execution_Table_Output(GDateLess15_Daily_Str);
+
+
+                SqlBulkCopy objbulk_GDateLess15 = new SqlBulkCopy(connection);
+                objbulk_GDateLess15.DestinationTableName = "Tehran_CC_NPOMTTR_DailyResultsLess15_90";
+                objbulk_GDateLess15.ColumnMappings.Add("GeneratedDate", "GeneratedDate");
+                objbulk_GDateLess15.ColumnMappings.Add("RNC", "RNC");
+                objbulk_GDateLess15.ColumnMappings.Add("RNC Owner", "RNC Owner");
+                objbulk_GDateLess15.ColumnMappings.Add("Count of TT", "Count of TT");
+                objbulk_GDateLess15.WriteToServer(GDateLess15_Daily_Table);
+
+
+
+            }
+
+            checkBox3.Invoke(new Action(() => checkBox3.Checked = true));
+
+
+            // delete older than 90 days
+            string Last_GDate_Str2 = @"select max(GeneratedDate) from Tehran_CC_NPOMTTR_DailyResults_90";
+            DataTable Last_GDate_Table2 = Query_Execution_Table_Output(Last_GDate_Str2);
+            DateTime Last_GDate2 = Convert.ToDateTime((Last_GDate_Table2.Rows[Last_GDate_Table2.Rows.Count - 1]).ItemArray[0]);
+            Last_GDate2 = Last_GDate2.AddDays(-90);
+            string Last_GDate_String2 = Date_ToString(Last_GDate2);
+
+            Query_Execution("delete from Tehran_CC_NPOMTTR_DailyResults_90 where GeneratedDate<'" + Last_GDate_String2 + "'");
+            Query_Execution("delete from Tehran_CC_NPOMTTR_DailyResultsLess15_90 where GeneratedDate<'" + Last_GDate_String2 + "'");
+
+
+
+            // VIPCC
+            string Last_GDateVIP_Str = @"select max(cast(cast([Created] as varchar(10)) as datetime)) from Tehran_VIP_CC";
+            DataTable Last_GDateVIP_Table = Query_Execution_Table_Output(Last_GDateVIP_Str);
+            DateTime Last_GDateVIP = Convert.ToDateTime((Last_GDateVIP_Table.Rows[Last_GDateVIP_Table.Rows.Count - 1]).ItemArray[0]);
+            DateTime First_GDateVIP = Last_GDateVIP;
+            string First_GDateVIP_String = Date_ToString(First_GDateVIP);
+            Last_GDateVIP = Last_GDateVIP.AddDays(-90);
+            string Last_GDateVIP_String = Date_ToString(Last_GDateVIP);
+
+            string GDateVIP_Str = @"select distinct cast(cast([Created] as varchar(10)) as datetime) as 'GeneratedDate' from Tehran_VIP_CC where cast(cast([Created] as varchar(10)) as datetime)>='" + Last_GDateVIP_String + "'";
+            DataTable GDateVIP_Table = Query_Execution_Table_Output(GDateVIP_Str);
+            //DateTime GDate = Convert.ToDateTime((Last_GDate_Table.Rows[Last_GDate_Table.Rows.Count - 1]).ItemArray[0]);
+
+
+
+            string Last_GDateVIP_Str1 = @"select max(Date_of_File) from Tehran_VIP_CC";
+            DataTable Last_GDateVIP_Table1 = Query_Execution_Table_Output(Last_GDateVIP_Str1);
+            DateTime Last_GDateVIP1 = Convert.ToDateTime((Last_GDateVIP_Table1.Rows[Last_GDateVIP_Table1.Rows.Count - 1]).ItemArray[0]);
+            DateTime First_GDateVIP1 = Last_GDateVIP1;
+            string First_GDateVIP_String1 = Date_ToString(First_GDateVIP1);
+
+
+            Query_Execution("truncate table Tehran_VIPCC_NPOMTTR_DailyResults_90");
+            Query_Execution("truncate table Tehran_VIPCC_NPOMTTR_DailyResults_90_Less20");
+
+            for (int i = 0; i < GDateVIP_Table.Rows.Count; i++)
+            {
+                DateTime D1 = Convert.ToDateTime((GDateVIP_Table.Rows[i]).ItemArray[0]);
+                DateTime D2 = D1.AddDays(-90);
+                string D1_String = Date_ToString(D1);
+                string D2_String = Date_ToString(D2);
+
+                string GDateVIP_Daily_Str = @"select '" + D1_String + @"' as 'GeneratedDate', [RNC Name] as 'RNC', [RNC Owner], sum(Count) as 'Count of TT' from(
+               select cast(cast([Created] as varchar(10)) as date) as Date, [RNC Name], [RNC Owner], Count(*) as 'Count' from(
+               select Tehran_VIP_CC.[Created], [Tehran_VIPCC_RNC_Owner].[RNC Name], [Tehran_VIPCC_RNC_Owner].[RNC Owner] from Tehran_VIP_CC left join [Tehran_VIPCC_RNC_Owner] on
+               Tehran_VIP_CC.RNC = [Tehran_VIPCC_RNC_Owner].[RNC Name] where Date_Of_File ='" + First_GDateVIP_String1 + "'and cast(cast([Created] as varchar(10)) as date) >='" + D2_String + "'  and cast(cast([Created] as varchar(10)) as date)<='" + D1_String + "'  and NPOStatus!= 'Rejected'  ) tble group by cast(cast([Created] as varchar(10)) as date), [RNC Name], [RNC Owner]) tble group by[RNC Name],  [RNC Owner]";
+
+
+                string GDateVIP_Daily_Str_Less20 = @"select  '" + D1_String + @"'  as 'GeneratedDate', [RNC Name] as 'RNC', [RNC Owner], sum(Count) as 'Count of TT' from(
+               select cast(cast([Created] as varchar(10)) as date) as Date, [RNC Name], [RNC Owner], Count(*) as 'Count' from(
+			   select Tehran_VIP_CC.[Created], [Tehran_VIPCC_RNC_Owner].[RNC Name], [Tehran_VIPCC_RNC_Owner].[RNC Owner], 
+			   DATEDIFF(day, cast(cast([Created] as varchar(10)) as date),cast(cast([Modified] as varchar(10)) as date)) as 'Difference of Created and Modified'
+			   from Tehran_VIP_CC left join [Tehran_VIPCC_RNC_Owner] on
+               Tehran_VIP_CC.RNC = [Tehran_VIPCC_RNC_Owner].[RNC Name] where Date_Of_File ='" + First_GDateVIP_String1 + @"'and cast(cast([Created] as varchar(10)) as date) >='" + D2_String + @"'
+               and cast(cast([Created] as varchar(10)) as date)<='" + D1_String + @"' and NPOStatus!= 'Rejected' and NPOStatus!= 'Open' and NPOStatus!= 'Assigned' and NPOStatus!= 'In Progress' and
+               DATEDIFF(day, cast(cast([Created] as varchar(10)) as date),cast(cast([Modified] as varchar(10)) as date))<20) tble 
+			   group by cast(cast([Created] as varchar(10)) as date), [RNC Name], [RNC Owner]) tble group by[RNC Name],  [RNC Owner]";
+
+
+
+                DataTable GDateVIP_Daily_Table = Query_Execution_Table_Output(GDateVIP_Daily_Str);
+                DataTable GDateVIP_DailyLess20_Table = Query_Execution_Table_Output(GDateVIP_Daily_Str_Less20);
+
+                SqlBulkCopy objbulk_GDateVIP = new SqlBulkCopy(connection);
+                objbulk_GDateVIP.DestinationTableName = "Tehran_VIPCC_NPOMTTR_DailyResults_90";
+                objbulk_GDateVIP.ColumnMappings.Add("GeneratedDate", "GeneratedDate");
+                objbulk_GDateVIP.ColumnMappings.Add("RNC", "RNC");
+                objbulk_GDateVIP.ColumnMappings.Add("RNC Owner", "RNC Owner");
+                objbulk_GDateVIP.ColumnMappings.Add("Count of TT", "Count of TT");
+                objbulk_GDateVIP.WriteToServer(GDateVIP_Daily_Table);
+
+                SqlBulkCopy objbulk_GDateVIP_Less20 = new SqlBulkCopy(connection);
+                objbulk_GDateVIP_Less20.DestinationTableName = "Tehran_VIPCC_NPOMTTR_DailyResults_90_Less20";
+                objbulk_GDateVIP_Less20.ColumnMappings.Add("GeneratedDate", "GeneratedDate");
+                objbulk_GDateVIP_Less20.ColumnMappings.Add("RNC", "RNC");
+                objbulk_GDateVIP_Less20.ColumnMappings.Add("RNC Owner", "RNC Owner");
+                objbulk_GDateVIP_Less20.ColumnMappings.Add("Count of TT", "Count of TT");
+                objbulk_GDateVIP_Less20.WriteToServer(GDateVIP_DailyLess20_Table);
+            }
+
+
+            checkBox4.Invoke(new Action(() => checkBox4.Checked = true));
 
             //FO MTTR of Tickets
             for (int i = 0; i < Date_Table.Rows.Count; i++)
@@ -617,36 +546,52 @@ MTTR1_Total.RNC=MTTR2_Total.RNC1  ) tble where [RNC MTTR] is not null";
                 DateTime Date1 = Convert.ToDateTime((Date_Table.Rows[i]).ItemArray[0]);
                 string Date = Date_ToString(Date1);
 
-                if (Date1 <= Last_Updated_Date_Incoming)
+                if (Date1 <= Last_Updated_Date_Tehran_CC_FOMTTR)
                 {
                     continue;
                 }
 
-                string MTTR_Quary = @"select Date, RNC, [RNC MTTR Num], [RNC MTTR Den], [RNC MTTR] from (
-select MTTR1_Total.Date, MTTR1_Total.RNC, MTTR1_Total.[RNC MTTR Num], MTTR2_Total.[RNC MTTR Den], cast(MTTR1_Total.[RNC MTTR Num] as float)/cast(MTTR2_Total.[RNC MTTR Den] as float) as 'RNC MTTR' from (
+                string MTTR_Quary = @"select MTTR90.Date, MTTR90.[TT Code], MTTR90.GeneratedDate, MTTR90.RNC, Tehran_CC_RNC_Owner.[RNC Owner], MTTR90.[Count of TT] from (
 
-select '" +
-  Date + @"' as Date, RNC, sum([RNC MTTR Num]) as 'RNC MTTR Num' from (
-select Date , RNC, Count(*) as 'RNC MTTR Num' from Tehran_CC_Maintable where (cast([Ticket Status] as varchar)='باز داخل باکس شخصی' or cast([Ticket Status] as varchar)='باز داخل باکس گروهی' ) and ( (cast([The Last Agent Name] as varchar)!='Delayناک تهران' and [The Last Agent Name]!='Mohamadreza Kazmi')) and Date<='" +
-  Date + @"'
-group by Date , RNC) tble group by RNC) MTTR1_Total
-left join( 
 
-select '" +
-  Date + @"' as Date1, RNC1, Count(*) as 'RNC MTTR Den' from (
-select [TT Code], RNC as 'RNC1', Date from (
-  SELECT
-  RANK() OVER(PARTITION BY  [TT Code] ORDER BY Date desc) AS ranking,
-  [TT Code],
-  RNC,
-Date from Tehran_CC_Maintable where (cast([Ticket Status] as varchar)='باز داخل باکس شخصی' or cast([Ticket Status] as varchar)='باز داخل باکس گروهی' ) and ( (cast([The Last Agent Name] as varchar)!='Delayناک تهران' and [The Last Agent Name]!='Mohamadreza Kazmi')) and Date<='" +
-  Date + @"') tble
-where ranking=1
+                                    select '" +
+                                    Date + @"' as Date, TBL1.[TT Code],  TBL1.GeneratedDate, TBL1.RNC, TBL2.[Count of TT] from (
 
-) tbl group by RNC1) MTTR2_Total 
+                                    select[TT Code], Date , GeneratedDate, RNC from(
 
-on MTTR1_Total.Date=MTTR2_Total.Date1 and
-MTTR1_Total.RNC=MTTR2_Total.RNC1  ) tble where [RNC MTTR] is not null";
+                                    select 
+                                      RANK() OVER(PARTITION BY  [TT Code] ORDER BY Date desc) AS ranking,
+                                      [TT Code],
+                                      GeneratedDate,
+                                      RNC,
+                                      Date from (
+
+                                    select [TT Code], Date , GeneratedDate, RNC, DATEDIFF(day, Date,GeneratedDate) as DateDiff from (
+                                    select [TT Code], Date , RNC,
+                                    TRY_CAST(CAST(CAST(SUBSTRING(CONVERT (VARCHAR(50), [TT Code], 128), 1, 9)*1e7 AS INT) AS VARCHAR(8)) AS DATE) as 'GeneratedDate' 
+                                    from Tehran_CC_Maintable where 
+                                    (cast([Ticket Status] as varchar)='باز داخل باکس شخصی' or cast([Ticket Status] as varchar)='باز داخل باکس گروهی' ) and 
+                                    (cast([The Last Agent Name] as varchar)!='Delayناک تهران' and [The Last Agent Name]!='Mohamadreza Kazmi')  )tbl 
+
+                                    )tbl ) tbl where ranking=1
+                                    ) TBL1
+
+                                    left join
+                                    (
+                                    select [TT Code],  count(*) 'Count of TT' from Tehran_CC_Maintable where 
+                                    (cast([Ticket Status] as varchar)='باز داخل باکس شخصی' or cast([Ticket Status] as varchar)='باز داخل باکس گروهی' ) and 
+                                    (cast([The Last Agent Name] as varchar)!='Delayناک تهران' and [The Last Agent Name]!='Mohamadreza Kazmi')
+                                    group by [TT Code]) TBL2
+
+                                    on
+
+                                    TBL1.[TT Code]=TBL2.[TT Code]
+
+                                    ) MTTR90 left join Tehran_CC_RNC_Owner
+
+                                    on
+                                    MTTR90.RNC=Tehran_CC_RNC_Owner.[RNC Name]";
+
 
 
 
@@ -655,15 +600,17 @@ MTTR1_Total.RNC=MTTR2_Total.RNC1  ) tble where [RNC MTTR] is not null";
                 SqlBulkCopy objbulk_MTTR = new SqlBulkCopy(connection);
                 objbulk_MTTR.DestinationTableName = "Tehran_CC_FOMTTR";
                 objbulk_MTTR.ColumnMappings.Add("Date", "Date");
+                objbulk_MTTR.ColumnMappings.Add("TT Code", "TT Code");
+                objbulk_MTTR.ColumnMappings.Add("GeneratedDate", "GeneratedDate");
                 objbulk_MTTR.ColumnMappings.Add("RNC", "RNC");
-                objbulk_MTTR.ColumnMappings.Add("RNC MTTR Num", "RNC MTTR Num");
-                objbulk_MTTR.ColumnMappings.Add("RNC MTTR Den", "RNC MTTR Den");
-                objbulk_MTTR.ColumnMappings.Add("RNC MTTR", "RNC MTTR");
+                objbulk_MTTR.ColumnMappings.Add("RNC Owner", "RNC Owner");
+                objbulk_MTTR.ColumnMappings.Add("Count of TT", "Count of TT");
                 objbulk_MTTR.WriteToServer(MTTR_Table);
+
             }
 
 
-
+            checkBox5.Invoke(new Action(() => checkBox5.Checked = true));
 
             //FO MTTR of Tickets LAst 90 Days
             for (int i = 0; i < Date_Table.Rows.Count; i++)
@@ -671,36 +618,54 @@ MTTR1_Total.RNC=MTTR2_Total.RNC1  ) tble where [RNC MTTR] is not null";
                 DateTime Date1 = Convert.ToDateTime((Date_Table.Rows[i]).ItemArray[0]);
                 string Date = Date_ToString(Date1);
 
-                if (Date1 <= Last_Updated_Date_Incoming)
+                if (Date1 <= Last_Updated_Date_Tehran_CC_FOMTTR_90)
                 {
                     continue;
                 }
 
-                string MTTR_Quary = @"select Date, RNC, [RNC MTTR Num], [RNC MTTR Den], [RNC MTTR] from (
-select MTTR1_Total.Date, MTTR1_Total.RNC, MTTR1_Total.[RNC MTTR Num], MTTR2_Total.[RNC MTTR Den], cast(MTTR1_Total.[RNC MTTR Num] as float)/cast(MTTR2_Total.[RNC MTTR Den] as float) as 'RNC MTTR' from (
 
-select '" +
-  Date + @"' as Date, RNC, sum([RNC MTTR Num]) as 'RNC MTTR Num' from (
-select Date , RNC, Count(*) as 'RNC MTTR Num' from Tehran_CC_Maintable where (cast([Ticket Status] as varchar)='باز داخل باکس شخصی' or cast([Ticket Status] as varchar)='باز داخل باکس گروهی' ) and ( (cast([The Last Agent Name] as varchar)!='Delayناک تهران' and [The Last Agent Name]!='Mohamadreza Kazmi')) and Date>='" + Last_Updated_Date_String_90 + @"' and Date<='" +
-  Date + @"'
-group by Date , RNC) tble group by RNC) MTTR1_Total
-left join( 
 
-select '" +
-  Date + @"' as Date1, RNC1, Count(*) as 'RNC MTTR Den' from (
-select [TT Code], RNC as 'RNC1', Date from (
-  SELECT
-  RANK() OVER(PARTITION BY  [TT Code] ORDER BY Date desc) AS ranking,
-  [TT Code],
-  RNC,
-Date from Tehran_CC_Maintable where (cast([Ticket Status] as varchar)='باز داخل باکس شخصی' or cast([Ticket Status] as varchar)='باز داخل باکس گروهی' ) and ( (cast([The Last Agent Name] as varchar)!='Delayناک تهران' and [The Last Agent Name]!='Mohamadreza Kazmi')) and Date>='" + Last_Updated_Date_String_90 + @"' and Date<='" +
-  Date + @"') tble
-where ranking=1
+                string MTTR_Quary = @"select MTTR90.Date, MTTR90.[TT Code], MTTR90.GeneratedDate, MTTR90.RNC, Tehran_CC_RNC_Owner.[RNC Owner], MTTR90.[Count of TT] from (
 
-) tbl group by RNC1) MTTR2_Total 
 
-on MTTR1_Total.Date=MTTR2_Total.Date1 and
-MTTR1_Total.RNC=MTTR2_Total.RNC1  ) tble where [RNC MTTR] is not null";
+                                    select '" +
+                                    Date + @"' as Date, TBL1.[TT Code],  TBL1.GeneratedDate, TBL1.RNC, TBL2.[Count of TT] from (
+
+                                    select[TT Code], Date , GeneratedDate, RNC from(
+
+                                    select 
+                                      RANK() OVER(PARTITION BY  [TT Code] ORDER BY Date desc) AS ranking,
+                                      [TT Code],
+                                      GeneratedDate,
+                                      RNC,
+                                      Date from (
+
+                                    select [TT Code], Date , GeneratedDate, RNC, DATEDIFF(day, Date,GeneratedDate) as DateDiff from (
+                                    select [TT Code], Date , RNC,
+                                    TRY_CAST(CAST(CAST(SUBSTRING(CONVERT (VARCHAR(50), [TT Code], 128), 1, 9)*1e7 AS INT) AS VARCHAR(8)) AS DATE) as 'GeneratedDate' 
+                                    from Tehran_CC_Maintable where 
+                                    (cast([Ticket Status] as varchar)='باز داخل باکس شخصی' or cast([Ticket Status] as varchar)='باز داخل باکس گروهی' ) and 
+                                    (cast([The Last Agent Name] as varchar)!='Delayناک تهران' and [The Last Agent Name]!='Mohamadreza Kazmi')  )tbl where DATEDIFF(day, '" + Date + @"',GeneratedDate)>=-90 
+
+                                    )tbl ) tbl where ranking=1
+                                    ) TBL1
+
+                                    left join
+                                    (
+                                    select [TT Code],  count(*) 'Count of TT' from Tehran_CC_Maintable where 
+                                    (cast([Ticket Status] as varchar)='باز داخل باکس شخصی' or cast([Ticket Status] as varchar)='باز داخل باکس گروهی' ) and 
+                                    (cast([The Last Agent Name] as varchar)!='Delayناک تهران' and [The Last Agent Name]!='Mohamadreza Kazmi')
+                                    group by [TT Code]) TBL2
+
+                                    on
+
+                                    TBL1.[TT Code]=TBL2.[TT Code]
+
+                                    ) MTTR90 left join Tehran_CC_RNC_Owner
+
+                                    on
+                                    MTTR90.RNC=Tehran_CC_RNC_Owner.[RNC Name]";
+
 
 
 
@@ -709,532 +674,172 @@ MTTR1_Total.RNC=MTTR2_Total.RNC1  ) tble where [RNC MTTR] is not null";
                 SqlBulkCopy objbulk_MTTR = new SqlBulkCopy(connection);
                 objbulk_MTTR.DestinationTableName = "Tehran_CC_FOMTTR_90";
                 objbulk_MTTR.ColumnMappings.Add("Date", "Date");
+                objbulk_MTTR.ColumnMappings.Add("TT Code", "TT Code");
+                objbulk_MTTR.ColumnMappings.Add("GeneratedDate", "GeneratedDate");
                 objbulk_MTTR.ColumnMappings.Add("RNC", "RNC");
-                objbulk_MTTR.ColumnMappings.Add("RNC MTTR Num", "RNC MTTR Num");
-                objbulk_MTTR.ColumnMappings.Add("RNC MTTR Den", "RNC MTTR Den");
-                objbulk_MTTR.ColumnMappings.Add("RNC MTTR", "RNC MTTR");
+                objbulk_MTTR.ColumnMappings.Add("RNC Owner", "RNC Owner");
+                objbulk_MTTR.ColumnMappings.Add("Count of TT", "Count of TT");
                 objbulk_MTTR.WriteToServer(MTTR_Table);
+
+
+            }
+
+            checkBox6.Invoke(new Action(() => checkBox6.Checked = true));
+
+
+
+
+
+            //FO MTTR of Tickets Last 90 days  DailyResults
+
+            string Last_GDateFO_Str = @"select max(Date) from Tehran_CC_FOMTTR_90";
+            DataTable Last_GDateFO_Table = Query_Execution_Table_Output(Last_GDateFO_Str);
+            DateTime Last_GDateFO = Convert.ToDateTime((Last_GDateFO_Table.Rows[Last_GDateFO_Table.Rows.Count - 1]).ItemArray[0]);
+            Last_GDateFO = Last_GDateFO.AddDays(-90);
+            string Last_GDateFO_String = Date_ToString(Last_GDateFO);
+
+            string GDateFO_Str = @"select distinct GeneratedDate from Tehran_CC_FOMTTR_90 where GeneratedDate>='" + Last_GDateFO_String + "'";
+            DataTable GDateFO_Table = Query_Execution_Table_Output(GDateFO_Str);
+
+
+            Query_Execution("delete from Tehran_CC_FOMTTR_DailyResults_90 where GeneratedDate>='" + Last_GDateFO_String + "'");
+
+
+            for (int i = 0; i < GDateFO_Table.Rows.Count; i++)
+            {
+                DateTime D1 = Convert.ToDateTime((GDateFO_Table.Rows[i]).ItemArray[0]);
+                DateTime D2 = D1.AddDays(-90);
+                string D1_String = Date_ToString(D1);
+                string D2_String = Date_ToString(D2);
+
+                string GDateFO_Daily_Str = @"select '" + D1_String + @"' as 'GeneratedDate', [RNC], [RNC Owner], count([TT Code]) as 'Count of TT' from(
+               select TBL1.RNC, TBL1.[TT Code], Tehran_CC_RNC_Owner.[RNC Owner] from(
+               select distinct[TT Code], [RNC] from Tehran_CC_FOMTTR_90
+               where [GeneratedDate] >= '" + D2_String + "' and[GeneratedDate] <= '" + D1_String + "') TBL1 left join Tehran_CC_RNC_Owner on TBL1.RNC = Tehran_CC_RNC_Owner.[RNC Name]) tbl group by [RNC], [RNC Owner]";
+
+
+
+                DataTable GDateFO_Daily_Table = Query_Execution_Table_Output(GDateFO_Daily_Str);
+
+
+                SqlBulkCopy objbulk_GDateFO = new SqlBulkCopy(connection);
+                objbulk_GDateFO.DestinationTableName = "Tehran_CC_FOMTTR_DailyResults_90";
+                objbulk_GDateFO.ColumnMappings.Add("GeneratedDate", "GeneratedDate");
+                objbulk_GDateFO.ColumnMappings.Add("RNC", "RNC");
+                objbulk_GDateFO.ColumnMappings.Add("RNC Owner", "RNC Owner");
+                objbulk_GDateFO.ColumnMappings.Add("Count of TT", "Count of TT");
+                objbulk_GDateFO.WriteToServer(GDateFO_Daily_Table);
+
+
+
             }
 
 
+            checkBox7.Invoke(new Action(() => checkBox7.Checked = true));
 
-            // Remain (Incoming) Tickets
+
+            // delete older than 90 days
+            string Last_GDate_Str3 = @"select max(GeneratedDate) from Tehran_CC_FOMTTR_DailyResults_90";
+            DataTable Last_GDate_Table3 = Query_Execution_Table_Output(Last_GDate_Str3);
+            DateTime Last_GDate3 = Convert.ToDateTime((Last_GDate_Table3.Rows[Last_GDate_Table3.Rows.Count - 1]).ItemArray[0]);
+            Last_GDate3 = Last_GDate3.AddDays(-90);
+            string Last_GDate_String3 = Date_ToString(Last_GDate3);
+
+            Query_Execution("delete from Tehran_CC_FOMTTR_DailyResults_90 where GeneratedDate<'" + Last_GDate_String3 + "'");
+
+
+
+
+            // Daily Open_Not belong to Current Quarter 
             for (int i = 0; i < Date_Table.Rows.Count; i++)
             {
                 DateTime Date1 = Convert.ToDateTime((Date_Table.Rows[i]).ItemArray[0]);
                 string Date = Date_ToString(Date1);
 
-                if (Date1 <= Last_Updated_Date_Incoming)
-                {
-                    continue;
-                }
-
-                string RemainTTs_Quary = @"select Date, RNC, count(*) as 'NewTTs' from(
-select[TT Code], Date, RNC from(select New_TBL.[TT Code], New_TBL.[RNC], New_TBL.Date, Old_TBL.OldTT from(select[TT Code], RNC, Date from Tehran_CC_Maintable where cast(Date as Date) ='" +
-  Date + @"') as New_TBL
-  left join
-  (select distinct[TT Code] as 'OldTT' from Tehran_CC_Maintable where cast(Date as Date) <'" + Date + @"')  Old_TBL
-  on New_TBL.[TT Code] = Old_TBL.OldTT) tble where OldTT is null) tble group by Date, RNC";
-
-                DataTable RemainTTs_Table = Query_Execution_Table_Output(RemainTTs_Quary);
-
-                SqlBulkCopy objbulk_Remain1 = new SqlBulkCopy(connection);
-                objbulk_Remain1.DestinationTableName = "Tehran_CC_Remain";
-                objbulk_Remain1.ColumnMappings.Add("Date", "Date");
-                objbulk_Remain1.ColumnMappings.Add("RNC", "RNC");
-                objbulk_Remain1.ColumnMappings.Add("NewTTs", "NewTTs");
-                objbulk_Remain1.WriteToServer(RemainTTs_Table);
-
-
-
-                string RemainTTs_Detail_Quary = @"select[TT Code], Date, RNC, channel, 'Incoming TTs' as 'Status' from(
-select New_TBL.[TT Code], New_TBL.[RNC], New_TBL.[channel],  New_TBL.Date, Old_TBL.OldTT from(select[TT Code], RNC, channel,   Date from Tehran_CC_Maintable where cast(Date as Date) = '" +
-  Date + @"') as New_TBL
-left join
-(select distinct[TT Code] as 'OldTT' from Tehran_CC_Maintable where cast(Date as Date) < '" + Date + @"')  Old_TBL
-on New_TBL.[TT Code] = Old_TBL.OldTT) tble where OldTT is null";
-
-
-
-                DataTable RemainTTs_Detail_Table = Query_Execution_Table_Output(RemainTTs_Detail_Quary);
-
-                SqlBulkCopy objbulk_Remain2 = new SqlBulkCopy(connection);
-                objbulk_Remain2.DestinationTableName = "Tehran_CC_Remain_Detail";
-                objbulk_Remain2.ColumnMappings.Add("TT code", "TT code");
-                objbulk_Remain2.ColumnMappings.Add("Date", "Date");
-                objbulk_Remain2.ColumnMappings.Add("RNC", "RNC");
-                objbulk_Remain2.ColumnMappings.Add("channel", "channel");
-                objbulk_Remain2.ColumnMappings.Add("Status", "Status");
-                objbulk_Remain2.WriteToServer(RemainTTs_Detail_Table);
-            }
-
-
-
-            // Ready to Close Tickets
-            for (int i = 0; i < Date_Table.Rows.Count - 1; i++)
-            {
-                DateTime Date1 = Convert.ToDateTime((Date_Table.Rows[i]).ItemArray[0]);
-                string Date = Date_ToString(Date1);
-                DateTime Date2 = Convert.ToDateTime((Date_Table.Rows[i + 1]).ItemArray[0]);
-                string Date_After = Date_ToString(Date2);
-
-
-                if (Date2 <= Last_Updated_Date_ReadyToClose)
+                if (Date1 <= Last_Updated_Date_Tehran_CC_Open_NotBlong_ToCQ)
                 {
                     continue;
                 }
 
 
-                string ReadyToCloseTTs_Quary = @"select '" + Date_After + @"' as Date, RNC, count(*) as 'ReadyToCloseTTs' from (
-select [TT Code], Date, RNC from(
-select Old_TBL.[TT Code], Old_TBL.[RNC],  Old_TBL.Date, New_TBL.NewTT from (select [TT Code], RNC, Date from Tehran_CC_Maintable where cast(Date as Date)='" + Date + @"') as Old_TBL
-  left join  
-  (select  [TT Code] as 'NewTT'  from Tehran_CC_Maintable where cast(Date as Date)='" + Date_After + @"')  New_TBL
-  on Old_TBL.[TT Code]=New_TBL.NewTT)  tble where NewTT is null) tble group by Date , RNC";
-
-                DataTable ReadyToCloseTTs_Table = Query_Execution_Table_Output(ReadyToCloseTTs_Quary);
-
-                SqlBulkCopy objbulk_ReadyToClose1 = new SqlBulkCopy(connection);
-                objbulk_ReadyToClose1.DestinationTableName = "Tehran_CC_ReadyToClose";
-                objbulk_ReadyToClose1.ColumnMappings.Add("Date", "Date");
-                objbulk_ReadyToClose1.ColumnMappings.Add("RNC", "RNC");
-                objbulk_ReadyToClose1.ColumnMappings.Add("ReadyToCloseTTs", "ReadyToCloseTTs");
-                objbulk_ReadyToClose1.WriteToServer(ReadyToCloseTTs_Table);
+                string QDate_Query = @"select * from Tehran_CC_QDate";
+                DataTable QDate_Table = Query_Execution_Table_Output(QDate_Query);
 
 
-                // Ready To Close Datails Table (Table between two charts)
-                string ReadyToCloseTTs_Details_Quary = @"select  [TT Code], cast('" + Date_After + @"' as Date) as Date, RNC,  channel, 'Ready To Close TTs' as 'Status'   from(
-select Old_TBL.[TT Code], Old_TBL.[RNC], Old_TBL.Date, Old_TBL.channel, New_TBL.NewTT from(select[TT Code], RNC, channel, Date from Tehran_CC_Maintable where cast(Date as Date) = '" + Date + @"') as Old_TBL
- left join
- (select[TT Code] as 'NewTT'  from Tehran_CC_Maintable where cast(Date as Date) = '" + Date_After + @"')  New_TBL
- on Old_TBL.[TT Code] = New_TBL.NewTT)  tble where  NewTT is null";
+                string Q_Open_Quary = @"select Date, 
+                                                   [TT Code],
+            	                                   RNC,
+            	                                   [TT Date], 
+                                                   DATEDIFF(day, Date,[TT Date]) as DateDiff, 
+            	                                   [Ticket Status], 
+            	                                   [The Last Agent Name], '' as QDate, '' as 'QDateDiff'
+                                                   from (      
+            		                                  select Date, [TT Code], RNC,
+            		                                  TRY_CAST(CAST(CAST(SUBSTRING(CONVERT (VARCHAR(50), [TT Code], 128), 1, 9)*1e7 AS decimal) AS VARCHAR(8)) AS DATE) as 'TT Date', 
+            		                                  [Ticket Status], [The Last Agent Name]   from Tehran_CC_Maintable 
+            		                                  where (cast([Ticket Status] as varchar)='باز داخل باکس شخصی' or cast([Ticket Status] as varchar)='باز داخل باکس گروهی' ) 
+                                                            and
+            				                                (cast([The Last Agent Name] as varchar)='Delayناک تهران' or cast([The Last Agent Name] as varchar)='Mohamadreza Kazmi' )
+            				                                and 
+            				                                Date='" + Date + @"') tbl";
 
 
+                DataTable Q_Open_Table = Query_Execution_Table_Output(Q_Open_Quary);
 
-
-                DataTable ReadyToCloseTTs_Details_Table = Query_Execution_Table_Output(ReadyToCloseTTs_Details_Quary);
-
-                SqlBulkCopy objbulk_ReadyToClose1_Details = new SqlBulkCopy(connection);
-                objbulk_ReadyToClose1_Details.DestinationTableName = "Tehran_CC_ReadyToClose_Details";
-                objbulk_ReadyToClose1_Details.ColumnMappings.Add("TT Code", "TT code");
-                objbulk_ReadyToClose1_Details.ColumnMappings.Add("Date", "Date");
-                objbulk_ReadyToClose1_Details.ColumnMappings.Add("RNC", "RNC");
-                objbulk_ReadyToClose1_Details.ColumnMappings.Add("channel", "channel");
-                objbulk_ReadyToClose1_Details.ColumnMappings.Add("Status", "Status");
-                objbulk_ReadyToClose1_Details.WriteToServer(ReadyToCloseTTs_Details_Table);
-
-
-
-
-                // Ready To Close Datail Table
-                string ReadyToCloseTTs_Detail_Quary = @"select cast('" + Date_After + @"' as Date) as Date, RNC, [TT Code] as 'ReadyToCloseTTs'  from(
-select Old_TBL.[TT Code], Old_TBL.[RNC],  Old_TBL.Date, New_TBL.NewTT from (select [TT Code], RNC, Date from Tehran_CC_Maintable where cast(Date as Date)='" + Date + @"' ) as Old_TBL
-  left join  
-  (select  [TT Code] as 'NewTT'  from Tehran_CC_Maintable where cast(Date as Date)= '" + Date_After + @"' )  New_TBL
-  on Old_TBL.[TT Code]=New_TBL.NewTT)  tble  where  NewTT is null"; 
-
-
-
-
-                DataTable ReadyToCloseTTs_Detail_Table = Query_Execution_Table_Output(ReadyToCloseTTs_Detail_Quary);
-
-                SqlBulkCopy objbulk_ReadyToClose1_Detail = new SqlBulkCopy(connection);
-                objbulk_ReadyToClose1_Detail.DestinationTableName = "Tehran_CC_ReadyToClose_Detail";
-                objbulk_ReadyToClose1_Detail.ColumnMappings.Add("Date", "Date");
-                objbulk_ReadyToClose1_Detail.ColumnMappings.Add("RNC", "RNC");
-                objbulk_ReadyToClose1_Detail.ColumnMappings.Add("ReadyToCloseTTs", "ReadyToCloseTTs");
-                objbulk_ReadyToClose1_Detail.WriteToServer(ReadyToCloseTTs_Detail_Table);
-
-
-
-
-
-               // Ready To Close_Remove Park Datail Table
-                string ReadyToCloseTTsRemovePark_Detail_Quary = @"select cast('" + Date_After + @"' as Date) as Date, RNC, [TT Code] as 'ReadyToCloseTTs' from(
-select Old_TBL.[TT Code], Old_TBL.[RNC], Old_TBL.Date, New_TBL.NewTT from(select[TT Code], RNC, Date from Tehran_CC_Maintable where cast(Date as Date) = '" + Date + @"' and (cast([Ticket Status] as varchar)!='پارک' and cast([Ticket Status] as varchar)!='پارک سررسید گذشته')) as Old_TBL
- left join
- (select[TT Code] as 'NewTT'  from Tehran_CC_Maintable where cast(Date as Date) = '" + Date_After + @"' and (cast([Ticket Status] as varchar)!='پارک' and cast([Ticket Status] as varchar)!='پارک سررسید گذشته'))  New_TBL
- on Old_TBL.[TT Code] = New_TBL.NewTT)  tble where  NewTT is null";
-
-                DataTable ReadyToCloseTTsRemovePark_Detail_Table = Query_Execution_Table_Output(ReadyToCloseTTsRemovePark_Detail_Quary);
-
-                SqlBulkCopy objbulk_ReadyToCloseRemovePark_Detail = new SqlBulkCopy(connection);
-                objbulk_ReadyToCloseRemovePark_Detail.DestinationTableName = "Tehran_CC_ReadyToCloseRemovePark_Detail";
-                objbulk_ReadyToCloseRemovePark_Detail.ColumnMappings.Add("Date", "Date");
-                objbulk_ReadyToCloseRemovePark_Detail.ColumnMappings.Add("RNC", "RNC");
-                objbulk_ReadyToCloseRemovePark_Detail.ColumnMappings.Add("ReadyToCloseTTs", "ReadyToCloseTTs");
-                objbulk_ReadyToCloseRemovePark_Detail.WriteToServer(ReadyToCloseTTsRemovePark_Detail_Table);
-
-
-            }
-
-
-            // Close Tickets
-            for (int i = 0; i < Date_Table.Rows.Count - 1; i++)
-            {
-                DateTime Date1 = Convert.ToDateTime((Date_Table.Rows[i]).ItemArray[0]);
-                string Date = Date_ToString(Date1);
-
-                // Close TTs
-                string CloseTTs_Quary = @"select '" + Date + @"' as Date, RNC, count(*) as 'CloseTTs' from (
-select [ReadyToCloseTTs], Date, RNC from(
-select Old_TBL.[ReadyToCloseTTs], Old_TBL.[RNC],  Old_TBL.Date, New_TBL.NewTT from (select ReadyToCloseTTs , RNC, Date from Tehran_CC_ReadyToClose_Detail where cast(Date as Date)='" + Date + @"') as Old_TBL
-  left join  
-  (select  distinct [TT Code] as 'NewTT'  from Tehran_CC_Maintable where cast(Date as Date)>'" + Date + @"')  New_TBL
-  on Old_TBL.[ReadyToCloseTTs]=New_TBL.NewTT)  tble where NewTT is null) tble group by Date , RNC";
-
-
-                DataTable CloseTTs_Table = Query_Execution_Table_Output(CloseTTs_Quary);
-
-
-                SqlBulkCopy objbulk_Close1 = new SqlBulkCopy(connection);
-                objbulk_Close1.DestinationTableName = "Tehran_CC_Close";
-                objbulk_Close1.ColumnMappings.Add("Date", "Date");
-                objbulk_Close1.ColumnMappings.Add("RNC", "RNC");
-                objbulk_Close1.ColumnMappings.Add("CloseTTs", "CloseTTs");
-                objbulk_Close1.WriteToServer(CloseTTs_Table);
-
-
-
-
-
-
-                // Close TTs Detail
-                string CloseTTs_Detail_Quary = @"select [ReadyToCloseTTs] as 'TT Code', Date, RNC, 'CloseTTs' as 'Status'  from(
-select Old_TBL.[ReadyToCloseTTs], Old_TBL.[RNC],  Old_TBL.Date, New_TBL.NewTT from (select ReadyToCloseTTs , RNC, Date from Tehran_CC_ReadyToClose_Detail where cast(Date as Date)='" + Date + @"') as Old_TBL
-  left join  
-  (select  distinct [TT Code] as 'NewTT'  from Tehran_CC_Maintable where cast(Date as Date)>'" + Date + @"')  New_TBL
-  on Old_TBL.[ReadyToCloseTTs]=New_TBL.NewTT)  tble where NewTT is null";
-
-
-                DataTable CloseTTs_Detail_Table = Query_Execution_Table_Output(CloseTTs_Detail_Quary);
-
-
-                SqlBulkCopy objbulk_Detail_Close1 = new SqlBulkCopy(connection);
-                objbulk_Detail_Close1.DestinationTableName = "Tehran_CC_Close_Detail";
-                objbulk_Detail_Close1.ColumnMappings.Add("TT Code", "TT code");
-                objbulk_Detail_Close1.ColumnMappings.Add("Date", "Date");
-                objbulk_Detail_Close1.ColumnMappings.Add("RNC", "RNC");
-                objbulk_Detail_Close1.ColumnMappings.Add("Status", "Status");
-                objbulk_Detail_Close1.WriteToServer(CloseTTs_Detail_Table);
-
-
-
-
-
-
-                // Close TTs Remove Park
-                string CloseTTsRemovePark_Quary = @"select '" + Date + @"' as Date, RNC, count(*) as 'CloseTTs' from (
-select [ReadyToCloseTTs], Date, RNC from(
-select Old_TBL.[ReadyToCloseTTs], Old_TBL.[RNC],  Old_TBL.Date, New_TBL.NewTT from (select ReadyToCloseTTs , RNC, Date from Tehran_CC_ReadyToCloseRemovePark_Detail where cast(Date as Date)='" + Date + @"') as Old_TBL
-  left join  
-  (select  distinct [TT Code] as 'NewTT'  from Tehran_CC_Maintable where cast(Date as Date)>'" + Date + @"')  New_TBL
-  on Old_TBL.[ReadyToCloseTTs]=New_TBL.NewTT)  tble where NewTT is null) tble group by Date , RNC";
-
-
-                DataTable CloseTTsRemovePark_Table = Query_Execution_Table_Output(CloseTTsRemovePark_Quary);
-
-
-                // Cahnge Values bigger than 10 to 10
-                for (int c = 0; c < CloseTTsRemovePark_Table.Rows.Count; c++)
+                DateTime Selected_QDate = DateTime.Now;
+                // Finding QDate comparing to file date
+                for (int d = 0; d < QDate_Table.Rows.Count; d++)
                 {
-                    if (Convert.ToUInt16(CloseTTsRemovePark_Table.Rows[c].ItemArray[2].ToString())>10)
+                    int QTable_Length = QDate_Table.Rows.Count;
+                    DateTime QDate = Convert.ToDateTime((QDate_Table.Rows[QTable_Length - d - 1]).ItemArray[2]);
+                    if (QDate < Date1)
                     {
-                        CloseTTsRemovePark_Table.Rows[c][2] = 10;
+                        Selected_QDate = QDate;
+                        break;
                     }
-                       
                 }
 
 
-                SqlBulkCopy objbulk_Close1RemovePark = new SqlBulkCopy(connection);
-                objbulk_Close1RemovePark.DestinationTableName = "Tehran_CC_CloseRemovePark";
-                objbulk_Close1RemovePark.ColumnMappings.Add("Date", "Date");
-                objbulk_Close1RemovePark.ColumnMappings.Add("RNC", "RNC");
-                objbulk_Close1RemovePark.ColumnMappings.Add("CloseTTs", "CloseTTs");
-                objbulk_Close1RemovePark.WriteToServer(CloseTTsRemovePark_Table);
+                for (int m = 0; m < Q_Open_Table.Rows.Count; m++)
+                {
+                    Q_Open_Table.Rows[m][7] = Selected_QDate;
+                    TimeSpan difference = Convert.ToDateTime((Q_Open_Table.Rows[m]).ItemArray[3]) - Selected_QDate;
+                    Q_Open_Table.Rows[m][8] = difference.Days;
+                }
 
 
-
-
-
-                // Close TTs Remove Park Detail
-                string CloseTTs_Detail_RemovePark_Quary = @"  select [ReadyToCloseTTs] as 'TT Code', Date, RNC, 'CloseTTs_NI-Excluded' as 'Status' from(
-select Old_TBL.[ReadyToCloseTTs], Old_TBL.[RNC],  Old_TBL.Date, New_TBL.NewTT from (select ReadyToCloseTTs , RNC, Date from Tehran_CC_ReadyToCloseRemovePark_Detail where cast(Date as Date)='" + Date + @"') as Old_TBL
-  left join  
-  (select  distinct [TT Code] as 'NewTT'  from Tehran_CC_Maintable where cast(Date as Date)>'" + Date + @"')  New_TBL
-  on Old_TBL.[ReadyToCloseTTs]=New_TBL.NewTT)  tble where NewTT is null";
-
-
-                DataTable CloseTTs_Detail_RemovePark_Table = Query_Execution_Table_Output(CloseTTs_Detail_RemovePark_Quary);
-
-
-                SqlBulkCopy objbulk_Detail_RemovePark_Close1 = new SqlBulkCopy(connection);
-                objbulk_Detail_RemovePark_Close1.DestinationTableName = "Tehran_CC_CloseNIExcluded_Detail";
-                objbulk_Detail_RemovePark_Close1.ColumnMappings.Add("TT Code", "TT code");
-                objbulk_Detail_RemovePark_Close1.ColumnMappings.Add("Date", "Date");
-                objbulk_Detail_RemovePark_Close1.ColumnMappings.Add("RNC", "RNC");
-                objbulk_Detail_RemovePark_Close1.ColumnMappings.Add("Status", "Status");
-                objbulk_Detail_RemovePark_Close1.WriteToServer(CloseTTs_Detail_RemovePark_Table);
-
-
-
-
+                SqlBulkCopy objbulk_Open_NotBlong_ToCQ = new SqlBulkCopy(connection);
+                objbulk_Open_NotBlong_ToCQ.DestinationTableName = "Tehran_CC_Open_NotBlong_ToCQ";
+                objbulk_Open_NotBlong_ToCQ.ColumnMappings.Add("Date", "Date");
+                objbulk_Open_NotBlong_ToCQ.ColumnMappings.Add("TT Code", "TT Code");
+                objbulk_Open_NotBlong_ToCQ.ColumnMappings.Add("RNC", "RNC");
+                objbulk_Open_NotBlong_ToCQ.ColumnMappings.Add("TT Date", "TT Date");
+                objbulk_Open_NotBlong_ToCQ.ColumnMappings.Add("DateDiff", "DateDiff");
+                objbulk_Open_NotBlong_ToCQ.ColumnMappings.Add("Ticket Status", "Ticket Status");
+                objbulk_Open_NotBlong_ToCQ.ColumnMappings.Add("The Last Agent Name", "The Last Agent Name");
+                objbulk_Open_NotBlong_ToCQ.ColumnMappings.Add("QDate", "QDate");
+                objbulk_Open_NotBlong_ToCQ.ColumnMappings.Add("QDateDiff", "QDateDiff");
+                objbulk_Open_NotBlong_ToCQ.WriteToServer(Q_Open_Table);
             }
 
 
+            checkBox8.Invoke(new Action(() => checkBox8.Checked = true));
 
-            string CloseTTs_Quary_LastDate = @"delete from[Tehran_CC_Close] where cast(Date as Date)= '" + Last_Updated_Date_String +
-                "' insert into[Tehran_CC_Close] select* from(select Date, RNC, ReadyToCloseTTs as 'ClosetTTS' from[Tehran_CC_ReadyToClose] where cast(Date as Date)= '" + Last_Updated_Date_String + "') as tble";
-            Query_Execution(CloseTTs_Quary_LastDate);
+            label1.Invoke(new Action(() => label1.Text = "Finished"));
+            label1.Invoke(new Action(() => label1.BackColor = Color.Green));
 
-
-
-            string CloseTTsRemovePark_Quary_LastDate = @"delete from[Tehran_CC_CloseRemovePark] where cast(Date as Date)= '" + Last_Updated_Date_String +
-                "' insert into [Tehran_CC_CloseRemovePark] select * from(select Date, RNC, ReadyToCloseTTs as 'ClosetTTS' from [Tehran_CC_ReadyToClose] where cast(Date as Date)= '" + Last_Updated_Date_String + "') as tble";
-            Query_Execution(CloseTTsRemovePark_Quary_LastDate);
-
-
-
-            string Delete_Quary = @"delete from[Tehran_CC_Remain] where cast(Date as Date)= '2022-07-31' delete from[Tehran_CC_ReadyToClose] where cast(Date as Date)= '2022-07-31' delete from[Tehran_CC_Close] where cast(Date as Date)= '2022-07-31'";
-            Query_Execution(Delete_Quary);
-
-            MessageBox.Show("Finished");
-
-        }
-
-        private void button2_Click(object sender, EventArgs e)
-        {
-            openFileDialog1.DefaultExt = "xlsx";
-            openFileDialog1.Filter = "Excel File|*.xlsx";
-            DialogResult result = openFileDialog1.ShowDialog();
-            string File_Name = openFileDialog1.SafeFileName.ToString();
-            string file = openFileDialog1.FileName;
-            xlApp = new Excel.Application();
-            xlWorkBook = xlApp.Workbooks.Open(file);
-            Sheet = xlWorkBook.Worksheets[1];
-
-
-            Server_Name = "PERFORMANCEDB01";
-            DataBase_Name = "Performance_NAK";
-
-
-            ConnectionString = @"Server=" + Server_Name + "; Database=" + DataBase_Name + "; User ID=cwpcApp;Password=cwpcApp@830625#Ahmad";
-            connection = new SqlConnection(ConnectionString);
-            connection.Open();
-
-
-            //Truncate[Tehran_VIP_CC]
-            string Truncate_Tehran_VIP_CC_Quary = "Truncate table [Tehran_VIP_CC]";
-            Query_Execution(Truncate_Tehran_VIP_CC_Quary);
-
-
-
-            DataTable Tehran_VIP_CC = new DataTable();
-            Tehran_VIP_CC.Columns.Add("CCID", typeof(String));
-            Tehran_VIP_CC.Columns.Add("SubscriberName", typeof(String));
-            Tehran_VIP_CC.Columns.Add("SubscriberPhone", typeof(String));
-            Tehran_VIP_CC.Columns.Add("SubscriberAddress", typeof(String));
-            Tehran_VIP_CC.Columns.Add("LatitudeValue", typeof(double));
-            Tehran_VIP_CC.Columns.Add("LongitudeValue", typeof(double));
-            Tehran_VIP_CC.Columns.Add("SourceofComplaint", typeof(String));
-            Tehran_VIP_CC.Columns.Add("RNC", typeof(String));
-            Tehran_VIP_CC.Columns.Add("NPOstatus", typeof(String));
-            Tehran_VIP_CC.Columns.Add("Create date", typeof(DateTime));
-            Tehran_VIP_CC.Columns.Add("AssignComment", typeof(String));
-            Tehran_VIP_CC.Columns.Add("SolutionCategory", typeof(String));
-            Tehran_VIP_CC.Columns.Add("PendingSite", typeof(String));
-            Tehran_VIP_CC.Columns.Add("ResponsibleTeam", typeof(String));
-            Tehran_VIP_CC.Columns.Add("CustomerComplaintRef", typeof(String));
-            Tehran_VIP_CC.Columns.Add("ReadyToCloseDate", typeof(DateTime));
-            Tehran_VIP_CC.Columns.Add("ResolveDate", typeof(DateTime));
-
-
-
-
-
-
-            Excel.Range Data = Sheet.get_Range("A2", "Q" + Sheet.UsedRange.Rows.Count);
-            object[,] VIP_Data = (object[,])Data.Value;
-            int Count = Sheet.UsedRange.Rows.Count;
-
-
-            for (int k = 0; k < Count - 1; k++)
-            {
-
-                if (VIP_Data[k + 1, 1] == null)
-                {
-                    continue;
-                }
-
-                DateTime Date = Convert.ToDateTime(VIP_Data[k + 1, 10]);
-                if (Date == null || Date.Year<2022)
-                {
-                    continue;
-                }
-
-               string CCID = "";
-               if (VIP_Data[k + 1, 1] != null)
-               {
-                   CCID = VIP_Data[k + 1, 1].ToString();
-               }
-
-
-                string Subscriber_Name = "";
-                if (VIP_Data[k + 1, 2] != null)
-                {
-                    Subscriber_Name = VIP_Data[k + 1, 2].ToString();
-                }
-
-                string Phone = "";
-                if (VIP_Data[k + 1, 3] != null)
-                {
-                    Phone = VIP_Data[k + 1, 3].ToString();
-                }
-
-
-                string Address = "";
-                if (VIP_Data[k + 1, 4] != null)
-                {
-                    Address = VIP_Data[k + 1, 4].ToString();
-                }
-
-
-                double latitude = 0;
-                if (VIP_Data[k + 1, 5] != null)
-                {
-                    latitude = Convert.ToDouble(VIP_Data[k + 1, 5]);
-                }
-
-                double longitude = 0;
-                if (VIP_Data[k + 1, 6] != null)
-                {
-                    longitude = Convert.ToDouble(VIP_Data[k + 1, 6]);
-                }
-
-
-
-                string Source_Of_Complaint = "";
-                if (VIP_Data[k + 1, 7] != null)
-                {
-                    Source_Of_Complaint = VIP_Data[k + 1, 7].ToString();
-                }
-
-
-                string RNC = "";
-                if (VIP_Data[k + 1, 8] != null)
-                {
-                    RNC = VIP_Data[k + 1, 8].ToString();
-                }
-
-
-                string Status = "";
-                if (VIP_Data[k + 1, 9] != null)
-                {
-                    Status = VIP_Data[k + 1, 9].ToString();
-                }
-
-
-
-                string comments = "";
-                if (VIP_Data[k + 1, 11] != null)
-                {
-                    comments = VIP_Data[k + 1, 11].ToString();
-                }
-
-
-
-                string SOLUTIONCATEGORY = "";
-                if (VIP_Data[k + 1, 12] != null)
-                {
-                    SOLUTIONCATEGORY = VIP_Data[k + 1, 12].ToString();
-                }
-
-
-                string Pending_Site = "";
-                if (VIP_Data[k + 1, 13] != null)
-                {
-                    Pending_Site = VIP_Data[k + 1, 13].ToString();
-                }
-
-
-                string RESPONSIBLE = "";
-                if (VIP_Data[k + 1, 14] != null)
-                {
-                    RESPONSIBLE = VIP_Data[k + 1, 14].ToString();
-                }
-
-
-                string CustomerComplaintRef = "";
-                if (VIP_Data[k + 1, 15] != null)
-                {
-                    CustomerComplaintRef = VIP_Data[k + 1, 15].ToString();
-                }
-
-
-                DateTime ReadyToCloseDate = Convert.ToDateTime(VIP_Data[k + 1, 16]);
-                //if (ReadyToCloseDate == null || ReadyToCloseDate.Year < 2022)
-                //{
-                //    ReadyToCloseDate = "";
-                //}
-                //else
-                //{
-                //    ReadyToCloseDate
-                //}
-
-
-                DateTime ResolveDate = Convert.ToDateTime(VIP_Data[k + 1, 17]);
-                //if (ResolveDate == null || ResolveDate.Year < 2022)
-                //{
-                //    continue;
-                //}
-
-
-
-                Tehran_VIP_CC.Rows.Add(CCID, Subscriber_Name, Phone,Address, latitude, longitude, Source_Of_Complaint,RNC,Status,Date, comments, SOLUTIONCATEGORY, Pending_Site, RESPONSIBLE, CustomerComplaintRef, ReadyToCloseDate, ResolveDate);
-
-
-            }
-
-
-
-            SqlBulkCopy objbulk_Tehran_VIP_CC = new SqlBulkCopy(connection);
-            objbulk_Tehran_VIP_CC.DestinationTableName = "Tehran_VIP_CC";
-            objbulk_Tehran_VIP_CC.ColumnMappings.Add("CCID", "CCID");
-            objbulk_Tehran_VIP_CC.ColumnMappings.Add("SubscriberName", "SubscriberName");
-            objbulk_Tehran_VIP_CC.ColumnMappings.Add("SubscriberPhone", "SubscriberPhone");
-            objbulk_Tehran_VIP_CC.ColumnMappings.Add("SubscriberAddress", "SubscriberAddress");
-
-            objbulk_Tehran_VIP_CC.ColumnMappings.Add("LatitudeValue", "LatitudeValue");
-            objbulk_Tehran_VIP_CC.ColumnMappings.Add("LongitudeValue", "LongitudeValue");
-            objbulk_Tehran_VIP_CC.ColumnMappings.Add("SourceofComplaint", "SourceofComplaint");
-            objbulk_Tehran_VIP_CC.ColumnMappings.Add("RNC", "RNC");
-
-            objbulk_Tehran_VIP_CC.ColumnMappings.Add("NPOstatus", "NPOstatus");
-            objbulk_Tehran_VIP_CC.ColumnMappings.Add("Create date", "Create date ");
-            objbulk_Tehran_VIP_CC.ColumnMappings.Add("AssignComment", "AssignComment");
-            objbulk_Tehran_VIP_CC.ColumnMappings.Add("SolutionCategory", "SolutionCategory");
-            objbulk_Tehran_VIP_CC.ColumnMappings.Add("PendingSite", "PendingSite");
-            objbulk_Tehran_VIP_CC.ColumnMappings.Add("ResponsibleTeam", "ResponsibleTeam");
-            objbulk_Tehran_VIP_CC.ColumnMappings.Add("CustomerComplaintRef", "CustomerComplaintRef");
-
-            objbulk_Tehran_VIP_CC.ColumnMappings.Add("ReadyToCloseDate", "ReadyToCloseDate");
-            objbulk_Tehran_VIP_CC.ColumnMappings.Add("ResolveDate", "ResolveDate");
-
-            objbulk_Tehran_VIP_CC.WriteToServer(Tehran_VIP_CC);
+            //label1.Text = "Finished";
+            //label1.BackColor = Color.Green;
 
             connection.Close();
             MessageBox.Show("Finished");
 
 
-
-
-
-
-
-
-
-
-
         }
+
+
+
+
+
     }
 }

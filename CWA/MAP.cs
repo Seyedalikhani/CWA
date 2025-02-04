@@ -38,10 +38,11 @@ namespace CWA
         public string ConnectionString = "";
         public SqlConnection connection = new SqlConnection();
 
-        //public string Server_Name = @"NAKPRG-NB1243\" + "AHMAD";
-        //public string DataBase_Name = "MAP";
+        //public string Server_Name = @"AHMAD\" + "SQLEXPRESS";
+        //public string DataBase_Name = "NAK";
 
-        public string Server_Name = "PERFORMANCEDB01";
+
+        public string Server_Name = "PERFORMANCEDB";
         public string DataBase_Name = "Performance_NAK";
 
 
@@ -213,7 +214,7 @@ namespace CWA
 
 
 
-            string MAP_DATA = @"select * from [ARAS_DB] WHERE [PROVINCE EN]='" + Selected_Province + "' order by LOCATION ,Technology";
+            string MAP_DATA = @"select * from [ARAS_DB] WHERE [PROVINCE_EN]='" + Selected_Province + "' order by LOCATION ,Technology";
             SqlCommand MAP_DATA_Quary = new SqlCommand(MAP_DATA, connection);
             MAP_DATA_Quary.CommandTimeout = 0;
             MAP_DATA_Quary.ExecuteNonQuery();
@@ -2206,6 +2207,11 @@ namespace CWA
 
 
             }
+
+        private void label1_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 
 

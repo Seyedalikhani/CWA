@@ -41,10 +41,10 @@ namespace CWA
         public double[,] TH_3G_PS = new double[6, 14];
         public double[,] TH_4G = new double[6, 11];
 
-        //public string Server_Name = @"NAKPRG-NB1243\" + "AHMAD";
-        //public string DataBase_Name = "Contract";
+        //public string Server_Name = @"AHMAD\" + "SQLEXPRESS";
+        //public string DataBase_Name = "NAK";
 
-        public string Server_Name = "PERFORMANCEDB01";
+        public string Server_Name = "PERFORMANCEDB";
         public string DataBase_Name = "Performance_NAK";
 
         public DataTable ARAS_Table = new DataTable();
@@ -99,7 +99,7 @@ namespace CWA
 };
 
 
-            
+
             //            if (authorizedUsers.Contains(currentUser.ToLower()))
             //            {
             //                string Authorized = "OK";
@@ -606,6 +606,7 @@ and ([CSSR_MCI]<93.989 or [OHSR]<93.811 or [CDR(not Affected by incoming Handove
 
 
                 SqlCommand Ericsson_2G_TBL_Quary = new SqlCommand(Ericsson_2G_TBL, connection);
+                Ericsson_2G_TBL_Quary.CommandTimeout = 0;
                 Ericsson_2G_TBL_Quary.ExecuteNonQuery();
                 DataTable Ericsson_2G_Table = new DataTable();
                 SqlDataAdapter dataAdapter_Ericsson_2G = new SqlDataAdapter(Ericsson_2G_TBL_Quary);
@@ -634,6 +635,7 @@ and ([CSSR_MCI]<93.989 or [OHSR]<93.811 or [CDR(not Affected by incoming Handove
 
 
                 SqlCommand Huawei_2G_TBL_Quary = new SqlCommand(Huawei_2G_TBL, connection);
+                Huawei_2G_TBL_Quary.CommandTimeout = 0;
                 Huawei_2G_TBL_Quary.ExecuteNonQuery();
                 DataTable Huawei_2G_Table = new DataTable();
                 SqlDataAdapter dataAdapter_Huawei_2G = new SqlDataAdapter(Huawei_2G_TBL_Quary);
@@ -665,6 +667,7 @@ and ([CSSR_MCI]<93.989 or [OHSR]<93.811 or [CDR(not Affected by incoming Handove
 
 
                 SqlCommand Nokia_2G_TBL_Quary = new SqlCommand(Nokia_2G_TBL, connection);
+                Nokia_2G_TBL_Quary.CommandTimeout = 0;
                 Nokia_2G_TBL_Quary.ExecuteNonQuery();
                 DataTable Nokia_2G_Table = new DataTable();
                 SqlDataAdapter dataAdapter_Nokia_2G = new SqlDataAdapter(Nokia_2G_TBL_Quary);
@@ -1658,6 +1661,7 @@ and ([Cs_RAB_Establish_Success_Rate]<99.725 or [IRAT_HO_Voice_Suc_Rate]<60 or [C
 
 
                 SqlCommand Ericsson_3G_CS_TBL_Quary = new SqlCommand(Ericsson_3G_CS_TBL, connection);
+                Ericsson_3G_CS_TBL_Quary.CommandTimeout = 0;
                 Ericsson_3G_CS_TBL_Quary.ExecuteNonQuery();
                 DataTable Ericsson_3G_CS_Table = new DataTable();
                 SqlDataAdapter dataAdapter_Ericsson_3G_CS = new SqlDataAdapter(Ericsson_3G_CS_TBL_Quary);
@@ -1675,6 +1679,7 @@ and ([CS_RAB_Setup_Success_Ratio]<99.827 or [CS_IRAT_HO_SR]<89.759 or [AMR_Call_
 
 
                 SqlCommand Huawei_3G_CS_TBL_Quary = new SqlCommand(Huawei_3G_CS_TBL, connection);
+                Huawei_3G_CS_TBL_Quary.CommandTimeout = 0;
                 Huawei_3G_CS_TBL_Quary.ExecuteNonQuery();
                 DataTable Huawei_3G_CS_Table = new DataTable();
                 SqlDataAdapter dataAdapter_Huawei_3G_CS = new SqlDataAdapter(Huawei_3G_CS_TBL_Quary);
@@ -1692,6 +1697,7 @@ and ([CS_RAB_Establish_Success_Rate]<99.407 or [Inter_sys_RT_Hard_HO_SR_3Gto2G(C
 
 
                 SqlCommand Nokia_3G_CS_TBL_Quary = new SqlCommand(Nokia_3G_CS_TBL, connection);
+                Nokia_3G_CS_TBL_Quary.CommandTimeout = 0;
                 Nokia_3G_CS_TBL_Quary.ExecuteNonQuery();
                 DataTable Nokia_3G_CS_Table = new DataTable();
                 SqlDataAdapter dataAdapter_Nokia_3G_CS = new SqlDataAdapter(Nokia_3G_CS_TBL_Quary);
@@ -2344,6 +2350,7 @@ and ([HSDPA_RAB_Setup_Succ_Rate(UCell_Eric)]<97.812 or [HSUPA_Setup_Success_Rate
 
 
                 SqlCommand Ericsson_3G_PS_TBL_Quary = new SqlCommand(Ericsson_3G_PS_TBL, connection);
+                Ericsson_3G_PS_TBL_Quary.CommandTimeout = 0;
                 Ericsson_3G_PS_TBL_Quary.ExecuteNonQuery();
                 DataTable Ericsson_3G_PS_Table = new DataTable();
                 SqlDataAdapter dataAdapter_Ericsson_3G_PS = new SqlDataAdapter(Ericsson_3G_PS_TBL_Quary);
@@ -2364,6 +2371,7 @@ and ([HSDPA_RAB_Setup_Success_Ratio(Hu_Cell)]<99.63 or [HSUPA_RAB_Setup_Success_
 
 
                 SqlCommand Huawei_3G_PS_TBL_Quary = new SqlCommand(Huawei_3G_PS_TBL, connection);
+                Huawei_3G_PS_TBL_Quary.CommandTimeout = 0;
                 Huawei_3G_PS_TBL_Quary.ExecuteNonQuery();
                 DataTable Huawei_3G_PS_Table = new DataTable();
                 SqlDataAdapter dataAdapter_Huawei_3G_PS = new SqlDataAdapter(Huawei_3G_PS_TBL_Quary);
@@ -2384,6 +2392,7 @@ and ([HSDPA_setup_success_ratio_from_user_perspective(CELL_Nokia)]<97.106 or [HS
 
 
                 SqlCommand Nokia_3G_PS_TBL_Quary = new SqlCommand(Nokia_3G_PS_TBL, connection);
+                Nokia_3G_PS_TBL_Quary.CommandTimeout = 0;
                 Nokia_3G_PS_TBL_Quary.ExecuteNonQuery();
                 DataTable Nokia_3G_PS_Table = new DataTable();
                 SqlDataAdapter dataAdapter_Nokia_3G_PS = new SqlDataAdapter(Nokia_3G_PS_TBL_Quary);
@@ -3525,6 +3534,7 @@ and ([RRC_Estab_Success_Rate(ReAtt)(EUCell_Eric)]<99.758 or [Initial_ERAB_Estab_
 
 
                 SqlCommand Ericsson_4G_TBL_Quary = new SqlCommand(Ericsson_4G_TBL, connection);
+                Ericsson_4G_TBL_Quary.CommandTimeout = 0;
                 Ericsson_4G_TBL_Quary.ExecuteNonQuery();
                 DataTable Ericsson_4G_Table = new DataTable();
                 SqlDataAdapter dataAdapter_Ericsson_4G = new SqlDataAdapter(Ericsson_4G_TBL_Quary);
@@ -3548,6 +3558,7 @@ and ([RRC_Connection_Setup_Success_Rate_service]<99.894 or [E-RAB_Setup_Success_
 
 
                 SqlCommand Huawei_4G_TBL_Quary = new SqlCommand(Huawei_4G_TBL, connection);
+                Huawei_4G_TBL_Quary.CommandTimeout = 0;
                 Huawei_4G_TBL_Quary.ExecuteNonQuery();
                 DataTable Huawei_4G_Table = new DataTable();
                 SqlDataAdapter dataAdapter_Huawei_4G = new SqlDataAdapter(Huawei_4G_TBL_Quary);
@@ -3569,6 +3580,7 @@ and ([RRC_Connection_Setup_Success_Ratio(Nokia_LTE_CELL)]<99.747 or [Initial_E-R
 
 
                 SqlCommand Nokia_4G_TBL_Quary = new SqlCommand(Nokia_4G_TBL, connection);
+                Nokia_4G_TBL_Quary.CommandTimeout = 0;
                 Nokia_4G_TBL_Quary.ExecuteNonQuery();
                 DataTable Nokia_4G_Table = new DataTable();
                 SqlDataAdapter dataAdapter_Nokia_4G = new SqlDataAdapter(Nokia_4G_TBL_Quary);
@@ -4674,7 +4686,7 @@ from [dbo].[TBL_LTE_CELL_Daily_N] where
                 p1 = "Province ='" + listBox1.SelectedItems[k - 1].ToString() + "' or ";
                 Province_List = Province_List + p1;
 
-                if(listBox1.SelectedItems[k - 1].ToString()== "Chahar Mahal Va Bakhtiari")
+                if (listBox1.SelectedItems[k - 1].ToString() == "Chahar Mahal Va Bakhtiari")
                 {
                     p1 = "Province ='Charmahal' or ";
                     Province_List = Province_List + p1;
@@ -4784,6 +4796,7 @@ from [dbo].[TBL_LTE_CELL_Daily_N] where
             if (Technology != "4G")
             {
                 SqlCommand Node_List_Quary1 = new SqlCommand(Node_List_Quary, connection);
+                Node_List_Quary1.CommandTimeout = 0;
                 Node_List_Quary1.ExecuteNonQuery();
                 DataTable Table_Node_List_Quary = new DataTable();
                 SqlDataAdapter dataAdapter_Node_List_Quary = new SqlDataAdapter(Node_List_Quary1);
@@ -4814,1120 +4827,1142 @@ from [dbo].[TBL_LTE_CELL_Daily_N] where
 
         private void button3_Click(object sender, EventArgs e)
         {
-            
+
             //string ID = textBox4.Text;
             //if (ID == "56" || ID == "npo-290962" || ID == "npo-294031" || ID == "npo-294005" || ID == "npo-260346" || ID == "npo-290515" || ID == "npo-260410" || ID == "npo-298081")
             //{
-                label15.Text = "Wait...";
-                label15.BackColor = Color.Yellow;
+            label15.Text = "Wait...";
+            label15.BackColor = Color.Yellow;
 
-                string KPI = listBox3.SelectedItem.ToString();
-                //            string cell_index = "substring(Cell,1,2)=";
-                //            string Province_Index_List = "";
-                //            if (listBox1.SelectedItems.Count==0)
-                //            {
-                //                MessageBox.Show("Please select the list of Province(s)");
-                //            }
-                //            for (int k = 1; k <= listBox1.SelectedItems.Count; k++)
-                //            {
-                //                if (listBox1.SelectedItems[k-1].ToString()=="Alborz")
-                //                {
-                //                    Province_Index_List = Province_Index_List + cell_index + "'KJ' or ";
-                //                }
-                //                if (listBox1.SelectedItems[k - 1].ToString() == "AZARGHARBI")
-                //                {
-                //                    Province_Index_List = Province_Index_List + cell_index + "'AG' or ";
-                //                }
+            string KPI = listBox3.SelectedItem.ToString();
+            //            string cell_index = "substring(Cell,1,2)=";
+            //            string Province_Index_List = "";
+            //            if (listBox1.SelectedItems.Count==0)
+            //            {
+            //                MessageBox.Show("Please select the list of Province(s)");
+            //            }
+            //            for (int k = 1; k <= listBox1.SelectedItems.Count; k++)
+            //            {
+            //                if (listBox1.SelectedItems[k-1].ToString()=="Alborz")
+            //                {
+            //                    Province_Index_List = Province_Index_List + cell_index + "'KJ' or ";
+            //                }
+            //                if (listBox1.SelectedItems[k - 1].ToString() == "AZARGHARBI")
+            //                {
+            //                    Province_Index_List = Province_Index_List + cell_index + "'AG' or ";
+            //                }
 
-                ////AZARSHARGHI
-                ////Charmahal
-                ////Gilan
-                ////Golestan
-                ////Kerman
-                ////KHORASANRAZAVI
-                ////Khuzestan
-                ////Mazandaran
-                ////Semnan
-                ////Tehran
-                ////Yazd
+            ////AZARSHARGHI
+            ////Charmahal
+            ////Gilan
+            ////Golestan
+            ////Kerman
+            ////KHORASANRAZAVI
+            ////Khuzestan
+            ////Mazandaran
+            ////Semnan
+            ////Tehran
+            ////Yazd
 
-                //            }
-                //            Province_Index_List = Province_Index_List.Substring(0, Province_Index_List.Length - 4);
+            //            }
+            //            Province_Index_List = Province_Index_List.Substring(0, Province_Index_List.Length - 4);
 
 
 
-                //string cell_index = "substring(Cell,1,2)=";
-                string Node_Index_List = "";
-                //if (listBox2.SelectedItems.Count == 0)
-                //{
-                //    MessageBox.Show("Please select the list of Node(s)");
-                //}
-                if (Technology != "4G")
+            //string cell_index = "substring(Cell,1,2)=";
+            string Node_Index_List = "";
+            //if (listBox2.SelectedItems.Count == 0)
+            //{
+            //    MessageBox.Show("Please select the list of Node(s)");
+            //}
+            if (Technology != "4G")
+            {
+                for (int k = 1; k <= listBox2.SelectedItems.Count; k++)
                 {
-                    for (int k = 1; k <= listBox2.SelectedItems.Count; k++)
+                    string Node = listBox2.SelectedItems[k - 1].ToString();
+                    if (Node.Substring(Node.Length - 1, 1) == "E")
                     {
-                        string Node = listBox2.SelectedItems[k - 1].ToString();
-                        if (Node.Substring(Node.Length - 1, 1) == "E")
-                        {
-                            Ericsson_Count++;
-                        }
-                        if (Node.Substring(Node.Length - 1, 1) == "H")
-                        {
-                            Huawei_Count++;
-                        }
-                        if (Node.Substring(Node.Length - 1, 1) == "N")
-                        {
-                            Nokia_Count++;
-                        }
-                        if (Technology == "2G")
-                        {
-                            Node_Index_List = Node_Index_List + "BSC='" + Node + "' or ";
-                        }
-                        if (Technology == "3G_CS" || Technology == "3G_PS")
-                        {
-                            Node_Index_List = Node_Index_List + "ElementID='" + Node + "' or ";
-                        }
+                        Ericsson_Count++;
+                    }
+                    if (Node.Substring(Node.Length - 1, 1) == "H")
+                    {
+                        Huawei_Count++;
+                    }
+                    if (Node.Substring(Node.Length - 1, 1) == "N")
+                    {
+                        Nokia_Count++;
+                    }
+                    if (Technology == "2G")
+                    {
+                        Node_Index_List = Node_Index_List + "BSC='" + Node + "' or ";
+                    }
+                    if (Technology == "3G_CS" || Technology == "3G_PS")
+                    {
+                        Node_Index_List = Node_Index_List + "ElementID='" + Node + "' or ";
+                    }
 
+                }
+            }
+            if (Technology == "4G")
+            {
+                for (int k = 1; k <= listBox1.SelectedItems.Count; k++)
+                {
+                    string Node = listBox1.SelectedItems[k - 1].ToString();
+                    Node_Index_List = Node_Index_List + "Province='" + Node + "' or ";
+
+                    if (Node == "Chahar Mahal Va Bakhtiari")
+                    {
+                        Node_Index_List = Node_Index_List + "Province='Charmahal' or ";
+                    }
+                    if (Node == "East Azarbaijan")
+                    {
+                        Node_Index_List = Node_Index_List + "Province='AZARSHARGHI' or ";
+                    }
+                    if (Node == "Khorasan Razavi")
+                    {
+                        Node_Index_List = Node_Index_List + "Province='KHORASANRAZAVI' or ";
+                    }
+                    if (Node == "West Azarbaijan")
+                    {
+                        Node_Index_List = Node_Index_List + "Province='AZARGHARBI' or ";
+                    }
+                    if (Node == "Esfahan")
+                    {
+                        Node_Index_List = Node_Index_List + "Province='ISFAHAN' or ";
+                    }
+                    if (Node == "Kohgiluyeh Va Boyer Ahmad")
+                    {
+                        Node_Index_List = Node_Index_List + "Province='KOHKILOYEH' or ";
+                    }
+                    if (Node == "North Khorasan")
+                    {
+                        Node_Index_List = Node_Index_List + "Province='KHORASANSHOMALI' or ";
+                    }
+                    if (Node == "South Khorasan")
+                    {
+                        Node_Index_List = Node_Index_List + "Province='KHORASANJONOBI' or ";
+                    }
+                    if (Node == "Sistan Va Baluchestan")
+                    {
+                        Node_Index_List = Node_Index_List + "Province='Sistan' or ";
+                    }
+
+                }
+            }
+
+            if (Node_Index_List != "")
+            {
+                Node_Index_List = Node_Index_List.Substring(0, Node_Index_List.Length - 4);
+            }
+
+
+
+
+
+            if (Interval == "Daily")
+            {
+                string KPI_E = "";
+                string Traffic_E = "";
+                string Ave_E = "";
+                string KPI_H = "";
+                string Traffic_H = "";
+                string Ave_H = "";
+                string KPI_N = "";
+                string Traffic_N = "";
+                string Ave_N = "";
+                if (Technology == "2G")
+                {
+                    Traffic_E = "[TCH_Traffic]"; Ave_E = "[TCH_Availability]";
+                    Traffic_H = "[TCH_Traffic]"; Ave_H = "[TCH_Availability]";
+                    Traffic_N = "[TCH_Traffic]"; Ave_N = "[TCH_Availability]";
+                    if (KPI == "CSSR")
+                    {
+                        KPI_E = "[CSSR_MCI]";
+                        KPI_H = "[CSSR3]";
+                        KPI_N = "[CSSR_MCI]";
+                    }
+                    if (KPI == "IHSR")
+                    {
+                        KPI_E = "[IHSR]";
+                        KPI_H = "[IHSR2]";
+                        KPI_N = "[IHSR]";
+                    }
+                    if (KPI == "OHSR")
+                    {
+                        KPI_E = "[OHSR]";
+                        KPI_H = "[OHSR2]";
+                        KPI_N = "[OHSR]";
+                    }
+                    if (KPI == "CDR")
+                    {
+                        KPI_E = "[CDR(not Affected by incoming Handovers from 3G)(Eric_CELL)]";
+                        KPI_H = "[CDR3]";
+                        KPI_N = "[CDR(including_CS_IRAT_handovers_3G_to2G)(Nokia_SEG)]";
+                    }
+                    if (KPI == "RxQual_DL")
+                    {
+                        KPI_E = "[RxQual_DL]";
+                        KPI_H = "[RX_QUALITTY_DL_NEW]";
+                        KPI_N = "[RxQuality_DL]";
+                    }
+                    if (KPI == "RxQual_UL")
+                    {
+                        KPI_E = "[RxQual_UL]";
+                        KPI_H = "[RX_QUALITTY_UL_NEW]";
+                        KPI_N = "[RxQuality_UL]";
+                    }
+                    if (KPI == "SDCCH_Access_SR")
+                    {
+                        KPI_E = "[SDCCH_Access_Succ_Rate]";
+                        KPI_H = "[SDCCH_Access_Success_Rate2]";
+                        KPI_N = "[SDCCH_Access_Success_Rate]";
+                    }
+                    if (KPI == "SDCCH_Congestion")
+                    {
+                        KPI_E = "[SDCCH_Congestion]";
+                        KPI_H = "[SDCCH_Congestion_Rate]";
+                        KPI_N = "[SDCCH_Congestion_Rate]";
+                    }
+                    if (KPI == "SDCCH_Drop_Rate")
+                    {
+                        KPI_E = "[SDCCH_Drop_Rate]";
+                        KPI_H = "[SDCCH_Drop_Rate]";
+                        KPI_N = "[SDCCH_Drop_Rate]";
+                    }
+                    if (KPI == "TCH_Assign_FR")
+                    {
+                        KPI_E = "[TCH_Assign_Fail_Rate(NAK)(Eric_CELL)]";
+                        KPI_H = "[TCH_Assignment_FR]";
+                        KPI_N = "[TCH_Assignment_FR]";
+                    }
+                    if (KPI == "TCH_Congestion")
+                    {
+                        KPI_E = "[TCH_Congestion]";
+                        KPI_H = "[TCH_Cong]";
+                        KPI_N = "[TCH_Cong_Rate]";
+                    }
+                    if (KPI == "TCH_Traffic")
+                    {
+                        KPI_E = "[TCH_Traffic]";
+                        KPI_H = "[TCH_Traffic]";
+                        KPI_N = "[TCH_Traffic]";
+                    }
+                    if (KPI == "TCH_Availability")
+                    {
+                        KPI_E = "[TCH_Availability]";
+                        KPI_H = "[TCH_Availability]";
+                        KPI_N = "[TCH_Availability]";
+                    }
+                }
+                if (Technology == "3G_CS")
+                {
+                    Traffic_E = "[CS_Traffic]"; Ave_E = "[Cell_Availability_Rate_Exclude_Blocking(UCELL_Eric)]";
+                    Traffic_H = "[CS_Erlang]"; Ave_H = "[Radio_Network_Availability_Ratio(Hu_Cell)]";
+                    Traffic_N = "[CS_Traffic]"; Ave_N = "[Cell_Availability_excluding_blocked_by_user_state]";
+                    if (KPI == "CS_RAB_Establish")
+                    {
+                        KPI_E = "[Cs_RAB_Establish_Success_Rate]";
+                        KPI_H = "[CS_RAB_Setup_Success_Ratio]";
+                        KPI_N = "[CS_RAB_Establish_Success_Rate]";
+                    }
+                    if (KPI == "CS_IRAT_HO_SR")
+                    {
+                        KPI_E = "[IRAT_HO_Voice_Suc_Rate]";
+                        KPI_H = "[CS_IRAT_HO_SR]";
+                        KPI_N = "[Inter_sys_RT_Hard_HO_SR_3Gto2G(CELL_nokia)]";
+                    }
+                    if (KPI == "CS_Drop_Rate")
+                    {
+                        KPI_E = "[CS_Drop_Call_Rate]";
+                        KPI_H = "[AMR_Call_Drop_Ratio_New(Hu_CELL)]";
+                        KPI_N = "[CS_Drop_Call_Rate]";
+                    }
+                    if (KPI == "Soft_HO_SR")
+                    {
+                        KPI_E = "[Soft_HO_Suc_Rate]";
+                        KPI_H = "[Softer_Handover_Success_Ratio(Hu_Cell)]";
+                        KPI_N = "[Soft_HO_Success_rate_RT]";
+                    }
+                    if (KPI == "CS_RRC_SR")
+                    {
+                        KPI_E = "[CS_RRC_Setup_Success_Rate]";
+                        KPI_H = "[CS_RRC_Connection_Establishment_SR]";
+                        KPI_N = "[CS_RRC_SETUP_SR_WITHOUT_REPEAT(CELL_NOKIA)]";
+                    }
+                    if (KPI == "CS_MultiRAB_SR")
+                    {
+                        KPI_E = "[CS_Multi_RAB_Establish_Success_Rate(Without_Nas)(CELL_Eric)]";
+                        KPI_H = "[CSPS_RAB_Setup_Success_Ratio]";
+                        KPI_N = "[CSAMR+PS_MRAB_STP_SR]";
+                    }
+                    if (KPI == "Inter_Carrier_HO_SR")
+                    {
+                        KPI_E = "[Inter_Carrier_HO_Success_Rate(UCell_Eric)]";
+                        KPI_H = "[Inter_Carrier_HO_Success_Rate]";
+                        KPI_N = "[Inter_Carrier_HO_Success_Rate]";
+                    }
+                    if (KPI == "CS_Traffic")
+                    {
+                        KPI_E = "[CS_Traffic]";
+                        KPI_H = "[CS_Erlang]";
+                        KPI_N = "[CS_Traffic]";
+                    }
+                    if (KPI == "Cell_Availability")
+                    {
+                        KPI_E = "[Cell_Availability_Rate_Exclude_Blocking(UCELL_Eric)]";
+                        KPI_H = "[Radio_Network_Availability_Ratio(Hu_Cell)]";
+                        KPI_N = "[Cell_Availability_excluding_blocked_by_user_state]";
+                    }
+                }
+                if (Technology == "3G_PS")
+                {
+                    Traffic_E = "[PS_Volume(GB)(UCell_Eric)]"; Ave_E = "[Cell_Availability_Rate_Exclude_Blocking(UCELL_Eric)]";
+                    Traffic_H = "[PAYLOAD]"; Ave_H = "[Radio_Network_Availability_Ratio(Hu_Cell)]";
+                    Traffic_N = "[PS_Payload_Total(HS+R99)(Nokia_CELL)_GB]"; Ave_N = "[Cell_Availability_excluding_blocked_by_user_state(Nokia_UCell)]";
+                    if (KPI == "HSDPA_SR")
+                    {
+                        KPI_E = "[HSDPA_RAB_Setup_Succ_Rate(UCell_Eric)]";
+                        KPI_H = "[HSDPA_RAB_Setup_Success_Ratio(Hu_Cell)]";
+                        KPI_N = "[HSDPA_setup_success_ratio_from_user_perspective(CELL_Nokia)]";
+                    }
+                    if (KPI == "HSUPA_SR")
+                    {
+                        KPI_E = "[HSUPA_Setup_Success_Rate(UCell_Eric)]";
+                        KPI_H = "[HSUPA_RAB_Setup_Success_Ratio(Hu_Cell)]";
+                        KPI_N = "[HSUPA_Setup_Success_Ratio_from_user_perspective(CELL)]";
+                    }
+                    if (KPI == "DL_User_THR (Mbps)")
+                    {
+                        KPI_E = "[HS_USER_Throughput_NET_PQ(Mbps)(UCell_Eric)]";
+                        KPI_H = "[AVERAGE_HSDPA_USER_THROUGHPUT_DC+SC(Mbit/s)(CELL_HUAWEI)]";
+                        KPI_N = "[AVERAGE_HSDPA_USER_THROUGHPUT_DC+SC(Mbit/s)(Nokia_CELL)]";
+                    }
+                    if (KPI == "UL_User_THR (Kbps)")
+                    {
+                        KPI_E = "[HSUPA_User_Throughput_MACe(Kbps)(UCell_Eric)]";
+                        KPI_H = "[hsupa_uplink_throughput_in_V16(CELL_Hu)]";
+                        KPI_N = "[Average_hsupa_throughput_MACe(nokia_cell)]";
+                    }
+                    if (KPI == "HSDAP_Drop_Rate")
+                    {
+                        KPI_E = "[HSDPA_Drop_Call_Rate(UCell_Eric)]";
+                        KPI_H = "[HSDPA_cdr(%)_(Hu_Cell)_new]";
+                        KPI_N = "[HSDPA_Call_Drop_Rate(Nokia_Cell)]";
+                    }
+                    if (KPI == "HSUAP_Drop_Rate")
+                    {
+                        KPI_E = "[HSUPA_Drop_Call_Rate(UCell_Eric)]";
+                        KPI_H = "[HSUPA_CDR(%)_(Hu_Cell)_new]";
+                        KPI_N = "[HSUPA_Call_Drop_Rate(Nokia_CELL)]";
+                    }
+                    if (KPI == "PS_RRC_SR")
+                    {
+                        KPI_E = "[PS_RRC_Setup_Success_Rate(UCell_Eric)]";
+                        KPI_H = "[PS_RRC_Connection_success_Rate_repeatless(Hu_Cell)]";
+                        KPI_N = "[PS_RRCSETUP_SR]";
+                    }
+                    if (KPI == "Ps_RAB_Establish")
+                    {
+                        KPI_E = "[Ps_RAB_Establish_Success_Rate]";
+                        KPI_H = "[PS_RAB_Setup_Success_Ratio]";
+                        KPI_N = "[PS_RAB_Setup_Success_Ratio]";
+                    }
+                    if (KPI == "PS_MultiRAB_Establish")
+                    {
+                        KPI_E = "[PS_Multi_RAB_Establish_Success_Rate(without_Nas)(UCELL_Eric)]";
+                        KPI_H = "[CS+PS_RAB_Setup_Success_Ratio]";
+                        KPI_N = "[CSAMR+PS_MRAB_stp_SR(Nokia_CELL)]";
+                    }
+                    if (KPI == "PS_Drop_Rate")
+                    {
+                        KPI_E = "[PS_Drop_Call_Rate(UCell_Eric)]";
+                        KPI_H = "[PS_Call_Drop_Ratio]";
+                        KPI_N = "[Packet_Session_Drop_Ratio_NOKIA(CELL_NOKIA)]";
+                    }
+                    if (KPI == "HSDPA_Cell_Change_SR")
+                    {
+                        KPI_E = "[HSDPA_Cell_Change_Succ_Rate(UCell_Eric)]";
+                        KPI_H = "[HSDPA_Soft_HandOver_Success_Ratio]";
+                        KPI_N = "[HSDPA_Cell_Change_SR(Nokia_CELL)]";
+                    }
+                    if (KPI == "HS_Share_Payload")
+                    {
+                        KPI_E = "[HS_share_PAYLOAD_Rate(UCell_Eric)]";
+                        KPI_H = "[HS_share_PAYLOAD_%]";
+                        KPI_N = "[HS_SHARE_PAYLOAD(Nokia_CELL)]";
+                    }
+                    if (KPI == "DL_Cell_THR (Mbps)")
+                    {
+                        KPI_E = "[HSDPA_Cell_Scheduled_Throughput(mbps)(UCell_Eric)]";
+                        KPI_H = "[HSDPA_SCHEDULING_Cell_throughput(CELL_HUAWEI)]";
+                        KPI_N = "[Active_HS-DSCH_cell_throughput_mbs(CELL_nokia)]";
+                    }
+                    if (KPI == "RSSI (dBm)")
+                    {
+                        KPI_E = "[uplink_average_RSSI_dbm_(Eric_UCELL)]";
+                        KPI_H = "[Mean_RTWP(Cell_Hu)]";
+                        KPI_N = "[average_RTWP_dbm(Nokia_Cell)]";
+                    }
+                    if (KPI == "Average CQI")
+                    {
+                        KPI_E = "[Avg_CQI(UCell_Eric)]";
+                        KPI_H = "[CQI_new(Hu_Cell)]";
+                        KPI_N = "[AVERAGE_CQI(cell_nokia)]";
+                    }
+                    if (KPI == "PS_Payload (GB)")
+                    {
+                        KPI_E = "[PS_Volume(GB)(UCell_Eric)]";
+                        KPI_H = "[PAYLOAD]";
+                        KPI_N = "[PS_Payload_Total(HS+R99)(Nokia_CELL)_GB]";
+                    }
+                    if (KPI == "Cell_Availability")
+                    {
+                        KPI_E = "[Cell_Availability_Rate_Exclude_Blocking(UCELL_Eric)]";
+                        KPI_H = "[Radio_Network_Availability_Ratio(Hu_Cell)]";
+                        KPI_N = "[Cell_Availability_excluding_blocked_by_user_state(Nokia_UCell)]";
                     }
                 }
                 if (Technology == "4G")
                 {
-                    for (int k = 1; k <= listBox1.SelectedItems.Count; k++)
+                    Traffic_E = "[Total_Volume(UL+DL)(GB)(eNodeB_Eric)]"; Ave_E = "[Cell_Availability_Rate_Exclude_Blocking(Cell_EricLTE)]";
+                    Traffic_H = "[Total_Traffic_Volume(GB)]"; Ave_H = "[Cell_Availability_Rate_Exclude_Blocking(Cell_Hu)]";
+                    Traffic_N = "[Total_Payload_GB(Nokia_LTE_CELL)]"; Ave_N = "[cell_availability_exclude_manual_blocking(Nokia_LTE_CELL)]";
+                    if (KPI == "RRC_Connection_SR")
                     {
-                        string Node = listBox1.SelectedItems[k - 1].ToString();
-                        Node_Index_List = Node_Index_List + "Province='" + Node + "' or ";
-
-                        if (Node == "Chahar Mahal Va Bakhtiari")
-                        {
-                            Node_Index_List = Node_Index_List + "Province='Charmahal' or ";
-                        }
-                        if (Node == "East Azarbaijan")
-                        {
-                            Node_Index_List = Node_Index_List + "Province='AZARSHARGHI' or ";
-                        }
-                        if (Node == "Khorasan Razavi")
-                        {
-                            Node_Index_List = Node_Index_List + "Province='KHORASANRAZAVI' or ";
-                        }
-                        if (Node == "West Azarbaijan")
-                        {
-                            Node_Index_List = Node_Index_List + "Province='AZARGHARBI' or ";
-                        }
-
+                        KPI_E = "[RRC_Estab_Success_Rate(ReAtt)(EUCell_Eric)]";
+                        KPI_H = "[RRC_Connection_Setup_Success_Rate_service]";
+                        KPI_N = "[RRC_Connection_Setup_Success_Ratio(Nokia_LTE_CELL)]";
+                    }
+                    if (KPI == "ERAB_SR_Initial")
+                    {
+                        KPI_E = "[Initial_ERAB_Estab_Success_Rate(eNodeB_Eric)]";
+                        KPI_H = "[E-RAB_Setup_Success_Rate]";
+                        KPI_N = "[Initial_E-RAB_Setup_Success_Ratio(Nokia_LTE_CELL)]";
+                    }
+                    if (KPI == "ERAB_SR_Added")
+                    {
+                        KPI_E = "[E-RAB_Setup_SR_incl_added_New(EUCell_Eric)]";
+                        KPI_H = "[E-RAB_Setup_Success_Rate(Hu_Cell)]";
+                        KPI_N = "[E-RAB_Setup_SR_incl_added(Nokia_LTE_CELL)]";
+                    }
+                    if (KPI == "DL_THR (Mbps)")
+                    {
+                        KPI_E = "[Average_UE_DL_Throughput(Mbps)(eNodeB_Eric)]";
+                        KPI_H = "[Average_Downlink_User_Throughput(Mbit/s)]";
+                        KPI_N = "[User_Throughput_DL_mbps(Nokia_LTE_CELL)]";
+                    }
+                    if (KPI == "UL_THR (Mbps)")
+                    {
+                        KPI_E = "[Average_UE_UL_Throughput(Mbps)(eNodeB_Eric)]";
+                        KPI_H = "[Average_UPlink_User_Throughput(Mbit/s)]";
+                        KPI_N = "[User_Throughput_UL_mbps(Nokia_LTE_CELL)]";
+                    }
+                    if (KPI == "ERAB_Drop_Rate")
+                    {
+                        KPI_E = "[E_RAB_Drop_Rate(eNodeB_Eric)]";
+                        KPI_H = "[Call_Drop_Rate]";
+                        KPI_N = "[E-RAB_Drop_Ratio_RAN_View(Nokia_LTE_CELL)]";
+                    }
+                    if (KPI == "S1_Signalling_SR")
+                    {
+                        KPI_E = "[S1Signal_Estab_Success_Rate(EUCell_Eric)]";
+                        KPI_H = "[S1Signal_E-RAB_Setup_SR(Hu_Cell)]";
+                        KPI_N = "[S1Signal_E-RAB_Setup_SR(Nokia_LTE_CELL)]";
+                    }
+                    if (KPI == "Intra_Freq_SR")
+                    {
+                        KPI_E = "[IntraF_Handover_Execution(eNodeB_Eric)]";
+                        KPI_H = "[IntraF_HOOut_SR]";
+                        KPI_N = "[HO_Success_Ratio_intra_eNB(Nokia_LTE_CELL)]";
+                    }
+                    if (KPI == "Inter_Freq_SR")
+                    {
+                        KPI_E = "[InterF_Handover_Execution(eNodeB_Eric)]";
+                        KPI_H = "[InterF_HOOut_SR]";
+                        KPI_N = "[Inter-Freq_HO_SR(Nokia_LTE_CELL)]";
+                    }
+                    if (KPI == "UL_Packet_Loss")
+                    {
+                        KPI_E = "[Average_UE_Ul_Packet_Loss_Rate(eNodeB_Eric)]";
+                        KPI_H = "[Average_UL_Packet_Loss_%(Huawei_LTE_UCell)]";
+                        KPI_N = "[Packet_loss_UL(Nokia_EUCELL)]";
+                    }
+                    if (KPI == "UE_DL_Latency (ms)")
+                    {
+                        KPI_E = "[Average_UE_DL_Latency(ms)(eNodeB_Eric)]";
+                        KPI_H = "[Average_DL_Latency_ms(Huawei_LTE_EUCell)]";
+                        KPI_N = "[Average_Latency_DL_ms(Nokia_LTE_CELL)]";
+                    }
+                    if (KPI == "Average CQI")
+                    {
+                        KPI_E = "[CQI_(EUCell_Eric)]";
+                        KPI_H = "[Average_CQI(Huawei_LTE_Cell)]";
+                        KPI_N = "[Average_CQI(Nokia_LTE_CELL)]";
+                    }
+                    if (KPI == "PUCCH_RSSI (dBm)")
+                    {
+                        KPI_E = "[RSSI_PUCCH]";
+                        KPI_H = "[RSSI_PUCCH]";
+                        KPI_N = "[RSSI_PUCCH]";
+                    }
+                    if (KPI == "PUSCH_RSSI (dBm)")
+                    {
+                        KPI_E = "[RSSI_PUSCH]";
+                        KPI_H = "[RSSI_PUSCH]";
+                        KPI_N = "[RSSI_PUSCH]";
+                    }
+                    if (KPI == "Total_Paylaod (GB)")
+                    {
+                        KPI_E = "[Total_Volume(UL+DL)(GB)(eNodeB_Eric)]";
+                        KPI_H = "[Total_Traffic_Volume(GB)]";
+                        KPI_N = "[Total_Payload_GB(Nokia_LTE_CELL)]";
+                    }
+                    if (KPI == "Cell_Availability")
+                    {
+                        KPI_E = "[Cell_Availability_Rate_Exclude_Blocking(Cell_EricLTE)]";
+                        KPI_H = "[Cell_Availability_Rate_Exclude_Blocking(Cell_Hu)]";
+                        KPI_N = "[cell_availability_exclude_manual_blocking(Nokia_LTE_CELL)]";
                     }
                 }
-
-                if (Node_Index_List != "")
+                string s1_E = "";
+                string s2_E = "";
+                string s1_H = "";
+                string s2_H = "";
+                string s1_N = "";
+                string s2_N = "";
+                if (textBox1.Text != "" && textBox2.Text != "" && textBox3.Text != "")
                 {
-                    Node_Index_List = Node_Index_List.Substring(0, Node_Index_List.Length - 4);
+                    s2_E = KPI_E + sign + textBox3.Text + " and " + Ave_E + ">=" + textBox1.Text + " and " + Traffic_E + ">=" + textBox2.Text;
+                    s2_H = KPI_H + sign + textBox3.Text + " and " + Ave_H + ">=" + textBox1.Text + " and " + Traffic_H + ">=" + textBox2.Text;
+                    s2_N = KPI_N + sign + textBox3.Text + " and " + Ave_N + ">=" + textBox1.Text + " and " + Traffic_N + ">=" + textBox2.Text;
                 }
-
-
-
-
-
-                if (Interval == "Daily")
+                if (textBox1.Text == "" && textBox2.Text != "" && textBox3.Text != "")
                 {
-                    string KPI_E = "";
-                    string Traffic_E = "";
-                    string Ave_E = "";
-                    string KPI_H = "";
-                    string Traffic_H = "";
-                    string Ave_H = "";
-                    string KPI_N = "";
-                    string Traffic_N = "";
-                    string Ave_N = "";
+                    s2_E = KPI_E + sign + textBox3.Text + " and " + Traffic_E + ">=" + textBox2.Text;
+                    s2_H = KPI_H + sign + textBox3.Text + " and " + Traffic_H + ">=" + textBox2.Text;
+                    s2_N = KPI_N + sign + textBox3.Text + " and " + Traffic_N + ">=" + textBox2.Text;
+                }
+                if (textBox1.Text != "" && textBox2.Text == "" && textBox3.Text != "")
+                {
+                    s2_E = KPI_E + sign + textBox3.Text + " and " + Ave_E + ">=" + textBox1.Text;
+                    s2_H = KPI_H + sign + textBox3.Text + " and " + Ave_H + ">=" + textBox1.Text;
+                    s2_N = KPI_N + sign + textBox3.Text + " and " + Ave_N + ">=" + textBox1.Text;
+                }
+                if (textBox1.Text == "" && textBox2.Text == "" && textBox3.Text != "")
+                {
+                    s2_E = KPI_E + sign + textBox3.Text;
+                    s2_H = KPI_H + sign + textBox3.Text;
+                    s2_N = KPI_N + sign + textBox3.Text;
+
+                }
+                if (textBox3.Text == "")
+                {
+                    MessageBox.Show("Please input the KPI Threshold");
+                }
+                if (textBox3.Text != "")
+                {
                     if (Technology == "2G")
                     {
-                        Traffic_E = "[TCH_Traffic]"; Ave_E = "[TCH_Availability]";
-                        Traffic_H = "[TCH_Traffic]"; Ave_H = "[TCH_Availability]";
-                        Traffic_N = "[TCH_Traffic]"; Ave_N = "[TCH_Availability]";
-                        if (KPI == "CSSR")
-                        {
-                            KPI_E = "[CSSR_MCI]";
-                            KPI_H = "[CSSR3]";
-                            KPI_N = "[CSSR_MCI]";
-                        }
-                        if (KPI == "IHSR")
-                        {
-                            KPI_E = "[IHSR]";
-                            KPI_H = "[IHSR2]";
-                            KPI_N = "[IHSR]";
-                        }
-                        if (KPI == "OHSR")
-                        {
-                            KPI_E = "[OHSR]";
-                            KPI_H = "[OHSR2]";
-                            KPI_N = "[OHSR]";
-                        }
-                        if (KPI == "CDR")
-                        {
-                            KPI_E = "[CDR(not Affected by incoming Handovers from 3G)(Eric_CELL)]";
-                            KPI_H = "[CDR3]";
-                            KPI_N = "[CDR(including_CS_IRAT_handovers_3G_to2G)(Nokia_SEG)]";
-                        }
-                        if (KPI == "RxQual_DL")
-                        {
-                            KPI_E = "[RxQual_DL]";
-                            KPI_H = "[RX_QUALITTY_DL_NEW]";
-                            KPI_N = "[RxQuality_DL]";
-                        }
-                        if (KPI == "RxQual_UL")
-                        {
-                            KPI_E = "[RxQual_UL]";
-                            KPI_H = "[RX_QUALITTY_UL_NEW]";
-                            KPI_N = "[RxQuality_UL]";
-                        }
-                        if (KPI == "SDCCH_Access_SR")
-                        {
-                            KPI_E = "[SDCCH_Access_Succ_Rate]";
-                            KPI_H = "[SDCCH_Access_Success_Rate2]";
-                            KPI_N = "[SDCCH_Access_Success_Rate]";
-                        }
-                        if (KPI == "SDCCH_Congestion")
-                        {
-                            KPI_E = "[SDCCH_Congestion]";
-                            KPI_H = "[SDCCH_Congestion_Rate]";
-                            KPI_N = "[SDCCH_Congestion_Rate]";
-                        }
-                        if (KPI == "SDCCH_Drop_Rate")
-                        {
-                            KPI_E = "[SDCCH_Drop_Rate]";
-                            KPI_H = "[SDCCH_Drop_Rate]";
-                            KPI_N = "[SDCCH_Drop_Rate]";
-                        }
-                        if (KPI == "TCH_Assign_FR")
-                        {
-                            KPI_E = "[TCH_Assign_Fail_Rate(NAK)(Eric_CELL)]";
-                            KPI_H = "[TCH_Assignment_FR]";
-                            KPI_N = "[TCH_Assignment_FR]";
-                        }
-                        if (KPI == "TCH_Congestion")
-                        {
-                            KPI_E = "[TCH_Congestion]";
-                            KPI_H = "[TCH_Cong]";
-                            KPI_N = "[TCH_Cong_Rate]";
-                        }
-                        if (KPI == "TCH_Traffic")
-                        {
-                            KPI_E = "[TCH_Traffic]";
-                            KPI_H = "[TCH_Traffic]";
-                            KPI_N = "[TCH_Traffic]";
-                        }
-                        if (KPI == "TCH_Availability")
-                        {
-                            KPI_E = "[TCH_Availability]";
-                            KPI_H = "[TCH_Availability]";
-                            KPI_N = "[TCH_Availability]";
-                        }
+                        s1_E = KPI_E + "as'" + KPI + "' , " + Traffic_E + "as " + "'Traffic(Erlang)'" + " , " + Ave_E + "as " + "'Availability'" + " from [CC2_Ericsson_Cell_Daily]";
+                        s1_H = KPI_H + "as'" + KPI + "' , " + Traffic_H + "as " + "'Traffic(Erlang)'" + " , " + Ave_H + "as " + "'Availability'" + " from [CC2_Huawei_Cell_Daily]";
+                        s1_N = KPI_N + "as'" + KPI + "' , " + Traffic_N + "as " + "'Traffic(Erlang)'" + " , " + Ave_N + "as " + "'Availability'" + " from [CC2_Nokia_Cell_Daily]";
                     }
                     if (Technology == "3G_CS")
                     {
-                        Traffic_E = "[CS_Traffic]"; Ave_E = "[Cell_Availability_Rate_Exclude_Blocking(UCELL_Eric)]";
-                        Traffic_H = "[CS_Erlang]"; Ave_H = "[Radio_Network_Availability_Ratio(Hu_Cell)]";
-                        Traffic_N = "[CS_Traffic]"; Ave_N = "[Cell_Availability_excluding_blocked_by_user_state]";
-                        if (KPI == "CS_RAB_Establish")
-                        {
-                            KPI_E = "[Cs_RAB_Establish_Success_Rate]";
-                            KPI_H = "[CS_RAB_Setup_Success_Ratio]";
-                            KPI_N = "[CS_RAB_Establish_Success_Rate]";
-                        }
-                        if (KPI == "CS_IRAT_HO_SR")
-                        {
-                            KPI_E = "[IRAT_HO_Voice_Suc_Rate]";
-                            KPI_H = "[CS_IRAT_HO_SR]";
-                            KPI_N = "[Inter_sys_RT_Hard_HO_SR_3Gto2G(CELL_nokia)]";
-                        }
-                        if (KPI == "CS_Drop_Rate")
-                        {
-                            KPI_E = "[CS_Drop_Call_Rate]";
-                            KPI_H = "[AMR_Call_Drop_Ratio_New(Hu_CELL)]";
-                            KPI_N = "[CS_Drop_Call_Rate]";
-                        }
-                        if (KPI == "Soft_HO_SR")
-                        {
-                            KPI_E = "[Soft_HO_Suc_Rate]";
-                            KPI_H = "[Softer_Handover_Success_Ratio(Hu_Cell)]";
-                            KPI_N = "[Soft_HO_Success_rate_RT]";
-                        }
-                        if (KPI == "CS_RRC_SR")
-                        {
-                            KPI_E = "[CS_RRC_Setup_Success_Rate]";
-                            KPI_H = "[CS_RRC_Connection_Establishment_SR]";
-                            KPI_N = "[CS_RRC_SETUP_SR_WITHOUT_REPEAT(CELL_NOKIA)]";
-                        }
-                        if (KPI == "CS_MultiRAB_SR")
-                        {
-                            KPI_E = "[CS_Multi_RAB_Establish_Success_Rate(Without_Nas)(CELL_Eric)]";
-                            KPI_H = "[CSPS_RAB_Setup_Success_Ratio]";
-                            KPI_N = "[CSAMR+PS_MRAB_STP_SR]";
-                        }
-                        if (KPI == "Inter_Carrier_HO_SR")
-                        {
-                            KPI_E = "[Inter_Carrier_HO_Success_Rate(UCell_Eric)]";
-                            KPI_H = "[Inter_Carrier_HO_Success_Rate]";
-                            KPI_N = "[Inter_Carrier_HO_Success_Rate]";
-                        }
-                        if (KPI == "CS_Traffic")
-                        {
-                            KPI_E = "[CS_Traffic]";
-                            KPI_H = "[CS_Erlang]";
-                            KPI_N = "[CS_Traffic]";
-                        }
-                        if (KPI == "Cell_Availability")
-                        {
-                            KPI_E = "[Cell_Availability_Rate_Exclude_Blocking(UCELL_Eric)]";
-                            KPI_H = "[Radio_Network_Availability_Ratio(Hu_Cell)]";
-                            KPI_N = "[Cell_Availability_excluding_blocked_by_user_state]";
-                        }
+                        s1_E = KPI_E + "as'" + KPI + "' , " + Traffic_E + "as " + "'Traffic(Erlang)'" + " , " + Ave_E + "as " + "'Availability'" + " from [CC3_Ericsson_Cell_Daily]";
+                        s1_H = KPI_H + "as'" + KPI + "' , " + Traffic_H + "as " + "'Traffic(Erlang)'" + " , " + Ave_H + "as " + "'Availability'" + " from [CC3_Huawei_Cell_Daily]";
+                        s1_N = KPI_N + "as'" + KPI + "' , " + Traffic_N + "as " + "'Traffic(Erlang)'" + " , " + Ave_N + "as " + "'Availability'" + " from [CC3_Nokia_Cell_Daily]";
                     }
                     if (Technology == "3G_PS")
                     {
-                        Traffic_E = "[PS_Volume(GB)(UCell_Eric)]"; Ave_E = "[Cell_Availability_Rate_Exclude_Blocking(UCELL_Eric)]";
-                        Traffic_H = "[PAYLOAD]"; Ave_H = "[Radio_Network_Availability_Ratio(Hu_Cell)]";
-                        Traffic_N = "[PS_Payload_Total(HS+R99)(Nokia_CELL)_GB]"; Ave_N = "[Cell_Availability_excluding_blocked_by_user_state(Nokia_UCell)]";
-                        if (KPI == "HSDPA_SR")
-                        {
-                            KPI_E = "[HSDPA_RAB_Setup_Succ_Rate(UCell_Eric)]";
-                            KPI_H = "[HSDPA_RAB_Setup_Success_Ratio(Hu_Cell)]";
-                            KPI_N = "[HSDPA_setup_success_ratio_from_user_perspective(CELL_Nokia)]";
-                        }
-                        if (KPI == "HSUPA_SR")
-                        {
-                            KPI_E = "[HSUPA_Setup_Success_Rate(UCell_Eric)]";
-                            KPI_H = "[HSUPA_RAB_Setup_Success_Ratio(Hu_Cell)]";
-                            KPI_N = "[HSUPA_Setup_Success_Ratio_from_user_perspective(CELL)]";
-                        }
-                        if (KPI == "DL_User_THR (Mbps)")
-                        {
-                            KPI_E = "[HS_USER_Throughput_NET_PQ(Mbps)(UCell_Eric)]";
-                            KPI_H = "[AVERAGE_HSDPA_USER_THROUGHPUT_DC+SC(Mbit/s)(CELL_HUAWEI)]";
-                            KPI_N = "[AVERAGE_HSDPA_USER_THROUGHPUT_DC+SC(Mbit/s)(Nokia_CELL)]";
-                        }
-                        if (KPI == "UL_User_THR (Kbps)")
-                        {
-                            KPI_E = "[HSUPA_User_Throughput_MACe(Kbps)(UCell_Eric)]";
-                            KPI_H = "[hsupa_uplink_throughput_in_V16(CELL_Hu)]";
-                            KPI_N = "[Average_hsupa_throughput_MACe(nokia_cell)]";
-                        }
-                        if (KPI == "HSDAP_Drop_Rate")
-                        {
-                            KPI_E = "[HSDPA_Drop_Call_Rate(UCell_Eric)]";
-                            KPI_H = "[HSDPA_cdr(%)_(Hu_Cell)_new]";
-                            KPI_N = "[HSDPA_Call_Drop_Rate(Nokia_Cell)]";
-                        }
-                        if (KPI == "HSUAP_Drop_Rate")
-                        {
-                            KPI_E = "[HSUPA_Drop_Call_Rate(UCell_Eric)]";
-                            KPI_H = "[HSUPA_CDR(%)_(Hu_Cell)_new]";
-                            KPI_N = "[HSUPA_Call_Drop_Rate(Nokia_CELL)]";
-                        }
-                        if (KPI == "PS_RRC_SR")
-                        {
-                            KPI_E = "[PS_RRC_Setup_Success_Rate(UCell_Eric)]";
-                            KPI_H = "[PS_RRC_Connection_success_Rate_repeatless(Hu_Cell)]";
-                            KPI_N = "[PS_RRCSETUP_SR]";
-                        }
-                        if (KPI == "Ps_RAB_Establish")
-                        {
-                            KPI_E = "[Ps_RAB_Establish_Success_Rate]";
-                            KPI_H = "[PS_RAB_Setup_Success_Ratio]";
-                            KPI_N = "[PS_RAB_Setup_Success_Ratio]";
-                        }
-                        if (KPI == "PS_MultiRAB_Establish")
-                        {
-                            KPI_E = "[PS_Multi_RAB_Establish_Success_Rate(without_Nas)(UCELL_Eric)]";
-                            KPI_H = "[CS+PS_RAB_Setup_Success_Ratio]";
-                            KPI_N = "[CSAMR+PS_MRAB_stp_SR(Nokia_CELL)]";
-                        }
-                        if (KPI == "PS_Drop_Rate")
-                        {
-                            KPI_E = "[PS_Drop_Call_Rate(UCell_Eric)]";
-                            KPI_H = "[PS_Call_Drop_Ratio]";
-                            KPI_N = "[Packet_Session_Drop_Ratio_NOKIA(CELL_NOKIA)]";
-                        }
-                        if (KPI == "HSDPA_Cell_Change_SR")
-                        {
-                            KPI_E = "[HSDPA_Cell_Change_Succ_Rate(UCell_Eric)]";
-                            KPI_H = "[HSDPA_Soft_HandOver_Success_Ratio]";
-                            KPI_N = "[HSDPA_Cell_Change_SR(Nokia_CELL)]";
-                        }
-                        if (KPI == "HS_Share_Payload")
-                        {
-                            KPI_E = "[HS_share_PAYLOAD_Rate(UCell_Eric)]";
-                            KPI_H = "[HS_share_PAYLOAD_%]";
-                            KPI_N = "[HS_SHARE_PAYLOAD(Nokia_CELL)]";
-                        }
-                        if (KPI == "DL_Cell_THR (Mbps)")
-                        {
-                            KPI_E = "[HSDPA_Cell_Scheduled_Throughput(mbps)(UCell_Eric)]";
-                            KPI_H = "[HSDPA_SCHEDULING_Cell_throughput(CELL_HUAWEI)]";
-                            KPI_N = "[Active_HS-DSCH_cell_throughput_mbs(CELL_nokia)]";
-                        }
-                        if (KPI == "RSSI (dBm)")
-                        {
-                            KPI_E = "[uplink_average_RSSI_dbm_(Eric_UCELL)]";
-                            KPI_H = "[Mean_RTWP(Cell_Hu)]";
-                            KPI_N = "[average_RTWP_dbm(Nokia_Cell)]";
-                        }
-                        if (KPI == "Average CQI")
-                        {
-                            KPI_E = "[Avg_CQI(UCell_Eric)]";
-                            KPI_H = "[CQI_new(Hu_Cell)]";
-                            KPI_N = "[AVERAGE_CQI(cell_nokia)]";
-                        }
-                        if (KPI == "PS_Payload (GB)")
-                        {
-                            KPI_E = "[PS_Volume(GB)(UCell_Eric)]";
-                            KPI_H = "[PAYLOAD]";
-                            KPI_N = "[PS_Payload_Total(HS+R99)(Nokia_CELL)_GB]";
-                        }
-                        if (KPI == "Cell_Availability")
-                        {
-                            KPI_E = "[Cell_Availability_Rate_Exclude_Blocking(UCELL_Eric)]";
-                            KPI_H = "[Radio_Network_Availability_Ratio(Hu_Cell)]";
-                            KPI_N = "[Cell_Availability_excluding_blocked_by_user_state(Nokia_UCell)]";
-                        }
+                        s1_E = KPI_E + "as'" + KPI + "' , " + Traffic_E + "as " + "'Paylaod(GB)'" + " , " + Ave_E + "as " + "'Availability'" + " from [RD3_Ericsson_Cell_Daily]";
+                        s1_H = KPI_H + "as'" + KPI + "' , " + Traffic_H + "as " + "'Paylaod(GB)'" + " , " + Ave_H + "as " + "'Availability'" + " from [RD3_Huawei_Cell_Daily]";
+                        s1_N = KPI_N + "as'" + KPI + "' , " + Traffic_N + "as " + "'Paylaod(GB)'" + " , " + Ave_N + "as " + "'Availability'" + " from [RD3_Nokia_Cell_Daily]";
                     }
                     if (Technology == "4G")
                     {
-                        Traffic_E = "[Total_Volume(UL+DL)(GB)(eNodeB_Eric)]"; Ave_E = "[Cell_Availability_Rate_Exclude_Blocking(Cell_EricLTE)]";
-                        Traffic_H = "[Total_Traffic_Volume(GB)]"; Ave_H = "[Cell_Availability_Rate_Exclude_Blocking(Cell_Hu)]";
-                        Traffic_N = "[Total_Payload_GB(Nokia_LTE_CELL)]"; Ave_N = "[cell_availability_exclude_manual_blocking(Nokia_LTE_CELL)]";
-                        if (KPI == "RRC_Connection_SR")
-                        {
-                            KPI_E = "[RRC_Estab_Success_Rate(ReAtt)(EUCell_Eric)]";
-                            KPI_H = "[RRC_Connection_Setup_Success_Rate_service]";
-                            KPI_N = "[RRC_Connection_Setup_Success_Ratio(Nokia_LTE_CELL)]";
-                        }
-                        if (KPI == "ERAB_SR_Initial")
-                        {
-                            KPI_E = "[Initial_ERAB_Estab_Success_Rate(eNodeB_Eric)]";
-                            KPI_H = "[E-RAB_Setup_Success_Rate]";
-                            KPI_N = "[Initial_E-RAB_Setup_Success_Ratio(Nokia_LTE_CELL)]";
-                        }
-                        if (KPI == "ERAB_SR_Added")
-                        {
-                            KPI_E = "[E-RAB_Setup_SR_incl_added_New(EUCell_Eric)]";
-                            KPI_H = "[E-RAB_Setup_Success_Rate(Hu_Cell)]";
-                            KPI_N = "[E-RAB_Setup_SR_incl_added(Nokia_LTE_CELL)]";
-                        }
-                        if (KPI == "DL_THR (Mbps)")
-                        {
-                            KPI_E = "[Average_UE_DL_Throughput(Mbps)(eNodeB_Eric)]";
-                            KPI_H = "[Average_Downlink_User_Throughput(Mbit/s)]";
-                            KPI_N = "[User_Throughput_DL_mbps(Nokia_LTE_CELL)]";
-                        }
-                        if (KPI == "UL_THR (Mbps)")
-                        {
-                            KPI_E = "[Average_UE_UL_Throughput(Mbps)(eNodeB_Eric)]";
-                            KPI_H = "[Average_UPlink_User_Throughput(Mbit/s)]";
-                            KPI_N = "[User_Throughput_UL_mbps(Nokia_LTE_CELL)]";
-                        }
-                        if (KPI == "ERAB_Drop_Rate")
-                        {
-                            KPI_E = "[E_RAB_Drop_Rate(eNodeB_Eric)]";
-                            KPI_H = "[Call_Drop_Rate]";
-                            KPI_N = "[E-RAB_Drop_Ratio_RAN_View(Nokia_LTE_CELL)]";
-                        }
-                        if (KPI == "S1_Signalling_SR")
-                        {
-                            KPI_E = "[S1Signal_Estab_Success_Rate(EUCell_Eric)]";
-                            KPI_H = "[S1Signal_E-RAB_Setup_SR(Hu_Cell)]";
-                            KPI_N = "[S1Signal_E-RAB_Setup_SR(Nokia_LTE_CELL)]";
-                        }
-                        if (KPI == "Intra_Freq_SR")
-                        {
-                            KPI_E = "[IntraF_Handover_Execution(eNodeB_Eric)]";
-                            KPI_H = "[IntraF_HOOut_SR]";
-                            KPI_N = "[HO_Success_Ratio_intra_eNB(Nokia_LTE_CELL)]";
-                        }
-                        if (KPI == "Inter_Freq_SR")
-                        {
-                            KPI_E = "[InterF_Handover_Execution(eNodeB_Eric)]";
-                            KPI_H = "[InterF_HOOut_SR]";
-                            KPI_N = "[Inter-Freq_HO_SR(Nokia_LTE_CELL)]";
-                        }
-                        if (KPI == "UL_Packet_Loss")
-                        {
-                            KPI_E = "[Average_UE_Ul_Packet_Loss_Rate(eNodeB_Eric)]";
-                            KPI_H = "[Average_UL_Packet_Loss_%(Huawei_LTE_UCell)]";
-                            KPI_N = "[Packet_loss_UL(Nokia_EUCELL)]";
-                        }
-                        if (KPI == "UE_DL_Latency (ms)")
-                        {
-                            KPI_E = "[Average_UE_DL_Latency(ms)(eNodeB_Eric)]";
-                            KPI_H = "[Average_DL_Latency_ms(Huawei_LTE_EUCell)]";
-                            KPI_N = "[Average_Latency_DL_ms(Nokia_LTE_CELL)]";
-                        }
-                        if (KPI == "Average CQI")
-                        {
-                            KPI_E = "[CQI_(EUCell_Eric)]";
-                            KPI_H = "[Average_CQI(Huawei_LTE_Cell)]";
-                            KPI_N = "[Average_CQI(Nokia_LTE_CELL)]";
-                        }
-                        if (KPI == "PUCCH_RSSI (dBm)")
-                        {
-                            KPI_E = "[RSSI_PUCCH]";
-                            KPI_H = "[RSSI_PUCCH]";
-                            KPI_N = "[RSSI_PUCCH]";
-                        }
-                        if (KPI == "PUSCH_RSSI (dBm)")
-                        {
-                            KPI_E = "[RSSI_PUSCH]";
-                            KPI_H = "[RSSI_PUSCH]";
-                            KPI_N = "[RSSI_PUSCH]";
-                        }
-                        if (KPI == "Total_Paylaod (GB)")
-                        {
-                            KPI_E = "[Total_Volume(UL+DL)(GB)(eNodeB_Eric)]";
-                            KPI_H = "[Total_Traffic_Volume(GB)]";
-                            KPI_N = "[Total_Payload_GB(Nokia_LTE_CELL)]";
-                        }
-                        if (KPI == "Cell_Availability")
-                        {
-                            KPI_E = "[Cell_Availability_Rate_Exclude_Blocking(Cell_EricLTE)]";
-                            KPI_H = "[Cell_Availability_Rate_Exclude_Blocking(Cell_Hu)]";
-                            KPI_N = "[cell_availability_exclude_manual_blocking(Nokia_LTE_CELL)]";
-                        }
-                    }
-                    string s1_E = "";
-                    string s2_E = "";
-                    string s1_H = "";
-                    string s2_H = "";
-                    string s1_N = "";
-                    string s2_N = "";
-                    if (textBox1.Text != "" && textBox2.Text != "" && textBox3.Text != "")
-                    {
-                        s2_E = KPI_E + sign + textBox3.Text + " and " + Ave_E + ">=" + textBox1.Text + " and " + Traffic_E + ">=" + textBox2.Text;
-                        s2_H = KPI_H + sign + textBox3.Text + " and " + Ave_H + ">=" + textBox1.Text + " and " + Traffic_H + ">=" + textBox2.Text;
-                        s2_N = KPI_N + sign + textBox3.Text + " and " + Ave_N + ">=" + textBox1.Text + " and " + Traffic_N + ">=" + textBox2.Text;
-                    }
-                    if (textBox1.Text == "" && textBox2.Text != "" && textBox3.Text != "")
-                    {
-                        s2_E = KPI_E + sign + textBox3.Text + " and " + Traffic_E + ">=" + textBox2.Text;
-                        s2_H = KPI_H + sign + textBox3.Text + " and " + Traffic_H + ">=" + textBox2.Text;
-                        s2_N = KPI_N + sign + textBox3.Text + " and " + Traffic_N + ">=" + textBox2.Text;
-                    }
-                    if (textBox1.Text != "" && textBox2.Text == "" && textBox3.Text != "")
-                    {
-                        s2_E = KPI_E + sign + textBox3.Text + " and " + Ave_E + ">=" + textBox1.Text;
-                        s2_H = KPI_H + sign + textBox3.Text + " and " + Ave_H + ">=" + textBox1.Text;
-                        s2_N = KPI_N + sign + textBox3.Text + " and " + Ave_N + ">=" + textBox1.Text;
-                    }
-                    if (textBox1.Text == "" && textBox2.Text == "" && textBox3.Text != "")
-                    {
-                        s2_E = KPI_E + sign + textBox3.Text;
-                        s2_H = KPI_H + sign + textBox3.Text;
-                        s2_N = KPI_N + sign + textBox3.Text;
-
-                    }
-                    if (textBox3.Text == "")
-                    {
-                        MessageBox.Show("Please input the KPI Threshold");
-                    }
-                    if (textBox3.Text != "")
-                    {
-                        if (Technology == "2G")
-                        {
-                            s1_E = KPI_E + "as'" + KPI + "' , " + Traffic_E + "as " + "'Traffic(Erlang)'" + " , " + Ave_E + "as " + "'Availability'" + " from [CC2_Ericsson_Cell_Daily]";
-                            s1_H = KPI_H + "as'" + KPI + "' , " + Traffic_H + "as " + "'Traffic(Erlang)'" + " , " + Ave_H + "as " + "'Availability'" + " from [CC2_Huawei_Cell_Daily]";
-                            s1_N = KPI_N + "as'" + KPI + "' , " + Traffic_N + "as " + "'Traffic(Erlang)'" + " , " + Ave_N + "as " + "'Availability'" + " from [CC2_Nokia_Cell_Daily]";
-                        }
-                        if (Technology == "3G_CS")
-                        {
-                            s1_E = KPI_E + "as'" + KPI + "' , " + Traffic_E + "as " + "'Traffic(Erlang)'" + " , " + Ave_E + "as " + "'Availability'" + " from [CC3_Ericsson_Cell_Daily]";
-                            s1_H = KPI_H + "as'" + KPI + "' , " + Traffic_H + "as " + "'Traffic(Erlang)'" + " , " + Ave_H + "as " + "'Availability'" + " from [CC3_Huawei_Cell_Daily]";
-                            s1_N = KPI_N + "as'" + KPI + "' , " + Traffic_N + "as " + "'Traffic(Erlang)'" + " , " + Ave_N + "as " + "'Availability'" + " from [CC3_Nokia_Cell_Daily]";
-                        }
-                        if (Technology == "3G_PS")
-                        {
-                            s1_E = KPI_E + "as'" + KPI + "' , " + Traffic_E + "as " + "'Paylaod(GB)'" + " , " + Ave_E + "as " + "'Availability'" + " from [RD3_Ericsson_Cell_Daily]";
-                            s1_H = KPI_H + "as'" + KPI + "' , " + Traffic_H + "as " + "'Paylaod(GB)'" + " , " + Ave_H + "as " + "'Availability'" + " from [RD3_Huawei_Cell_Daily]";
-                            s1_N = KPI_N + "as'" + KPI + "' , " + Traffic_N + "as " + "'Paylaod(GB)'" + " , " + Ave_N + "as " + "'Availability'" + " from [RD3_Nokia_Cell_Daily]";
-                        }
-                        if (Technology == "4G")
-                        {
-                            s1_E = KPI_E + "as'" + KPI + "' , " + Traffic_E + "as " + "'Paylaod(GB)'" + " , " + Ave_E + "as " + "'Availability'" + " from [TBL_LTE_CELL_Daily_E]";
-                            s1_H = KPI_H + "as'" + KPI + "' , " + Traffic_H + "as " + "'Paylaod(GB)'" + " , " + Ave_H + "as " + "'Availability'" + " from [TBL_LTE_CELL_Daily_H]";
-                            s1_N = KPI_N + "as'" + KPI + "' , " + Traffic_N + "as " + "'Paylaod(GB)'" + " , " + Ave_N + "as " + "'Availability'" + " from [TBL_LTE_CELL_Daily_N]";
-                        }
-                    }
-
-                    if (textBox3.Text != "")
-                    {
-                        string KPI_Q = "";
-                        if (Technology == "2G")
-                        {
-                            KPI_Q = "select  'Ericsson' as 'Vendor' , BSC, Cell, Province, Date, " + s1_E + " where Date = '" + Date_List + "' and " + s2_E + " and (" + Node_Index_List + ")" +
-                           " union all " +
-                           "select  'Huawei' as 'Vendor', BSC, Cell, Province, Date, " + s1_H + " where Date = '" + Date_List + "' and " + s2_H + " and (" + Node_Index_List + ")" +
-                           " union all " +
-                             "select 'Nokia' as 'Vendor', BSC, Seg, Province, Date, " + s1_N + " where Date = '" + Date_List + "' and " + s2_N + " and (" + Node_Index_List + ")";
-                        }
-                        if (Technology == "3G_CS")
-                        {
-                            KPI_Q = "select  'Ericsson' as 'Vendor' , ElementID as 'RNC', ElementID1 as 'Cell',  Date, " + s1_E + " where Date = '" + Date_List + "' and " + s2_E + " and (" + Node_Index_List + ")" +
-                           " union all " +
-                           "select  'Huawei' as 'Vendor',  ElementID as 'RNC', ElementID1 as 'Cell',  Date, " + s1_H + " where Date = '" + Date_List + "' and " + s2_H + " and (" + Node_Index_List + ")" +
-                           " union all " +
-                             "select 'Nokia' as 'Vendor', ElementID as 'RNC', ElementID1 as 'Cell',  Date, " + s1_N + " where Date = '" + Date_List + "' and " + s2_N + " and (" + Node_Index_List + ")";
-                        }
-                        if (Technology == "3G_PS")
-                        {
-                            KPI_Q = "select  'Ericsson' as 'Vendor' , ElementID as 'RNC', ElementID1 as 'Cell',  Date, " + s1_E + " where Date = '" + Date_List + "' and " + s2_E + " and (" + Node_Index_List + ")" +
-                           " union all " +
-                           "select  'Huawei' as 'Vendor',  ElementID as 'RNC', ElementID1 as 'Cell',  Date, " + s1_H + " where Date = '" + Date_List + "' and " + s2_H + " and (" + Node_Index_List + ")" +
-                           " union all " +
-                             "select 'Nokia' as 'Vendor', ElementID as 'RNC', ElementID1 as 'Cell',  Date, " + s1_N + " where Date = '" + Date_List + "' and " + s2_N + " and (" + Node_Index_List + ")";
-                        }
-                        if (Technology == "4G")
-                        {
-                            KPI_Q = "select  'Ericsson' as 'Vendor' , Province, eNodeB as 'Cell',  Datetime, " + s1_E + " where Datetime = '" + Date_List + "' and " + s2_E + " and (" + Node_Index_List + ")" +
-                           " union all " +
-                           "select  'Huawei' as 'Vendor',  Province, eNodeB as 'Cell',  Datetime, " + s1_H + " where Datetime = '" + Date_List + "' and " + s2_H + " and (" + Node_Index_List + ")" +
-                           " union all " +
-                             "select 'Nokia' as 'Vendor', Province, ElementID1 as 'Cell',  Date, " + s1_N + " where Date = '" + Date_List + "' and " + s2_N + " and (" + Node_Index_List + ")";
-                        }
-                        SqlCommand Node_List_Quary1 = new SqlCommand(KPI_Q, connection);
-                        Node_List_Quary1.ExecuteNonQuery();
-                        DataTable Table_Node_List_Quary = new DataTable();
-                        SqlDataAdapter dataAdapter_Node_List_Quary = new SqlDataAdapter(Node_List_Quary1);
-                        dataAdapter_Node_List_Quary.Fill(Table_Node_List_Quary);
-
-
-
-
-
-                        XLWorkbook wb = new XLWorkbook();
-                        wb.Worksheets.Add(Table_Node_List_Quary, "WPC");
-
-                        var saveFileDialog = new SaveFileDialog
-                        {
-                            FileName = "WPC_" + Interval + "_" + Technology + "_" + KPI,
-                            Filter = "Excel files|*.xlsx",
-                            Title = "Save an Excel File"
-                        };
-
-                        saveFileDialog.ShowDialog();
-
-                        if (!String.IsNullOrWhiteSpace(saveFileDialog.FileName))
-                            wb.SaveAs(saveFileDialog.FileName);
-
-                        label15.Text = "Finished";
-                        label15.BackColor = Color.Green;
-
-                        MessageBox.Show("Finished");
-
-
-
-
-
+                        s1_E = KPI_E + "as'" + KPI + "' , " + Traffic_E + "as " + "'Paylaod(GB)'" + " , " + Ave_E + "as " + "'Availability'" + " from [TBL_LTE_CELL_Daily_E]";
+                        s1_H = KPI_H + "as'" + KPI + "' , " + Traffic_H + "as " + "'Paylaod(GB)'" + " , " + Ave_H + "as " + "'Availability'" + " from [TBL_LTE_CELL_Daily_H]";
+                        s1_N = KPI_N + "as'" + KPI + "' , " + Traffic_N + "as " + "'Paylaod(GB)'" + " , " + Ave_N + "as " + "'Availability'" + " from [TBL_LTE_CELL_Daily_N]";
                     }
                 }
 
-
-
-                if (Interval == "BH")
+                if (textBox3.Text != "")
                 {
-                    string KPI_E = "";
-                    string Traffic_E = "";
-                    string Ave_E = "";
-                    string KPI_H = "";
-                    string Traffic_H = "";
-                    string Ave_H = "";
-                    string KPI_N = "";
-                    string Traffic_N = "";
-                    string Ave_N = "";
+                    string KPI_Q = "";
                     if (Technology == "2G")
                     {
-                        Traffic_E = "[TCH_Traffic_BH]"; Ave_E = "[TCH_Availability]";
-                        Traffic_H = "[TCH_Traffic_BH]"; Ave_H = "[TCH_Availability]";
-                        Traffic_N = "[TCH_Traffic_BH]"; Ave_N = "[TCH_Availability]";
-                        if (KPI == "CSSR")
-                        {
-                            KPI_E = "[CSSR_MCI]";
-                            KPI_H = "[CSSR3]";
-                            KPI_N = "[CSSR_MCI]";
-                        }
-                        if (KPI == "IHSR")
-                        {
-                            KPI_E = "[IHSR]";
-                            KPI_H = "[IHSR2]";
-                            KPI_N = "[IHSR]";
-                        }
-                        if (KPI == "OHSR")
-                        {
-                            KPI_E = "[OHSR]";
-                            KPI_H = "[OHSR2]";
-                            KPI_N = "[OHSR]";
-                        }
-                        if (KPI == "CDR")
-                        {
-                            KPI_E = "[CDR(not Affected by incoming Handovers from 3G)(Eric_CELL)]";
-                            KPI_H = "[CDR3]";
-                            KPI_N = "[CDR(including_CS_IRAT_handovers_3G_to2G)(Nokia_SEG)]";
-                        }
-                        if (KPI == "RxQual_DL")
-                        {
-                            KPI_E = "[RxQual_DL]";
-                            KPI_H = "[RX_QUALITTY_DL_NEW]";
-                            KPI_N = "[RxQuality_DL]";
-                        }
-                        if (KPI == "RxQual_UL")
-                        {
-                            KPI_E = "[RxQual_UL]";
-                            KPI_H = "[RX_QUALITTY_UL_NEW]";
-                            KPI_N = "[RxQuality_UL]";
-                        }
-                        if (KPI == "SDCCH_Access_SR")
-                        {
-                            KPI_E = "[SDCCH_Access_Succ_Rate]";
-                            KPI_H = "[SDCCH_Access_Success_Rate2]";
-                            KPI_N = "[SDCCH_Access_Success_Rate]";
-                        }
-                        if (KPI == "SDCCH_Congestion")
-                        {
-                            KPI_E = "[SDCCH_Congestion]";
-                            KPI_H = "[SDCCH_Congestion_Rate]";
-                            KPI_N = "[SDCCH_Congestion_Rate]";
-                        }
-                        if (KPI == "SDCCH_Drop_Rate")
-                        {
-                            KPI_E = "[SDCCH_Drop_Rate]";
-                            KPI_H = "[SDCCH_Drop_Rate]";
-                            KPI_N = "[SDCCH_Drop_Rate]";
-                        }
-                        if (KPI == "TCH_Assign_FR")
-                        {
-                            KPI_E = "[TCH_Assign_Fail_Rate(NAK)(Eric_CELL)]";
-                            KPI_H = "[TCH_Assignment_FR]";
-                            KPI_N = "[TCH_Assignment_FR]";
-                        }
-                        if (KPI == "TCH_Congestion")
-                        {
-                            KPI_E = "[TCH_Congestion]";
-                            KPI_H = "[TCH_Cong]";
-                            KPI_N = "[TCH_Cong_Rate]";
-                        }
-                        if (KPI == "TCH_Traffic")
-                        {
-                            KPI_E = "[TCH_Traffic_BH]";
-                            KPI_H = "[TCH_Traffic_BH]";
-                            KPI_N = "[TCH_Traffic_BH]";
-                        }
-                        if (KPI == "TCH_Availability")
-                        {
-                            KPI_E = "[TCH_Availability]";
-                            KPI_H = "[TCH_Availability]";
-                            KPI_N = "[TCH_Availability]";
-                        }
+                        KPI_Q = "select  'Ericsson' as 'Vendor' , BSC, Cell, Province, Date, " + s1_E + " where Date = '" + Date_List + "' and " + s2_E + " and (" + Node_Index_List + ")" +
+                       " union all " +
+                       "select  'Huawei' as 'Vendor', BSC, Cell, Province, Date, " + s1_H + " where Date = '" + Date_List + "' and " + s2_H + " and (" + Node_Index_List + ")" +
+                       " union all " +
+                         "select 'Nokia' as 'Vendor', BSC, Seg, Province, Date, " + s1_N + " where Date = '" + Date_List + "' and " + s2_N + " and (" + Node_Index_List + ")";
                     }
                     if (Technology == "3G_CS")
                     {
-                        Traffic_E = "[CS_Traffic_BH]"; Ave_E = "[Cell_Availability_Rate_Exclude_Blocking(UCELL_Eric)]";
-                        Traffic_H = "[CS_Erlang]"; Ave_H = "[Radio_Network_Availability_Ratio(Hu_Cell)]";
-                        Traffic_N = "[CS_TrafficBH]"; Ave_N = "[Cell_Availability_excluding_blocked_by_user_state]";
-                        if (KPI == "CS_RAB_Establish")
-                        {
-                            KPI_E = "[Cs_RAB_Establish_Success_Rate]";
-                            KPI_H = "[CS_RAB_Setup_Success_Ratio]";
-                            KPI_N = "[CS_RAB_Establish_Success_Rate]";
-                        }
-                        if (KPI == "CS_IRAT_HO_SR")
-                        {
-                            KPI_E = "[IRAT_HO_Voice_Suc_Rate]";
-                            KPI_H = "[CS_IRAT_HO_SR]";
-                            KPI_N = "[Inter_sys_RT_Hard_HO_SR_3Gto2G(CELL_nokia)]";
-                        }
-                        if (KPI == "CS_Drop_Rate")
-                        {
-                            KPI_E = "[CS_Drop_Call_Rate]";
-                            KPI_H = "[AMR_Call_Drop_Ratio_New(Hu_CELL)]";
-                            KPI_N = "[CS_Drop_Call_Rate]";
-                        }
-                        if (KPI == "Soft_HO_SR")
-                        {
-                            KPI_E = "[Soft_HO_Suc_Rate]";
-                            KPI_H = "[Softer_Handover_Success_Ratio(Hu_Cell)]";
-                            KPI_N = "[Soft_HO_Success_rate_RT]";
-                        }
-                        if (KPI == "CS_RRC_SR")
-                        {
-                            KPI_E = "[CS_RRC_Setup_Success_Rate]";
-                            KPI_H = "[CS_RRC_Connection_Establishment_SR]";
-                            KPI_N = "[CS_RRC_SETUP_SR_WITHOUT_REPEAT(CELL_NOKIA)]";
-                        }
-                        if (KPI == "CS_MultiRAB_SR")
-                        {
-                            KPI_E = "[CS_Multi_RAB_Establish_Success_Rate(Without_Nas)(CELL_Eric)]";
-                            KPI_H = "[CSPS_RAB_Setup_Success_Ratio]";
-                            KPI_N = "[CSAMR+PS_MRAB_STP_SR]";
-                        }
-                        if (KPI == "Inter_Carrier_HO_SR")
-                        {
-                            KPI_E = "[Inter_Carrier_HO_Success_Rate(UCell_Eric)]";
-                            KPI_H = "[Inter_Carrier_HO_Success_Rate]";
-                            KPI_N = "[Inter_Carrier_HO_Success_Rate]";
-                        }
-                        if (KPI == "CS_Traffic")
-                        {
-                            KPI_E = "[CS_Traffic]";
-                            KPI_H = "[CS_Erlang]";
-                            KPI_N = "[CS_Traffic]";
-                        }
-                        if (KPI == "Cell_Availability")
-                        {
-                            KPI_E = "[Cell_Availability_Rate_Exclude_Blocking(UCELL_Eric)]";
-                            KPI_H = "[Radio_Network_Availability_Ratio(Hu_Cell)]";
-                            KPI_N = "[Cell_Availability_excluding_blocked_by_user_state]";
-                        }
+                        KPI_Q = "select  'Ericsson' as 'Vendor' , ElementID as 'RNC', ElementID1 as 'Cell',  Date, " + s1_E + " where Date = '" + Date_List + "' and " + s2_E + " and (" + Node_Index_List + ")" +
+                       " union all " +
+                       "select  'Huawei' as 'Vendor',  ElementID as 'RNC', ElementID1 as 'Cell',  Date, " + s1_H + " where Date = '" + Date_List + "' and " + s2_H + " and (" + Node_Index_List + ")" +
+                       " union all " +
+                         "select 'Nokia' as 'Vendor', ElementID as 'RNC', ElementID1 as 'Cell',  Date, " + s1_N + " where Date = '" + Date_List + "' and " + s2_N + " and (" + Node_Index_List + ")";
                     }
                     if (Technology == "3G_PS")
                     {
-                        Traffic_E = "[Payload_Total_BH]"; Ave_E = "[Cell_Availability_Rate_Exclude_Blocking(UCELL_Eric)]";
-                        Traffic_H = "[Payload_Total_BH]"; Ave_H = "[Radio_Network_Availability_Ratio(Hu_Cell)]";
-                        Traffic_N = "[Payload_Total_BH]"; Ave_N = "[Cell_Availability_excluding_blocked_by_user_state(Nokia_UCell)]";
-                        if (KPI == "HSDPA_SR")
-                        {
-                            KPI_E = "[HSDPA_RAB_Setup_Succ_Rate(UCell_Eric)]";
-                            KPI_H = "[HSDPA_RAB_Setup_Success_Ratio(Hu_Cell)]";
-                            KPI_N = "[HSDPA_setup_success_ratio_from_user_perspective(CELL_Nokia)]";
-                        }
-                        if (KPI == "HSUPA_SR")
-                        {
-                            KPI_E = "[HSUPA_Setup_Success_Rate(UCell_Eric)]";
-                            KPI_H = "[HSUPA_RAB_Setup_Success_Ratio(Hu_Cell)]";
-                            KPI_N = "[HSUPA_Setup_Success_Ratio_from_user_perspective(CELL)]";
-                        }
-                        if (KPI == "DL_User_THR (Mbps)")
-                        {
-                            KPI_E = "[HS_USER_Throughput_NET_PQ(Mbps)(UCell_Eric)]";
-                            KPI_H = "[AVERAGE_HSDPA_USER_THROUGHPUT_DC+SC(Mbit/s)(CELL_HUAWEI)]";
-                            KPI_N = "[AVERAGE_HSDPA_USER_THROUGHPUT_DC+SC(Mbit/s)(Nokia_CELL)]";
-                        }
-                        if (KPI == "UL_User_THR (Kbps)")
-                        {
-                            KPI_E = "[HSUPA_User_Throughput_MACe(Kbps)(UCell_Eric)]";
-                            KPI_H = "[hsupa_uplink_throughput_in_V16(CELL_Hu)]";
-                            KPI_N = "[Average_hsupa_throughput_MACe(nokia_cell)]";
-                        }
-                        if (KPI == "HSDAP_Drop_Rate")
-                        {
-                            KPI_E = "[HSDPA_Drop_Call_Rate(UCell_Eric)]";
-                            KPI_H = "[HSDPA_cdr(%)_(Hu_Cell)_new]";
-                            KPI_N = "[HSDPA_Call_Drop_Rate(Nokia_Cell)]";
-                        }
-                        if (KPI == "HSUAP_Drop_Rate")
-                        {
-                            KPI_E = "[HSUPA_Drop_Call_Rate(UCell_Eric)]";
-                            KPI_H = "[HSUPA_CDR(%)_(Hu_Cell)_new]";
-                            KPI_N = "[HSUPA_Call_Drop_Rate(Nokia_CELL)]";
-                        }
-                        if (KPI == "PS_RRC_SR")
-                        {
-                            KPI_E = "[PS_RRC_Setup_Success_Rate(UCell_Eric)]";
-                            KPI_H = "[PS_RRC_Connection_success_Rate_repeatless(Hu_Cell)]";
-                            KPI_N = "[PS_RRCSETUP_SR]";
-                        }
-                        if (KPI == "Ps_RAB_Establish")
-                        {
-                            KPI_E = "[Ps_RAB_Establish_Success_Rate]";
-                            KPI_H = "[PS_RAB_Setup_Success_Ratio]";
-                            KPI_N = "[PS_RAB_Setup_Success_Ratio]";
-                        }
-                        if (KPI == "PS_MultiRAB_Establish")
-                        {
-                            KPI_E = "[PS_Multi_RAB_Establish_Success_Rate(without_Nas)(UCELL_Eric)]";
-                            KPI_H = "[CS+PS_RAB_Setup_Success_Ratio]";
-                            KPI_N = "[CSAMR+PS_MRAB_stp_SR(Nokia_CELL)]";
-                        }
-                        if (KPI == "PS_Drop_Rate")
-                        {
-                            KPI_E = "[PS_Drop_Call_Rate(UCell_Eric)]";
-                            KPI_H = "[PS_Call_Drop_Ratio]";
-                            KPI_N = "[Packet_Session_Drop_Ratio_NOKIA(CELL_NOKIA)]";
-                        }
-                        if (KPI == "HSDPA_Cell_Change_SR")
-                        {
-                            KPI_E = "[HSDPA_Cell_Change_Succ_Rate(UCell_Eric)]";
-                            KPI_H = "[HSDPA_Soft_HandOver_Success_Ratio]";
-                            KPI_N = "[HSDPA_Cell_Change_SR(Nokia_CELL)]";
-                        }
-                        if (KPI == "HS_Share_Payload")
-                        {
-                            KPI_E = "[HS_share_PAYLOAD_Rate(UCell_Eric)]";
-                            KPI_H = "[HS_share_PAYLOAD_%]";
-                            KPI_N = "[HS_SHARE_PAYLOAD(Nokia_CELL)]";
-                        }
-                        if (KPI == "DL_Cell_THR (Mbps)")
-                        {
-                            KPI_E = "[HSDPA_Cell_Scheduled_Throughput(mbps)(UCell_Eric)]";
-                            KPI_H = "[HSDPA_SCHEDULING_Cell_throughput(CELL_HUAWEI)]";
-                            KPI_N = "[Active_HS-DSCH_cell_throughput_mbs(CELL_nokia)]";
-                        }
-                        if (KPI == "RSSI (dBm)")
-                        {
-                            KPI_E = "[RTWP]";
-                            KPI_H = "[RTWP]";
-                            KPI_N = "[RTWP]";
-                        }
-                        if (KPI == "Average CQI")
-                        {
-                            KPI_E = "[AVERAGE_CQI]";
-                            KPI_H = "[AVERAGE_CQI]";
-                            KPI_N = "[AVERAGE_CQI]";
-                        }
-                        if (KPI == "PS_Payload (GB)")
-                        {
-                            KPI_E = "[Payload_Total_BH]";
-                            KPI_H = "[Payload_Total_BH]";
-                            KPI_N = "[Payload_Total_BH]";
-                        }
-                        if (KPI == "Cell_Availability")
-                        {
-                            KPI_E = "[Cell_Availability_Rate_Exclude_Blocking(UCELL_Eric)]";
-                            KPI_H = "[Radio_Network_Availability_Ratio(Hu_Cell)]";
-                            KPI_N = "[Cell_Availability_excluding_blocked_by_user_state(Nokia_UCell)]";
-                        }
+                        KPI_Q = "select  'Ericsson' as 'Vendor' , ElementID as 'RNC', ElementID1 as 'Cell',  Date, " + s1_E + " where Date = '" + Date_List + "' and " + s2_E + " and (" + Node_Index_List + ")" +
+                       " union all " +
+                       "select  'Huawei' as 'Vendor',  ElementID as 'RNC', ElementID1 as 'Cell',  Date, " + s1_H + " where Date = '" + Date_List + "' and " + s2_H + " and (" + Node_Index_List + ")" +
+                       " union all " +
+                         "select 'Nokia' as 'Vendor', ElementID as 'RNC', ElementID1 as 'Cell',  Date, " + s1_N + " where Date = '" + Date_List + "' and " + s2_N + " and (" + Node_Index_List + ")";
                     }
                     if (Technology == "4G")
                     {
-                        Traffic_E = "[Total_Volume(UL+DL)(GB)(eNodeB_Eric)]"; Ave_E = "[Cell_Availability_Rate_Exclude_Blocking(Cell_EricLTE)]";
-                        Traffic_H = "[Total_Traffic_Volume(GB)]"; Ave_H = "[Cell_Availability_Rate_Exclude_Blocking(Cell_Hu)]";
-                        Traffic_N = "[Total_Payload_GB(Nokia_LTE_CELL)]"; Ave_N = "[cell_availability_exclude_manual_blocking(Nokia_LTE_CELL)]";
-                        if (KPI == "RRC_Connection_SR")
-                        {
-                            KPI_E = "[RRC_Estab_Success_Rate(ReAtt)(EUCell_Eric)]";
-                            KPI_H = "[RRC_Connection_Setup_Success_Rate_service]";
-                            KPI_N = "[RRC_Connection_Setup_Success_Ratio(Nokia_LTE_CELL)]";
-                        }
-                        if (KPI == "ERAB_SR_Initial")
-                        {
-                            KPI_E = "[Initial_ERAB_Estab_Success_Rate(eNodeB_Eric)]";
-                            KPI_H = "[E-RAB_Setup_Success_Rate]";
-                            KPI_N = "[Initial_E-RAB_Setup_Success_Ratio(Nokia_LTE_CELL)]";
-                        }
-                        if (KPI == "ERAB_SR_Added")
-                        {
-                            KPI_E = "[E-RAB_Setup_SR_incl_added_New(EUCell_Eric)]";
-                            KPI_H = "[E-RAB_Setup_Success_Rate(Hu_Cell)]";
-                            KPI_N = "[E-RAB_Setup_SR_incl_added(Nokia_LTE_CELL)]";
-                        }
-                        if (KPI == "DL_THR (Mbps)")
-                        {
-                            KPI_E = "[Average_UE_DL_Throughput(Mbps)(eNodeB_Eric)]";
-                            KPI_H = "[Average_Downlink_User_Throughput(Mbit/s)]";
-                            KPI_N = "[User_Throughput_DL_mbps(Nokia_LTE_CELL)]";
-                        }
-                        if (KPI == "UL_THR (Mbps)")
-                        {
-                            KPI_E = "[Average_UE_UL_Throughput(Mbps)(eNodeB_Eric)]";
-                            KPI_H = "[Average_UPlink_User_Throughput(Mbit/s)]";
-                            KPI_N = "[User_Throughput_UL_mbps(Nokia_LTE_CELL)]";
-                        }
-                        if (KPI == "ERAB_Drop_Rate")
-                        {
-                            KPI_E = "[E_RAB_Drop_Rate(eNodeB_Eric)]";
-                            KPI_H = "[Call_Drop_Rate]";
-                            KPI_N = "[E-RAB_Drop_Ratio_RAN_View(Nokia_LTE_CELL)]";
-                        }
-                        if (KPI == "S1_Signalling_SR")
-                        {
-                            KPI_E = "[S1Signal_Estab_Success_Rate(EUCell_Eric)]";
-                            KPI_H = "[S1Signal_E-RAB_Setup_SR(Hu_Cell)]";
-                            KPI_N = "[S1Signal_E-RAB_Setup_SR(Nokia_LTE_CELL)]";
-                        }
-                        if (KPI == "Intra_Freq_SR")
-                        {
-                            KPI_E = "[IntraF_Handover_Execution(eNodeB_Eric)]";
-                            KPI_H = "[IntraF_HOOut_SR]";
-                            KPI_N = "[HO_Success_Ratio_intra_eNB(Nokia_LTE_CELL)]";
-                        }
-                        if (KPI == "Inter_Freq_SR")
-                        {
-                            KPI_E = "[InterF_Handover_Execution(eNodeB_Eric)]";
-                            KPI_H = "[InterF_HOOut_SR]";
-                            KPI_N = "[Inter-Freq_HO_SR(Nokia_LTE_CELL)]";
-                        }
-                        if (KPI == "UL_Packet_Loss")
-                        {
-                            KPI_E = "[Average_UE_Ul_Packet_Loss_Rate(eNodeB_Eric)]";
-                            KPI_H = "[Average_UL_Packet_Loss_%(Huawei_LTE_UCell)]";
-                            KPI_N = "[Packet_loss_UL(Nokia_EUCELL)]";
-                        }
-                        if (KPI == "UE_DL_Latency (ms)")
-                        {
-                            KPI_E = "[Average_UE_DL_Latency(ms)(eNodeB_Eric)]";
-                            KPI_H = "[Average_DL_Latency_ms(Huawei_LTE_EUCell)]";
-                            KPI_N = "[Average_Latency_DL_ms(Nokia_LTE_CELL)]";
-                        }
-                        if (KPI == "Average CQI")
-                        {
-                            KPI_E = "[CQI_(EUCell_Eric)]";
-                            KPI_H = "[Average_CQI(Huawei_LTE_Cell)]";
-                            KPI_N = "[Average_CQI(Nokia_LTE_CELL)]";
-                        }
-                        if (KPI == "PUCCH_RSSI (dBm)")
-                        {
-                            KPI_E = "[RSSI_PUCCH]";
-                            KPI_H = "[RSSI_PUCCH]";
-                            KPI_N = "[RSSI_PUCCH]";
-                        }
-                        if (KPI == "PUSCH_RSSI (dBm)")
-                        {
-                            KPI_E = "[RSSI_PUSCH]";
-                            KPI_H = "[RSSI_PUSCH]";
-                            KPI_N = "[RSSI_PUSCH]";
-                        }
-                        if (KPI == "Total_Paylaod (GB)")
-                        {
-                            KPI_E = "[Total_Volume(UL+DL)(GB)(eNodeB_Eric)]";
-                            KPI_H = "[Total_Traffic_Volume(GB)]";
-                            KPI_N = "[Total_Payload_GB(Nokia_LTE_CELL)]";
-                        }
-                        if (KPI == "Cell_Availability")
-                        {
-                            KPI_E = "[Cell_Availability_Rate_Exclude_Blocking(Cell_EricLTE)]";
-                            KPI_H = "[Cell_Availability_Rate_Exclude_Blocking(Cell_Hu)]";
-                            KPI_N = "[cell_availability_exclude_manual_blocking(Nokia_LTE_CELL)]";
-                        }
+                        KPI_Q = "select  'Ericsson' as 'Vendor' , Province, eNodeB as 'Cell',  Datetime, " + s1_E + " where Datetime = '" + Date_List + "' and " + s2_E + " and (" + Node_Index_List + ")" +
+                       " union all " +
+                       "select  'Huawei' as 'Vendor',  Province, eNodeB as 'Cell',  Datetime, " + s1_H + " where Datetime = '" + Date_List + "' and " + s2_H + " and (" + Node_Index_List + ")" +
+                       " union all " +
+                         "select 'Nokia' as 'Vendor', Province, ElementID1 as 'Cell',  Date, " + s1_N + " where Date = '" + Date_List + "' and " + s2_N + " and (" + Node_Index_List + ")";
                     }
-                    string s1_E = "";
-                    string s2_E = "";
-                    string s1_H = "";
-                    string s2_H = "";
-                    string s1_N = "";
-                    string s2_N = "";
-                    if (textBox1.Text != "" && textBox2.Text != "" && textBox3.Text != "")
+                    SqlCommand Node_List_Quary1 = new SqlCommand(KPI_Q, connection);
+                    Node_List_Quary1.CommandTimeout = 0;
+                    Node_List_Quary1.ExecuteNonQuery();
+                    DataTable Table_Node_List_Quary = new DataTable();
+                    SqlDataAdapter dataAdapter_Node_List_Quary = new SqlDataAdapter(Node_List_Quary1);
+                    dataAdapter_Node_List_Quary.Fill(Table_Node_List_Quary);
+
+
+
+
+
+                    XLWorkbook wb = new XLWorkbook();
+                    wb.Worksheets.Add(Table_Node_List_Quary, "WPC");
+
+                    var saveFileDialog = new SaveFileDialog
                     {
-                        s2_E = KPI_E + sign + textBox3.Text + " and " + Ave_E + ">=" + textBox1.Text + " and " + Traffic_E + ">=" + textBox2.Text;
-                        s2_H = KPI_H + sign + textBox3.Text + " and " + Ave_H + ">=" + textBox1.Text + " and " + Traffic_H + ">=" + textBox2.Text;
-                        s2_N = KPI_N + sign + textBox3.Text + " and " + Ave_N + ">=" + textBox1.Text + " and " + Traffic_N + ">=" + textBox2.Text;
+                        FileName = "WPC_" + Interval + "_" + Technology + "_" + KPI,
+                        Filter = "Excel files|*.xlsx",
+                        Title = "Save an Excel File"
+                    };
+
+                    saveFileDialog.ShowDialog();
+
+                    if (!String.IsNullOrWhiteSpace(saveFileDialog.FileName))
+                        wb.SaveAs(saveFileDialog.FileName);
+
+                    label15.Text = "Finished";
+                    label15.BackColor = Color.Green;
+
+                    MessageBox.Show("Finished");
+
+
+
+
+
+                }
+            }
+
+
+
+            if (Interval == "BH")
+            {
+                string KPI_E = "";
+                string Traffic_E = "";
+                string Ave_E = "";
+                string KPI_H = "";
+                string Traffic_H = "";
+                string Ave_H = "";
+                string KPI_N = "";
+                string Traffic_N = "";
+                string Ave_N = "";
+                if (Technology == "2G")
+                {
+                    Traffic_E = "[TCH_Traffic_BH]"; Ave_E = "[TCH_Availability]";
+                    Traffic_H = "[TCH_Traffic_BH]"; Ave_H = "[TCH_Availability]";
+                    Traffic_N = "[TCH_Traffic_BH]"; Ave_N = "[TCH_Availability]";
+                    if (KPI == "CSSR")
+                    {
+                        KPI_E = "[CSSR_MCI]";
+                        KPI_H = "[CSSR3]";
+                        KPI_N = "[CSSR_MCI]";
                     }
-                    if (textBox1.Text == "" && textBox2.Text != "" && textBox3.Text != "")
+                    if (KPI == "IHSR")
                     {
-                        s2_E = KPI_E + sign + textBox3.Text + " and " + Traffic_E + ">=" + textBox2.Text;
-                        s2_H = KPI_H + sign + textBox3.Text + " and " + Traffic_H + ">=" + textBox2.Text;
-                        s2_N = KPI_N + sign + textBox3.Text + " and " + Traffic_N + ">=" + textBox2.Text;
+                        KPI_E = "[IHSR]";
+                        KPI_H = "[IHSR2]";
+                        KPI_N = "[IHSR]";
                     }
-                    if (textBox1.Text != "" && textBox2.Text == "" && textBox3.Text != "")
+                    if (KPI == "OHSR")
                     {
-                        s2_E = KPI_E + sign + textBox3.Text + " and " + Ave_E + ">=" + textBox1.Text;
-                        s2_H = KPI_H + sign + textBox3.Text + " and " + Ave_H + ">=" + textBox1.Text;
-                        s2_N = KPI_N + sign + textBox3.Text + " and " + Ave_N + ">=" + textBox1.Text;
+                        KPI_E = "[OHSR]";
+                        KPI_H = "[OHSR2]";
+                        KPI_N = "[OHSR]";
                     }
-                    if (textBox1.Text == "" && textBox2.Text == "" && textBox3.Text != "")
+                    if (KPI == "CDR")
                     {
-                        s2_E = KPI_E + sign + textBox3.Text;
-                        s2_H = KPI_H + sign + textBox3.Text;
-                        s2_N = KPI_N + sign + textBox3.Text;
-
+                        KPI_E = "[CDR(not Affected by incoming Handovers from 3G)(Eric_CELL)]";
+                        KPI_H = "[CDR3]";
+                        KPI_N = "[CDR(including_CS_IRAT_handovers_3G_to2G)(Nokia_SEG)]";
                     }
-                    if (textBox3.Text == "")
+                    if (KPI == "RxQual_DL")
                     {
-                        MessageBox.Show("Please input the KPI Threshold");
+                        KPI_E = "[RxQual_DL]";
+                        KPI_H = "[RX_QUALITTY_DL_NEW]";
+                        KPI_N = "[RxQuality_DL]";
                     }
-                    if (textBox3.Text != "")
+                    if (KPI == "RxQual_UL")
                     {
-                        if (Technology == "2G")
-                        {
-                            s1_E = KPI_E + "as'" + KPI + "' , " + Traffic_E + "as " + "'Traffic(Erlang)'" + " , " + Ave_E + "as " + "'Availability'" + " from [CC2_Ericsson_Cell_BH]";
-                            s1_H = KPI_H + "as'" + KPI + "' , " + Traffic_H + "as " + "'Traffic(Erlang)'" + " , " + Ave_H + "as " + "'Availability'" + " from [CC2_Huawei_Cell_BH]";
-                            s1_N = KPI_N + "as'" + KPI + "' , " + Traffic_N + "as " + "'Traffic(Erlang)'" + " , " + Ave_N + "as " + "'Availability'" + " from [CC2_Nokia_Cell_BH]";
-                        }
-                        if (Technology == "3G_CS")
-                        {
-                            s1_E = KPI_E + "as'" + KPI + "' , " + Traffic_E + "as " + "'Traffic(Erlang)'" + " , " + Ave_E + "as " + "'Availability'" + " from [CC3_Ericsson_Cell_BH]";
-                            s1_H = KPI_H + "as'" + KPI + "' , " + Traffic_H + "as " + "'Traffic(Erlang)'" + " , " + Ave_H + "as " + "'Availability'" + " from [CC3_Huawei_Cell_BH]";
-                            s1_N = KPI_N + "as'" + KPI + "' , " + Traffic_N + "as " + "'Traffic(Erlang)'" + " , " + Ave_N + "as " + "'Availability'" + " from [CC3_Nokia_Cell_BH]";
-                        }
-                        if (Technology == "3G_PS")
-                        {
-                            s1_E = KPI_E + "as'" + KPI + "' , " + Traffic_E + "as " + "'Paylaod(GB)'" + " , " + Ave_E + "as " + "'Availability'" + " from [RD3_Ericsson_Cell_BH]";
-                            s1_H = KPI_H + "as'" + KPI + "' , " + Traffic_H + "as " + "'Paylaod(GB)'" + " , " + Ave_H + "as " + "'Availability'" + " from [RD3_Huawei_Cell_BH]";
-                            s1_N = KPI_N + "as'" + KPI + "' , " + Traffic_N + "as " + "'Paylaod(GB)'" + " , " + Ave_N + "as " + "'Availability'" + " from [RD3_Nokia_Cell_BH]";
-                        }
-                        if (Technology == "4G")
-                        {
-                            s1_E = KPI_E + "as'" + KPI + "' , " + Traffic_E + "as " + "'Paylaod(GB)'" + " , " + Ave_E + "as " + "'Availability'" + " from [TBL_LTE_CELL_BH_E]";
-                            s1_H = KPI_H + "as'" + KPI + "' , " + Traffic_H + "as " + "'Paylaod(GB)'" + " , " + Ave_H + "as " + "'Availability'" + " from [TBL_LTE_CELL_BH_H]";
-                            s1_N = KPI_N + "as'" + KPI + "' , " + Traffic_N + "as " + "'Paylaod(GB)'" + " , " + Ave_N + "as " + "'Availability'" + " from [TBL_LTE_CELL_BH_N]";
-                        }
+                        KPI_E = "[RxQual_UL]";
+                        KPI_H = "[RX_QUALITTY_UL_NEW]";
+                        KPI_N = "[RxQuality_UL]";
                     }
-
-                    if (textBox3.Text != "")
+                    if (KPI == "SDCCH_Access_SR")
                     {
-                        string KPI_Q = "";
-                        if (Technology == "2G")
-                        {
-                            KPI_Q = "select 'Ericsson' as 'Vendor', BSC, Cell, Province, Date, " + s1_E + " where cast(Date as Date) = '" + Date_List + "' and " + s2_E + " and (" + Node_Index_List + ")" +
-                           " union all " +
-                           "select 'Huawei' as 'Vendor',  BSC, Cell, Province, Date, " + s1_H + " where cast(Date as Date) = '" + Date_List + "' and " + s2_H + " and (" + Node_Index_List + ")" +
-                           " union all " +
-                             "select 'Nokia' as 'Vendor',  BSC, Seg, Province, Date, " + s1_N + " where cast(Date as Date) = '" + Date_List + "' and " + s2_N + " and (" + Node_Index_List + ")";
-                        }
-                        if (Technology == "3G_CS")
-                        {
-                            KPI_Q = "select  'Ericsson' as 'Vendor' , ElementID as 'RNC', ElementID1 as 'Cell',  Date, " + s1_E + " where cast(Date as Date) = '" + Date_List + "' and " + s2_E + " and (" + Node_Index_List + ")" +
-                           " union all " +
-                           "select  'Huawei' as 'Vendor',  ElementID as 'RNC', ElementID1 as 'Cell',  Date, " + s1_H + " where cast(Date as Date) = '" + Date_List + "' and " + s2_H + " and (" + Node_Index_List + ")" +
-                           " union all " +
-                             "select 'Nokia' as 'Vendor', ElementID as 'RNC', ElementID1 as 'Cell',  Date, " + s1_N + " where cast(Date as Date) = '" + Date_List + "' and " + s2_N + " and (" + Node_Index_List + ")";
-                        }
-                        if (Technology == "3G_PS")
-                        {
-                            KPI_Q = "select  'Ericsson' as 'Vendor' , ElementID as 'RNC', ElementID1 as 'Cell',  Date, " + s1_E + " where cast(Date as Date) = '" + Date_List + "' and " + s2_E + " and (" + Node_Index_List + ")" +
-                           " union all " +
-                           "select  'Huawei' as 'Vendor',  ElementID as 'RNC', ElementID1 as 'Cell',  Date, " + s1_H + " where cast(Date as Date) = '" + Date_List + "' and " + s2_H + " and (" + Node_Index_List + ")" +
-                           " union all " +
-                             "select 'Nokia' as 'Vendor', ElementID as 'RNC', ElementID1 as 'Cell',  Date, " + s1_N + " where cast(Date as Date) = '" + Date_List + "' and " + s2_N + " and (" + Node_Index_List + ")";
-                        }
-
-                        if (Technology == "4G")
-                        {
-                            KPI_Q = "select  'Ericsson' as 'Vendor' , Province, eNodeB as 'Cell',  Datetime, " + s1_E + " where cast(Datetime as Date) = '" + Date_List + "' and " + s2_E + " and (" + Node_Index_List + ")" +
-                           " union all " +
-                           "select  'Huawei' as 'Vendor',  Province, eNodeB as 'Cell',  Datetime, " + s1_H + " where cast(Datetime as Date) = '" + Date_List + "' and " + s2_H + " and (" + Node_Index_List + ")" +
-                           " union all " +
-                             "select 'Nokia' as 'Vendor', Province, ElementID1 as 'Cell',  Date, " + s1_N + " where cast(Date as Date) = '" + Date_List + "' and " + s2_N + " and (" + Node_Index_List + ")";
-                        }
-                        SqlCommand Node_List_Quary1 = new SqlCommand(KPI_Q, connection);
-                        Node_List_Quary1.ExecuteNonQuery();
-                        DataTable Table_Node_List_Quary = new DataTable();
-                        SqlDataAdapter dataAdapter_Node_List_Quary = new SqlDataAdapter(Node_List_Quary1);
-                        dataAdapter_Node_List_Quary.Fill(Table_Node_List_Quary);
-
-
-
-              
-
-                        XLWorkbook wb = new XLWorkbook();
-                        wb.Worksheets.Add(Table_Node_List_Quary, "WPC");
-
-                        var saveFileDialog = new SaveFileDialog
-                        {
-                            FileName = "WPC_" + Interval + "_" + Technology + "_" + KPI,
-                            Filter = "Excel files|*.xlsx",
-                            Title = "Save an Excel File"
-                        };
-
-                        saveFileDialog.ShowDialog();
-
-                        if (!String.IsNullOrWhiteSpace(saveFileDialog.FileName))
-                            wb.SaveAs(saveFileDialog.FileName);
-
-                        label15.Text = "Finished";
-                        label15.BackColor = Color.Green;
-
-                        MessageBox.Show("Finished");
-
-
-
-
-
+                        KPI_E = "[SDCCH_Access_Succ_Rate]";
+                        KPI_H = "[SDCCH_Access_Success_Rate2]";
+                        KPI_N = "[SDCCH_Access_Success_Rate]";
+                    }
+                    if (KPI == "SDCCH_Congestion")
+                    {
+                        KPI_E = "[SDCCH_Congestion]";
+                        KPI_H = "[SDCCH_Congestion_Rate]";
+                        KPI_N = "[SDCCH_Congestion_Rate]";
+                    }
+                    if (KPI == "SDCCH_Drop_Rate")
+                    {
+                        KPI_E = "[SDCCH_Drop_Rate]";
+                        KPI_H = "[SDCCH_Drop_Rate]";
+                        KPI_N = "[SDCCH_Drop_Rate]";
+                    }
+                    if (KPI == "TCH_Assign_FR")
+                    {
+                        KPI_E = "[TCH_Assign_Fail_Rate(NAK)(Eric_CELL)]";
+                        KPI_H = "[TCH_Assignment_FR]";
+                        KPI_N = "[TCH_Assignment_FR]";
+                    }
+                    if (KPI == "TCH_Congestion")
+                    {
+                        KPI_E = "[TCH_Congestion]";
+                        KPI_H = "[TCH_Cong]";
+                        KPI_N = "[TCH_Cong_Rate]";
+                    }
+                    if (KPI == "TCH_Traffic")
+                    {
+                        KPI_E = "[TCH_Traffic_BH]";
+                        KPI_H = "[TCH_Traffic_BH]";
+                        KPI_N = "[TCH_Traffic_BH]";
+                    }
+                    if (KPI == "TCH_Availability")
+                    {
+                        KPI_E = "[TCH_Availability]";
+                        KPI_H = "[TCH_Availability]";
+                        KPI_N = "[TCH_Availability]";
                     }
                 }
+                if (Technology == "3G_CS")
+                {
+                    Traffic_E = "[CS_Traffic_BH]"; Ave_E = "[Cell_Availability_Rate_Exclude_Blocking(UCELL_Eric)]";
+                    Traffic_H = "[CS_Erlang]"; Ave_H = "[Radio_Network_Availability_Ratio(Hu_Cell)]";
+                    Traffic_N = "[CS_TrafficBH]"; Ave_N = "[Cell_Availability_excluding_blocked_by_user_state]";
+                    if (KPI == "CS_RAB_Establish")
+                    {
+                        KPI_E = "[Cs_RAB_Establish_Success_Rate]";
+                        KPI_H = "[CS_RAB_Setup_Success_Ratio]";
+                        KPI_N = "[CS_RAB_Establish_Success_Rate]";
+                    }
+                    if (KPI == "CS_IRAT_HO_SR")
+                    {
+                        KPI_E = "[IRAT_HO_Voice_Suc_Rate]";
+                        KPI_H = "[CS_IRAT_HO_SR]";
+                        KPI_N = "[Inter_sys_RT_Hard_HO_SR_3Gto2G(CELL_nokia)]";
+                    }
+                    if (KPI == "CS_Drop_Rate")
+                    {
+                        KPI_E = "[CS_Drop_Call_Rate]";
+                        KPI_H = "[AMR_Call_Drop_Ratio_New(Hu_CELL)]";
+                        KPI_N = "[CS_Drop_Call_Rate]";
+                    }
+                    if (KPI == "Soft_HO_SR")
+                    {
+                        KPI_E = "[Soft_HO_Suc_Rate]";
+                        KPI_H = "[Softer_Handover_Success_Ratio(Hu_Cell)]";
+                        KPI_N = "[Soft_HO_Success_rate_RT]";
+                    }
+                    if (KPI == "CS_RRC_SR")
+                    {
+                        KPI_E = "[CS_RRC_Setup_Success_Rate]";
+                        KPI_H = "[CS_RRC_Connection_Establishment_SR]";
+                        KPI_N = "[CS_RRC_SETUP_SR_WITHOUT_REPEAT(CELL_NOKIA)]";
+                    }
+                    if (KPI == "CS_MultiRAB_SR")
+                    {
+                        KPI_E = "[CS_Multi_RAB_Establish_Success_Rate(Without_Nas)(CELL_Eric)]";
+                        KPI_H = "[CSPS_RAB_Setup_Success_Ratio]";
+                        KPI_N = "[CSAMR+PS_MRAB_STP_SR]";
+                    }
+                    if (KPI == "Inter_Carrier_HO_SR")
+                    {
+                        KPI_E = "[Inter_Carrier_HO_Success_Rate(UCell_Eric)]";
+                        KPI_H = "[Inter_Carrier_HO_Success_Rate]";
+                        KPI_N = "[Inter_Carrier_HO_Success_Rate]";
+                    }
+                    if (KPI == "CS_Traffic")
+                    {
+                        KPI_E = "[CS_Traffic]";
+                        KPI_H = "[CS_Erlang]";
+                        KPI_N = "[CS_Traffic]";
+                    }
+                    if (KPI == "Cell_Availability")
+                    {
+                        KPI_E = "[Cell_Availability_Rate_Exclude_Blocking(UCELL_Eric)]";
+                        KPI_H = "[Radio_Network_Availability_Ratio(Hu_Cell)]";
+                        KPI_N = "[Cell_Availability_excluding_blocked_by_user_state]";
+                    }
+                }
+                if (Technology == "3G_PS")
+                {
+                    Traffic_E = "[Payload_Total_BH]"; Ave_E = "[Cell_Availability_Rate_Exclude_Blocking(UCELL_Eric)]";
+                    Traffic_H = "[Payload_Total_BH]"; Ave_H = "[Radio_Network_Availability_Ratio(Hu_Cell)]";
+                    Traffic_N = "[Payload_Total_BH]"; Ave_N = "[Cell_Availability_excluding_blocked_by_user_state(Nokia_UCell)]";
+                    if (KPI == "HSDPA_SR")
+                    {
+                        KPI_E = "[HSDPA_RAB_Setup_Succ_Rate(UCell_Eric)]";
+                        KPI_H = "[HSDPA_RAB_Setup_Success_Ratio(Hu_Cell)]";
+                        KPI_N = "[HSDPA_setup_success_ratio_from_user_perspective(CELL_Nokia)]";
+                    }
+                    if (KPI == "HSUPA_SR")
+                    {
+                        KPI_E = "[HSUPA_Setup_Success_Rate(UCell_Eric)]";
+                        KPI_H = "[HSUPA_RAB_Setup_Success_Ratio(Hu_Cell)]";
+                        KPI_N = "[HSUPA_Setup_Success_Ratio_from_user_perspective(CELL)]";
+                    }
+                    if (KPI == "DL_User_THR (Mbps)")
+                    {
+                        KPI_E = "[HS_USER_Throughput_NET_PQ(Mbps)(UCell_Eric)]";
+                        KPI_H = "[AVERAGE_HSDPA_USER_THROUGHPUT_DC+SC(Mbit/s)(CELL_HUAWEI)]";
+                        KPI_N = "[AVERAGE_HSDPA_USER_THROUGHPUT_DC+SC(Mbit/s)(Nokia_CELL)]";
+                    }
+                    if (KPI == "UL_User_THR (Kbps)")
+                    {
+                        KPI_E = "[HSUPA_User_Throughput_MACe(Kbps)(UCell_Eric)]";
+                        KPI_H = "[hsupa_uplink_throughput_in_V16(CELL_Hu)]";
+                        KPI_N = "[Average_hsupa_throughput_MACe(nokia_cell)]";
+                    }
+                    if (KPI == "HSDAP_Drop_Rate")
+                    {
+                        KPI_E = "[HSDPA_Drop_Call_Rate(UCell_Eric)]";
+                        KPI_H = "[HSDPA_cdr(%)_(Hu_Cell)_new]";
+                        KPI_N = "[HSDPA_Call_Drop_Rate(Nokia_Cell)]";
+                    }
+                    if (KPI == "HSUAP_Drop_Rate")
+                    {
+                        KPI_E = "[HSUPA_Drop_Call_Rate(UCell_Eric)]";
+                        KPI_H = "[HSUPA_CDR(%)_(Hu_Cell)_new]";
+                        KPI_N = "[HSUPA_Call_Drop_Rate(Nokia_CELL)]";
+                    }
+                    if (KPI == "PS_RRC_SR")
+                    {
+                        KPI_E = "[PS_RRC_Setup_Success_Rate(UCell_Eric)]";
+                        KPI_H = "[PS_RRC_Connection_success_Rate_repeatless(Hu_Cell)]";
+                        KPI_N = "[PS_RRCSETUP_SR]";
+                    }
+                    if (KPI == "Ps_RAB_Establish")
+                    {
+                        KPI_E = "[Ps_RAB_Establish_Success_Rate]";
+                        KPI_H = "[PS_RAB_Setup_Success_Ratio]";
+                        KPI_N = "[PS_RAB_Setup_Success_Ratio]";
+                    }
+                    if (KPI == "PS_MultiRAB_Establish")
+                    {
+                        KPI_E = "[PS_Multi_RAB_Establish_Success_Rate(without_Nas)(UCELL_Eric)]";
+                        KPI_H = "[CS+PS_RAB_Setup_Success_Ratio]";
+                        KPI_N = "[CSAMR+PS_MRAB_stp_SR(Nokia_CELL)]";
+                    }
+                    if (KPI == "PS_Drop_Rate")
+                    {
+                        KPI_E = "[PS_Drop_Call_Rate(UCell_Eric)]";
+                        KPI_H = "[PS_Call_Drop_Ratio]";
+                        KPI_N = "[Packet_Session_Drop_Ratio_NOKIA(CELL_NOKIA)]";
+                    }
+                    if (KPI == "HSDPA_Cell_Change_SR")
+                    {
+                        KPI_E = "[HSDPA_Cell_Change_Succ_Rate(UCell_Eric)]";
+                        KPI_H = "[HSDPA_Soft_HandOver_Success_Ratio]";
+                        KPI_N = "[HSDPA_Cell_Change_SR(Nokia_CELL)]";
+                    }
+                    if (KPI == "HS_Share_Payload")
+                    {
+                        KPI_E = "[HS_share_PAYLOAD_Rate(UCell_Eric)]";
+                        KPI_H = "[HS_share_PAYLOAD_%]";
+                        KPI_N = "[HS_SHARE_PAYLOAD(Nokia_CELL)]";
+                    }
+                    if (KPI == "DL_Cell_THR (Mbps)")
+                    {
+                        KPI_E = "[HSDPA_Cell_Scheduled_Throughput(mbps)(UCell_Eric)]";
+                        KPI_H = "[HSDPA_SCHEDULING_Cell_throughput(CELL_HUAWEI)]";
+                        KPI_N = "[Active_HS-DSCH_cell_throughput_mbs(CELL_nokia)]";
+                    }
+                    if (KPI == "RSSI (dBm)")
+                    {
+                        KPI_E = "[RTWP]";
+                        KPI_H = "[RTWP]";
+                        KPI_N = "[RTWP]";
+                    }
+                    if (KPI == "Average CQI")
+                    {
+                        KPI_E = "[AVERAGE_CQI]";
+                        KPI_H = "[AVERAGE_CQI]";
+                        KPI_N = "[AVERAGE_CQI]";
+                    }
+                    if (KPI == "PS_Payload (GB)")
+                    {
+                        KPI_E = "[Payload_Total_BH]";
+                        KPI_H = "[Payload_Total_BH]";
+                        KPI_N = "[Payload_Total_BH]";
+                    }
+                    if (KPI == "Cell_Availability")
+                    {
+                        KPI_E = "[Cell_Availability_Rate_Exclude_Blocking(UCELL_Eric)]";
+                        KPI_H = "[Radio_Network_Availability_Ratio(Hu_Cell)]";
+                        KPI_N = "[Cell_Availability_excluding_blocked_by_user_state(Nokia_UCell)]";
+                    }
+                }
+                if (Technology == "4G")
+                {
+                    Traffic_E = "[Total_Volume(UL+DL)(GB)(eNodeB_Eric)]"; Ave_E = "[Cell_Availability_Rate_Exclude_Blocking(Cell_EricLTE)]";
+                    Traffic_H = "[Total_Traffic_Volume(GB)]"; Ave_H = "[Cell_Availability_Rate_Exclude_Blocking(Cell_Hu)]";
+                    Traffic_N = "[Total_Payload_GB(Nokia_LTE_CELL)]"; Ave_N = "[cell_availability_exclude_manual_blocking(Nokia_LTE_CELL)]";
+                    if (KPI == "RRC_Connection_SR")
+                    {
+                        KPI_E = "[RRC_Estab_Success_Rate(ReAtt)(EUCell_Eric)]";
+                        KPI_H = "[RRC_Connection_Setup_Success_Rate_service]";
+                        KPI_N = "[RRC_Connection_Setup_Success_Ratio(Nokia_LTE_CELL)]";
+                    }
+                    if (KPI == "ERAB_SR_Initial")
+                    {
+                        KPI_E = "[Initial_ERAB_Estab_Success_Rate(eNodeB_Eric)]";
+                        KPI_H = "[E-RAB_Setup_Success_Rate]";
+                        KPI_N = "[Initial_E-RAB_Setup_Success_Ratio(Nokia_LTE_CELL)]";
+                    }
+                    if (KPI == "ERAB_SR_Added")
+                    {
+                        KPI_E = "[E-RAB_Setup_SR_incl_added_New(EUCell_Eric)]";
+                        KPI_H = "[E-RAB_Setup_Success_Rate(Hu_Cell)]";
+                        KPI_N = "[E-RAB_Setup_SR_incl_added(Nokia_LTE_CELL)]";
+                    }
+                    if (KPI == "DL_THR (Mbps)")
+                    {
+                        KPI_E = "[Average_UE_DL_Throughput(Mbps)(eNodeB_Eric)]";
+                        KPI_H = "[Average_Downlink_User_Throughput(Mbit/s)]";
+                        KPI_N = "[User_Throughput_DL_mbps(Nokia_LTE_CELL)]";
+                    }
+                    if (KPI == "UL_THR (Mbps)")
+                    {
+                        KPI_E = "[Average_UE_UL_Throughput(Mbps)(eNodeB_Eric)]";
+                        KPI_H = "[Average_UPlink_User_Throughput(Mbit/s)]";
+                        KPI_N = "[User_Throughput_UL_mbps(Nokia_LTE_CELL)]";
+                    }
+                    if (KPI == "ERAB_Drop_Rate")
+                    {
+                        KPI_E = "[E_RAB_Drop_Rate(eNodeB_Eric)]";
+                        KPI_H = "[Call_Drop_Rate]";
+                        KPI_N = "[E-RAB_Drop_Ratio_RAN_View(Nokia_LTE_CELL)]";
+                    }
+                    if (KPI == "S1_Signalling_SR")
+                    {
+                        KPI_E = "[S1Signal_Estab_Success_Rate(EUCell_Eric)]";
+                        KPI_H = "[S1Signal_E-RAB_Setup_SR(Hu_Cell)]";
+                        KPI_N = "[S1Signal_E-RAB_Setup_SR(Nokia_LTE_CELL)]";
+                    }
+                    if (KPI == "Intra_Freq_SR")
+                    {
+                        KPI_E = "[IntraF_Handover_Execution(eNodeB_Eric)]";
+                        KPI_H = "[IntraF_HOOut_SR]";
+                        KPI_N = "[HO_Success_Ratio_intra_eNB(Nokia_LTE_CELL)]";
+                    }
+                    if (KPI == "Inter_Freq_SR")
+                    {
+                        KPI_E = "[InterF_Handover_Execution(eNodeB_Eric)]";
+                        KPI_H = "[InterF_HOOut_SR]";
+                        KPI_N = "[Inter-Freq_HO_SR(Nokia_LTE_CELL)]";
+                    }
+                    if (KPI == "UL_Packet_Loss")
+                    {
+                        KPI_E = "[Average_UE_Ul_Packet_Loss_Rate(eNodeB_Eric)]";
+                        KPI_H = "[Average_UL_Packet_Loss_%(Huawei_LTE_UCell)]";
+                        KPI_N = "[Packet_loss_UL(Nokia_EUCELL)]";
+                    }
+                    if (KPI == "UE_DL_Latency (ms)")
+                    {
+                        KPI_E = "[Average_UE_DL_Latency(ms)(eNodeB_Eric)]";
+                        KPI_H = "[Average_DL_Latency_ms(Huawei_LTE_EUCell)]";
+                        KPI_N = "[Average_Latency_DL_ms(Nokia_LTE_CELL)]";
+                    }
+                    if (KPI == "Average CQI")
+                    {
+                        KPI_E = "[CQI_(EUCell_Eric)]";
+                        KPI_H = "[Average_CQI(Huawei_LTE_Cell)]";
+                        KPI_N = "[Average_CQI(Nokia_LTE_CELL)]";
+                    }
+                    if (KPI == "PUCCH_RSSI (dBm)")
+                    {
+                        KPI_E = "[RSSI_PUCCH]";
+                        KPI_H = "[RSSI_PUCCH]";
+                        KPI_N = "[RSSI_PUCCH]";
+                    }
+                    if (KPI == "PUSCH_RSSI (dBm)")
+                    {
+                        KPI_E = "[RSSI_PUSCH]";
+                        KPI_H = "[RSSI_PUSCH]";
+                        KPI_N = "[RSSI_PUSCH]";
+                    }
+                    if (KPI == "Total_Paylaod (GB)")
+                    {
+                        KPI_E = "[Total_Volume(UL+DL)(GB)(eNodeB_Eric)]";
+                        KPI_H = "[Total_Traffic_Volume(GB)]";
+                        KPI_N = "[Total_Payload_GB(Nokia_LTE_CELL)]";
+                    }
+                    if (KPI == "Cell_Availability")
+                    {
+                        KPI_E = "[Cell_Availability_Rate_Exclude_Blocking(Cell_EricLTE)]";
+                        KPI_H = "[Cell_Availability_Rate_Exclude_Blocking(Cell_Hu)]";
+                        KPI_N = "[cell_availability_exclude_manual_blocking(Nokia_LTE_CELL)]";
+                    }
+                }
+                string s1_E = "";
+                string s2_E = "";
+                string s1_H = "";
+                string s2_H = "";
+                string s1_N = "";
+                string s2_N = "";
+                if (textBox1.Text != "" && textBox2.Text != "" && textBox3.Text != "")
+                {
+                    s2_E = KPI_E + sign + textBox3.Text + " and " + Ave_E + ">=" + textBox1.Text + " and " + Traffic_E + ">=" + textBox2.Text;
+                    s2_H = KPI_H + sign + textBox3.Text + " and " + Ave_H + ">=" + textBox1.Text + " and " + Traffic_H + ">=" + textBox2.Text;
+                    s2_N = KPI_N + sign + textBox3.Text + " and " + Ave_N + ">=" + textBox1.Text + " and " + Traffic_N + ">=" + textBox2.Text;
+                }
+                if (textBox1.Text == "" && textBox2.Text != "" && textBox3.Text != "")
+                {
+                    s2_E = KPI_E + sign + textBox3.Text + " and " + Traffic_E + ">=" + textBox2.Text;
+                    s2_H = KPI_H + sign + textBox3.Text + " and " + Traffic_H + ">=" + textBox2.Text;
+                    s2_N = KPI_N + sign + textBox3.Text + " and " + Traffic_N + ">=" + textBox2.Text;
+                }
+                if (textBox1.Text != "" && textBox2.Text == "" && textBox3.Text != "")
+                {
+                    s2_E = KPI_E + sign + textBox3.Text + " and " + Ave_E + ">=" + textBox1.Text;
+                    s2_H = KPI_H + sign + textBox3.Text + " and " + Ave_H + ">=" + textBox1.Text;
+                    s2_N = KPI_N + sign + textBox3.Text + " and " + Ave_N + ">=" + textBox1.Text;
+                }
+                if (textBox1.Text == "" && textBox2.Text == "" && textBox3.Text != "")
+                {
+                    s2_E = KPI_E + sign + textBox3.Text;
+                    s2_H = KPI_H + sign + textBox3.Text;
+                    s2_N = KPI_N + sign + textBox3.Text;
+
+                }
+                if (textBox3.Text == "")
+                {
+                    MessageBox.Show("Please input the KPI Threshold");
+                }
+                if (textBox3.Text != "")
+                {
+                    if (Technology == "2G")
+                    {
+                        s1_E = KPI_E + "as'" + KPI + "' , " + Traffic_E + "as " + "'Traffic(Erlang)'" + " , " + Ave_E + "as " + "'Availability'" + " from [CC2_Ericsson_Cell_BH]";
+                        s1_H = KPI_H + "as'" + KPI + "' , " + Traffic_H + "as " + "'Traffic(Erlang)'" + " , " + Ave_H + "as " + "'Availability'" + " from [CC2_Huawei_Cell_BH]";
+                        s1_N = KPI_N + "as'" + KPI + "' , " + Traffic_N + "as " + "'Traffic(Erlang)'" + " , " + Ave_N + "as " + "'Availability'" + " from [CC2_Nokia_Cell_BH]";
+                    }
+                    if (Technology == "3G_CS")
+                    {
+                        s1_E = KPI_E + "as'" + KPI + "' , " + Traffic_E + "as " + "'Traffic(Erlang)'" + " , " + Ave_E + "as " + "'Availability'" + " from [CC3_Ericsson_Cell_BH]";
+                        s1_H = KPI_H + "as'" + KPI + "' , " + Traffic_H + "as " + "'Traffic(Erlang)'" + " , " + Ave_H + "as " + "'Availability'" + " from [CC3_Huawei_Cell_BH]";
+                        s1_N = KPI_N + "as'" + KPI + "' , " + Traffic_N + "as " + "'Traffic(Erlang)'" + " , " + Ave_N + "as " + "'Availability'" + " from [CC3_Nokia_Cell_BH]";
+                    }
+                    if (Technology == "3G_PS")
+                    {
+                        s1_E = KPI_E + "as'" + KPI + "' , " + Traffic_E + "as " + "'Paylaod(GB)'" + " , " + Ave_E + "as " + "'Availability'" + " from [RD3_Ericsson_Cell_BH]";
+                        s1_H = KPI_H + "as'" + KPI + "' , " + Traffic_H + "as " + "'Paylaod(GB)'" + " , " + Ave_H + "as " + "'Availability'" + " from [RD3_Huawei_Cell_BH]";
+                        s1_N = KPI_N + "as'" + KPI + "' , " + Traffic_N + "as " + "'Paylaod(GB)'" + " , " + Ave_N + "as " + "'Availability'" + " from [RD3_Nokia_Cell_BH]";
+                    }
+                    if (Technology == "4G")
+                    {
+                        s1_E = KPI_E + "as'" + KPI + "' , " + Traffic_E + "as " + "'Paylaod(GB)'" + " , " + Ave_E + "as " + "'Availability'" + " from [TBL_LTE_CELL_BH_E]";
+                        s1_H = KPI_H + "as'" + KPI + "' , " + Traffic_H + "as " + "'Paylaod(GB)'" + " , " + Ave_H + "as " + "'Availability'" + " from [TBL_LTE_CELL_BH_H]";
+                        s1_N = KPI_N + "as'" + KPI + "' , " + Traffic_N + "as " + "'Paylaod(GB)'" + " , " + Ave_N + "as " + "'Availability'" + " from [TBL_LTE_CELL_BH_N]";
+                    }
+                }
+
+                if (textBox3.Text != "")
+                {
+                    string KPI_Q = "";
+                    if (Technology == "2G")
+                    {
+                        KPI_Q = "select 'Ericsson' as 'Vendor', BSC, Cell, Province, Date, " + s1_E + " where cast(Date as Date) = '" + Date_List + "' and " + s2_E + " and (" + Node_Index_List + ")" +
+                       " union all " +
+                       "select 'Huawei' as 'Vendor',  BSC, Cell, Province, Date, " + s1_H + " where cast(Date as Date) = '" + Date_List + "' and " + s2_H + " and (" + Node_Index_List + ")" +
+                       " union all " +
+                         "select 'Nokia' as 'Vendor',  BSC, Seg, Province, Date, " + s1_N + " where cast(Date as Date) = '" + Date_List + "' and " + s2_N + " and (" + Node_Index_List + ")";
+                    }
+                    if (Technology == "3G_CS")
+                    {
+                        KPI_Q = "select  'Ericsson' as 'Vendor' , ElementID as 'RNC', ElementID1 as 'Cell',  Date, " + s1_E + " where cast(Date as Date) = '" + Date_List + "' and " + s2_E + " and (" + Node_Index_List + ")" +
+                       " union all " +
+                       "select  'Huawei' as 'Vendor',  ElementID as 'RNC', ElementID1 as 'Cell',  Date, " + s1_H + " where cast(Date as Date) = '" + Date_List + "' and " + s2_H + " and (" + Node_Index_List + ")" +
+                       " union all " +
+                         "select 'Nokia' as 'Vendor', ElementID as 'RNC', ElementID1 as 'Cell',  Date, " + s1_N + " where cast(Date as Date) = '" + Date_List + "' and " + s2_N + " and (" + Node_Index_List + ")";
+                    }
+                    if (Technology == "3G_PS")
+                    {
+                        KPI_Q = "select  'Ericsson' as 'Vendor' , ElementID as 'RNC', ElementID1 as 'Cell',  Date, " + s1_E + " where cast(Date as Date) = '" + Date_List + "' and " + s2_E + " and (" + Node_Index_List + ")" +
+                       " union all " +
+                       "select  'Huawei' as 'Vendor',  ElementID as 'RNC', ElementID1 as 'Cell',  Date, " + s1_H + " where cast(Date as Date) = '" + Date_List + "' and " + s2_H + " and (" + Node_Index_List + ")" +
+                       " union all " +
+                         "select 'Nokia' as 'Vendor', ElementID as 'RNC', ElementID1 as 'Cell',  Date, " + s1_N + " where cast(Date as Date) = '" + Date_List + "' and " + s2_N + " and (" + Node_Index_List + ")";
+                    }
+
+                    if (Technology == "4G")
+                    {
+                        KPI_Q = "select  'Ericsson' as 'Vendor' , Province, eNodeB as 'Cell',  Datetime, " + s1_E + " where cast(Datetime as Date) = '" + Date_List + "' and " + s2_E + " and (" + Node_Index_List + ")" +
+                       " union all " +
+                       "select  'Huawei' as 'Vendor',  Province, eNodeB as 'Cell',  Datetime, " + s1_H + " where cast(Datetime as Date) = '" + Date_List + "' and " + s2_H + " and (" + Node_Index_List + ")" +
+                       " union all " +
+                         "select 'Nokia' as 'Vendor', Province, ElementID1 as 'Cell',  Date, " + s1_N + " where cast(Date as Date) = '" + Date_List + "' and " + s2_N + " and (" + Node_Index_List + ")";
+                    }
+                    SqlCommand Node_List_Quary1 = new SqlCommand(KPI_Q, connection);
+                    Node_List_Quary1.CommandTimeout = 0;
+                    Node_List_Quary1.ExecuteNonQuery();
+                    DataTable Table_Node_List_Quary = new DataTable();
+                    SqlDataAdapter dataAdapter_Node_List_Quary = new SqlDataAdapter(Node_List_Quary1);
+                    dataAdapter_Node_List_Quary.Fill(Table_Node_List_Quary);
+
+
+
+
+
+                    XLWorkbook wb = new XLWorkbook();
+                    wb.Worksheets.Add(Table_Node_List_Quary, "WPC");
+
+                    var saveFileDialog = new SaveFileDialog
+                    {
+                        FileName = "WPC_" + Interval + "_" + Technology + "_" + KPI,
+                        Filter = "Excel files|*.xlsx",
+                        Title = "Save an Excel File"
+                    };
+
+                    saveFileDialog.ShowDialog();
+
+                    if (!String.IsNullOrWhiteSpace(saveFileDialog.FileName))
+                        wb.SaveAs(saveFileDialog.FileName);
+
+                    label15.Text = "Finished";
+                    label15.BackColor = Color.Green;
+
+                    MessageBox.Show("Finished");
+
+
+
+
+
+                }
+            }
 
 
 
@@ -5968,6 +6003,11 @@ from [dbo].[TBL_LTE_CELL_Daily_N] where
         }
 
         private void listBox3_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void groupBox2_Enter(object sender, EventArgs e)
         {
 
         }

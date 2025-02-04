@@ -13,6 +13,7 @@ using Excel = Microsoft.Office.Interop.Excel;
 using ClosedXML;
 using ClosedXML.Excel;
 using System.Threading;
+using System.Text.RegularExpressions;
 
 namespace CWA
 {
@@ -28,10 +29,13 @@ namespace CWA
 
         private void Form1_Load(object sender, EventArgs e)
         {
-
+            //ConnectionString = @"Server=" + Server_Name + "; Database=" + DataBase_Name + "; Trusted_Connection=True;";
             ConnectionString = @"Server=" + Server_Name + "; Database=" + DataBase_Name + "; User ID=cwpcApp; Password=cwpcApp@830625#Ahmad";
             connection = new SqlConnection(ConnectionString);
             connection.Open();
+
+
+
 
 
             string userName = System.Security.Principal.WindowsIdentity.GetCurrent().Name;
@@ -61,16 +65,16 @@ namespace CWA
         }
 
 
-       
+
         public string ConnectionString = "";
         public SqlConnection connection = new SqlConnection();
 
-    
-        //public string Server_Name = @"NAKPRG-NB1243\" + "AHMAD";
-        //public string DataBase_Name = "Contract";
+
+        //public string Server_Name = @"AHMAD\" + "SQLEXPRESS";
+        //public string DataBase_Name = "NAK";
 
 
-        public string Server_Name = "PERFORMANCEDB01";
+        public string Server_Name = "PERFORMANCEDB";
         public string DataBase_Name = "Performance_NAK";
 
         //public string Server_Name = "core";
@@ -80,8 +84,9 @@ namespace CWA
         //public string Server_Name = "172.26.7.159";
         //public string DataBase_Name = "Performance_NAK";
 
- 
 
+        public bool Site_Agg_Flag = true;
+        public bool Sector_Agg_Flag = false;
 
         // ****** worstCellReports ******
         private void worstCellReportsToolStripMenuItem_Click(object sender, EventArgs e)
@@ -92,7 +97,7 @@ namespace CWA
             newFrm.Size = new Size(841, 454);
             newFrm.TopMost = true;
             newFrm.Show();
-        }   
+        }
 
 
         // ****** mAP ******
@@ -189,7 +194,7 @@ namespace CWA
             CustomerComplaint newFrm = new CustomerComplaint(this);                                  // Form1 for Setting
             newFrm.StartPosition = FormStartPosition.CenterScreen;
             //newFrm.Location = new FormStartPosition.CenterScreen;
-            newFrm.Size = new Size(375, 183);
+            newFrm.Size = new Size(535, 256);
             // newFrm.AutoScroll = true;
             // newFrm.AutoSize = true;
             newFrm.TopMost = true;
@@ -287,7 +292,7 @@ namespace CWA
                 comboBox3.Items.Add("L2300F2");
                 comboBox3.Items.Add("L900F1");
                 comboBox3.Items.Add("L900F2");
-                
+
                 listBox2.Items.Add("4G_Total_Paylaod (GB)");
                 listBox2.Items.Add("Volte_Traffic (Erlang)");
                 listBox2.Items.Add("RRC_Connection_SR");
@@ -342,7 +347,7 @@ namespace CWA
 
         private void checkBox2_CheckedChanged(object sender, EventArgs e)
         {
-            if (checkBox2.Checked==true)
+            if (checkBox2.Checked == true)
             {
                 checkBox3.Checked = false;
                 checkBox4.Checked = false;
@@ -368,6 +373,8 @@ namespace CWA
         {
             if (checkBox3.Checked == true)
             {
+                Site_Agg_Flag = true;
+                Sector_Agg_Flag = false;
                 checkBox2.Checked = false;
                 checkBox4.Checked = false;
                 checkBox5.Checked = false;
@@ -380,6 +387,8 @@ namespace CWA
         {
             if (checkBox4.Checked == true)
             {
+                Site_Agg_Flag = false;
+                Sector_Agg_Flag = true;
                 checkBox2.Checked = false;
                 checkBox3.Checked = false;
                 checkBox5.Checked = false;
@@ -392,6 +401,8 @@ namespace CWA
         {
             if (checkBox5.Checked == true)
             {
+                Site_Agg_Flag = true;
+                Sector_Agg_Flag = false;
                 checkBox2.Checked = false;
                 checkBox3.Checked = false;
                 checkBox4.Checked = false;
@@ -404,6 +415,8 @@ namespace CWA
         {
             if (checkBox6.Checked == true)
             {
+                Site_Agg_Flag = false;
+                Sector_Agg_Flag = true;
                 checkBox2.Checked = false;
                 checkBox3.Checked = false;
                 checkBox4.Checked = false;
@@ -421,21 +434,129 @@ namespace CWA
         public string Vendor = "All";
         public string Frequency = "All Band";
         public string Interval = "Daily";
-        public string Site_list = "";
+        public string Site_list_txt = "";
+
+
+        //public class Site_Tec_List
+        //{
+        //    public string Tech { get; set; }
+        //    public string Vendor { get; set; }
+        //    public string SiteList { get; set; }
+        //}
+
+        //public List<Site_Tec_List> Site_Tec_Struc;
+
 
         private void button3_Click(object sender, EventArgs e)
         {
+            Site_list_txt = textBox1.SelectedText.ToString();
             Thread th1 = new Thread(my_thread1);
             th1.Start();
         }
 
         void my_thread1()
         {
-            Site_list = textBox1.SelectedText.ToString();
             // Firstly we must detect the category of data 
+            string Site_Disticnts1 = Regex.Replace(Site_list_txt, "[^a-zA-Z0-9]", " ");
+            Site_Disticnts1 = Regex.Replace(Site_Disticnts1, " {2,}", " ").Trim();
+            string[] Site_Code_Distincts = Site_Disticnts1.Split(' ');
+
+            string EH_sites_list = "";
+            string H_sites_list = "";
+            string N_sites_list = "";
+            string sites_list = "";
+
+            for (int i = 0; i < Site_Code_Distincts.Count(); i++)
+            {
+                if (Technology == "2G")
+                {
+                    EH_sites_list = EH_sites_list + "substring([Cell],1,6)='" + Site_Code_Distincts[i] + "' or ";
+                    H_sites_list = H_sites_list + "substring([Cell],1,2)+substring([Cell],5,4)='" + Site_Code_Distincts[i] + "' or ";
+                    N_sites_list = N_sites_list + "substring([Seg],1,2)+substring([Seg],5,4)='" + Site_Code_Distincts[i] + "' or ";
+                }
+                if (Technology == "3G")
+                {
+                    sites_list = sites_list + "substring([ElementID1],1,2)+substring([ElementID1],5,4)='" + Site_Code_Distincts[i] + "' or ";
+                }
+                if (Technology == "4G")
+                {
+                    EH_sites_list = EH_sites_list + "substring([enodeB],1,2)+substring([enodeB],5,4)='" + Site_Code_Distincts[i] + "' or ";
+                    N_sites_list = N_sites_list + "substring([ElementID1],1,2)+substring([ElementID1],5,4)='" + Site_Code_Distincts[i] + "' or ";
+                }
+
+            }
+            if (Technology == "2G")
+            {
+                EH_sites_list = EH_sites_list.Substring(0, EH_sites_list.Length - 4);
+                H_sites_list = H_sites_list.Substring(0, H_sites_list.Length - 4);
+                N_sites_list = N_sites_list.Substring(0, N_sites_list.Length - 4);
+            }
+            if (Technology == "3G")
+            {
+                sites_list = sites_list.Substring(0, sites_list.Length - 4);
+            }
+            if (Technology == "4G")
+            {
+                EH_sites_list = EH_sites_list.Substring(0, EH_sites_list.Length - 4);
+                N_sites_list = N_sites_list.Substring(0, N_sites_list.Length - 4);
+            }
+
+
+            // Data request in "Province Level"
+            if (Site_Code_Distincts[0] == "" && checkBox1.Checked==false && checkBox2.Checked == true && comboBox4.SelectedIndex == -1 && comboBox3.SelectedIndex == -1 && comboBox1.SelectedItem.ToString()=="Daily")
+            {
+                int yy = 0;
+            }
+            // Data request in "Province-Vendor Level"
+            if (Site_Code_Distincts[0] == "" && checkBox1.Checked == false && checkBox2.Checked == true)
+            {
+
+            }
+
+            //Site_Tec_Struc = new List<Site_Tec_List>();
+            //Site_Tec_Struc.Add(new Site_Tec_List()
+            //{
+            //    Tech = "2G",
+            //    Vendor = "Ericsson",
+            //    SiteList = "fszfzsfrzsd"
+            //});
+
 
 
         }
+
+
+
+        // Method of Query Execution with Output
+        public DataTable Query_Execution_Table_Output(String Query)
+        {
+            string Quary_String = Query;
+            SqlCommand Quary_Command = new SqlCommand(Quary_String, connection);
+            Quary_Command.CommandTimeout = 0;
+            Quary_Command.ExecuteNonQuery();
+            DataTable Output_Table = new DataTable();
+            SqlDataAdapter dataAdapter_Quary_Command = new SqlDataAdapter(Quary_Command);
+            dataAdapter_Quary_Command.Fill(Output_Table);
+            return Output_Table;
+        }
+
+        // Method of Query Execution without Output
+        void Query_Execution(String Query)
+        {
+            string Quary_String = Query;
+            SqlCommand Quary_Command = new SqlCommand(Quary_String, connection);
+            Quary_Command.CommandTimeout = 0;
+            Quary_Command.ExecuteNonQuery();
+        }
+
+
+        // Metood of listing sites and sectors for quary
+
+
+
+
+
+
 
         private void comboBox4_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -458,7 +579,33 @@ namespace CWA
 
         private void textBox1_TextChanged(object sender, EventArgs e)
         {
-            Site_list = textBox1.SelectedText.ToString();
+            Site_list_txt = textBox1.SelectedText.ToString();
+        }
+
+
+        // Automatic Reports
+        private void automaticReportsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            AutomaticReports newFrm = new AutomaticReports(this);                                  // Form1 for Setting
+            newFrm.StartPosition = FormStartPosition.CenterScreen;
+            //newFrm.Location = new FormStartPosition.CenterScreen;
+            newFrm.Size = new Size(664, 512);
+            // newFrm.AutoScroll = true;
+            // newFrm.AutoSize = true;
+            newFrm.TopMost = true;
+            newFrm.Show();
+        }
+
+        private void kMLToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            KML newFrm = new KML(this);                                  // Form1 for Setting
+            newFrm.StartPosition = FormStartPosition.CenterScreen;
+            //newFrm.Location = new FormStartPosition.CenterScreen;
+            newFrm.Size = new Size(440, 293);
+            // newFrm.AutoScroll = true;
+            // newFrm.AutoSize = true;
+            newFrm.TopMost = true;
+            newFrm.Show();
         }
     }
 

@@ -37,8 +37,10 @@ namespace CWA
 
         public string ConnectionString = "";
         public SqlConnection connection = new SqlConnection();
-        public string Server_Name = "PERFORMANCEDB01";
+        public string Server_Name = "PERFORMANCEDB";
         public string DataBase_Name = "Performance_NAK";
+        //public string Server_Name = @"AHMAD\" + "SQLEXPRESS";
+        //public string DataBase_Name = "NAK";
         public string Technology = "";
         public DataTable Data_Table_2G = new DataTable();
         public DataTable Site_Data_Table_2G = new DataTable();
@@ -122,7 +124,7 @@ namespace CWA
 
         private void Form6_Load(object sender, EventArgs e)
         {
-
+            //ConnectionString = @"Server=" + Server_Name + "; Database=" + DataBase_Name + "; Trusted_Connection=True;";
             ConnectionString = @"Server=" + Server_Name + "; Database=" + DataBase_Name + "; User ID=cwpcApp;Password=cwpcApp@830625#Ahmad";
             connection = new SqlConnection(ConnectionString);
             connection.Open();
@@ -184,6 +186,7 @@ namespace CWA
         void my_thread1()
         {
 
+            dataGridView1.Invoke(new Action(() => dataGridView1.Rows.Clear()));
 
             if (Input_Type == "DataBase")
             {
@@ -652,7 +655,7 @@ from
 
 
 		[HS User THR],
-		(isnull([HS_User_THR],0)*[PS_Traffic_Daily (GB)]) HS_User_THR_T,
+		(isnull([HS User THR],0)*[PS_Traffic_Daily (GB)]) HS_User_THR_T,
 		case when[HS User THR] is null then 0
 		else [PS_Traffic_Daily (GB)]
         end as HS_User_THR_T1,
@@ -1940,9 +1943,6 @@ inner join (SELECT [Datetime]
                             }
 
                         }
-
-
-
 
 
                     }
@@ -4235,7 +4235,7 @@ inner join (SELECT [Datetime]
 
         private void button5_Click(object sender, EventArgs e)
         {
-            if (Technology == "2G")
+            if (Technology == "2G" && Input_Type == "FARAZ")
             {
                 XLWorkbook wb = new XLWorkbook();
                 wb.Worksheets.Add(Data_Table_2G, "Data Table");
@@ -4256,13 +4256,13 @@ inner join (SELECT [Datetime]
 
                 for (int k = 1; k <= number_of_rows; k++)
                 {
-                    for (int j = 1; j <= 6; j++)
+                    for (int j = 1; j <= 7; j++)
                     {
-                        string val = Source_worksheet.Cell(k, j + 9).Value.ToString();
+                        string val = Source_worksheet.Cell(k, j + 10).Value.ToString();
                         if (val == "1")
                         {
-                            Source_worksheet.Cell(k, j + 2).Style.Fill.BackgroundColor = XLColor.Red;
-                            Source_worksheet.Cell(k, 19).Style.Fill.BackgroundColor = XLColor.Red;
+                            Source_worksheet.Cell(k, j + 3).Style.Fill.BackgroundColor = XLColor.Red;
+                            Source_worksheet.Cell(k, 18).Style.Fill.BackgroundColor = XLColor.Red;
                         }
                     }
 
@@ -4311,7 +4311,7 @@ inner join (SELECT [Datetime]
 
 
 
-            if (Technology == "2G-MCI")
+            if (Technology == "2G" && Input_Type == "DataBase")
             {
                 XLWorkbook wb = new XLWorkbook();
                 wb.Worksheets.Add(Data_Table_2G, "Data Table");
@@ -4332,13 +4332,13 @@ inner join (SELECT [Datetime]
 
                 for (int k = 1; k <= number_of_rows; k++)
                 {
-                    for (int j = 1; j <= 7; j++)
+                    for (int j = 1; j <= 6; j++)
                     {
-                        string val = Source_worksheet.Cell(k, j + 10).Value.ToString();
+                        string val = Source_worksheet.Cell(k, j + 8).Value.ToString();
                         if (val == "1")
                         {
-                            Source_worksheet.Cell(k, j + 3).Style.Fill.BackgroundColor = XLColor.Red;
-                            Source_worksheet.Cell(k, 18).Style.Fill.BackgroundColor = XLColor.Red;
+                            Source_worksheet.Cell(k, j + 2).Style.Fill.BackgroundColor = XLColor.Red;
+                            Source_worksheet.Cell(k, 16).Style.Fill.BackgroundColor = XLColor.Red;
                             r1++;
                         }
                     }
@@ -4359,9 +4359,9 @@ inner join (SELECT [Datetime]
                     string Cells = "";
                     for (int i = 1; i <= number_of_rows; i++)     // Sheet if Data  (Source_worksheet)
                     {
-                        string site1 = Source_worksheet.Cell(i, 19).Value.ToString();
+                        string site1 = Source_worksheet.Cell(i, 17).Value.ToString();
                         string Cell = Source_worksheet.Cell(i, 3).Value.ToString();
-                        string val = Source_worksheet.Cell(i, 18).Value.ToString();
+                        string val = Source_worksheet.Cell(i, 16).Value.ToString();
 
                         if (site == site1 && val == "0")
                         {
@@ -4469,77 +4469,7 @@ inner join (SELECT [Datetime]
                 MessageBox.Show("Finished");
             }
 
-            if (Technology == "4G-MCI")
-            {
-                XLWorkbook wb = new XLWorkbook();
-                wb.Worksheets.Add(Data_Table_4G, "Data Table");
-                wb.Worksheets.Add(Site_Data_Table_4G, "Result");
-                var saveFileDialog = new SaveFileDialog
-                {
-                    FileName = "4G_KPI_Zero_Check",
-                    Filter = "Excel files|*.xlsx",
-                    Title = "Save an Excel File"
-                };
-
-                IXLWorksheet Source_worksheet = wb.Worksheet("Data Table");
-                int number_of_rows = Source_worksheet.RowsUsed().Count();
-
-                for (int k = 1; k <= number_of_rows; k++)
-                {
-                    for (int j = 1; j <= 9; j++)
-                    {
-                        string val = Source_worksheet.Cell(k, j + 12).Value.ToString();
-                        if (val == "1")
-                        {
-                            Source_worksheet.Cell(k, j + 3).Style.Fill.BackgroundColor = XLColor.Red;
-                            Source_worksheet.Cell(k, 21).Style.Fill.BackgroundColor = XLColor.Red;
-                        }
-                    }
-
-                }
-
-                IXLWorksheet Source_worksheet1 = wb.Worksheet("Result");
-                int number_of_rows1 = Source_worksheet1.RowsUsed().Count();
-                for (int k = 1; k <= number_of_rows1; k++)  // Sheet of Results (Source_worksheet1)
-                {
-                    string site = Source_worksheet1.Cell(k, 1).Value.ToString();
-                    int cell_indexer = 1;
-                    string[] cell_list = new string[10];
-                    string Cells = "";
-                    for (int i = 1; i <= number_of_rows; i++)     // Sheet if Data  (Source_worksheet)
-                    {
-
-                        string site1 = Source_worksheet.Cell(i, 22).Value.ToString();
-                        string Cell = Source_worksheet.Cell(i, 2).Value.ToString();
-                        string val = Source_worksheet.Cell(i, 21).Value.ToString();
-
-
-                        if (site == site1 && val == "0")
-                        {
-                            if (!cell_list.Contains(Cell))
-                            {
-                                Cells = Cells + Cell + ", ";
-                                Source_worksheet1.Cell(k, 3).Value = Cells;
-                                cell_list[cell_indexer - 1] = Cell;
-                                cell_indexer++;
-                            }
-                        }
-                    }
-
-                }
-
-
-                saveFileDialog.ShowDialog();
-
-                if (!String.IsNullOrWhiteSpace(saveFileDialog.FileName))
-                    wb.SaveAs(saveFileDialog.FileName);
-
-                MessageBox.Show("Finished");
-            }
-
-
-
-
+          
 
 
             if (Technology == "4G" && Input_Type == "FARAZ")
@@ -4565,7 +4495,7 @@ inner join (SELECT [Datetime]
                         if (val == "1")
                         {
                             Source_worksheet.Cell(k, j + 1).Style.Fill.BackgroundColor = XLColor.Red;
-                            Source_worksheet.Cell(k, 22).Style.Fill.BackgroundColor = XLColor.Red;
+                            Source_worksheet.Cell(k, 21).Style.Fill.BackgroundColor = XLColor.Red;
                         }
                     }
 
@@ -4706,6 +4636,11 @@ inner join (SELECT [Datetime]
         }
 
         private void textBox1_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void listBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
 
         }

@@ -133,7 +133,7 @@ namespace CWA
 
 
         public string Connection_Type = "DataBase";
-        public string Server_Name = "PERFORMANCEDB01";
+        public string Server_Name = "PERFORMANCEDB";
         public string DataBase_Name = "Performance_NAK";
 
 

@@ -39,6 +39,7 @@
             this.availabilityToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.coreToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.customerComplainToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.automaticReportsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.checkBox1 = new System.Windows.Forms.CheckBox();
@@ -69,6 +70,7 @@
             this.checkBox7 = new System.Windows.Forms.CheckBox();
             this.checkBox6 = new System.Windows.Forms.CheckBox();
             this.checkBox5 = new System.Windows.Forms.CheckBox();
+            this.kMLToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
@@ -84,7 +86,9 @@
             this.exportToolStripMenuItem,
             this.availabilityToolStripMenuItem1,
             this.coreToolStripMenuItem,
-            this.customerComplainToolStripMenuItem});
+            this.customerComplainToolStripMenuItem,
+            this.automaticReportsToolStripMenuItem,
+            this.kMLToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(1276, 24);
@@ -153,6 +157,13 @@
             this.customerComplainToolStripMenuItem.Size = new System.Drawing.Size(130, 20);
             this.customerComplainToolStripMenuItem.Text = "Customer Complaint";
             this.customerComplainToolStripMenuItem.Click += new System.EventHandler(this.customerComplainToolStripMenuItem_Click);
+            // 
+            // automaticReportsToolStripMenuItem
+            // 
+            this.automaticReportsToolStripMenuItem.Name = "automaticReportsToolStripMenuItem";
+            this.automaticReportsToolStripMenuItem.Size = new System.Drawing.Size(118, 20);
+            this.automaticReportsToolStripMenuItem.Text = "Automatic Reports";
+            this.automaticReportsToolStripMenuItem.Click += new System.EventHandler(this.automaticReportsToolStripMenuItem_Click);
             // 
             // label1
             // 
@@ -539,6 +550,13 @@
             this.checkBox5.UseVisualStyleBackColor = true;
             this.checkBox5.CheckedChanged += new System.EventHandler(this.checkBox5_CheckedChanged);
             // 
+            // kMLToolStripMenuItem
+            // 
+            this.kMLToolStripMenuItem.Name = "kMLToolStripMenuItem";
+            this.kMLToolStripMenuItem.Size = new System.Drawing.Size(43, 20);
+            this.kMLToolStripMenuItem.Text = "KML";
+            this.kMLToolStripMenuItem.Click += new System.EventHandler(this.kMLToolStripMenuItem_Click);
+            // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
@@ -607,6 +625,8 @@
         private System.Windows.Forms.ListBox listBox2;
         private System.Windows.Forms.ComboBox comboBox4;
         private System.Windows.Forms.Label label11;
+        private System.Windows.Forms.ToolStripMenuItem automaticReportsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem kMLToolStripMenuItem;
     }
 }
 

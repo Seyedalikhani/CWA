@@ -58,7 +58,7 @@ namespace CWA
         public string ConnectionString = "";
         public SqlConnection connection = new SqlConnection();
         //public string Server_Name = "172.26.7.159";
-        public string Server_Name = "PERFORMANCEDB01";
+        public string Server_Name = "PERFORMANCEDB";
         public string DataBase_Name = "Performance_NAK";
         public string Technology = "2G";
         public DataTable Fluctuation_Results = new DataTable();

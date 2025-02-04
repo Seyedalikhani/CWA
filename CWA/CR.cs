@@ -38,7 +38,7 @@ namespace CWA
         public SqlConnection connection = new SqlConnection();
        // public string Server_Name = "172.26.7.159";
         public string DataBase_Name = "Performance_NAK";
-        public string Server_Name = "PERFORMANCEDB01";
+        public string Server_Name = "PERFORMANCEDB";
         public DateTime Check_Day = DateTime.Now;
         public DateTime Check_Day_7 = DateTime.Now;
         public string EH_sites_list_2G = "";
@@ -47,41 +47,45 @@ namespace CWA
         public string sites_list_3G = "";
         public string EH_sites_list_4G = "";
         public string N_sites_list_4G = "";
+        public string sites_list_5G = "";
+
+
         public DataTable Data_Table_2G = new DataTable();
         public DataTable Data_Table_3G_CS = new DataTable();
         public DataTable Data_Table_3G_PS = new DataTable();
         public DataTable Data_Table_4G = new DataTable();
+        public DataTable Data_Table_5G = new DataTable();
         public DataTable CR_Output_Table = new DataTable();
         public DataTable CR_Output_Table1 = new DataTable();
 
 
 
 
-        public double CSSR_2G = 97;
-        public double Voice_Drop_2G = 2;
-        public double IHSR_2G = 97;
-        public double OHSR_2G = 97;
-        public double TCH_Cong_2G = 1;
-        public double TCH_ASFR_2G = 2;
-        public double SDCCH_SR_2G = 97;
-        public double SDCCH_Drop_2G = 2;
-        public double TCH_Availability_2G = 99.5;
-        public double SDCCH_Cong_2G = 1;
-        public double RX_DL_2G = 97;
-        public double RX_UL_2G = 97;
+        public double CSSR_2G = 90;
+        public double Voice_Drop_2G = 5;
+        public double IHSR_2G = 90;
+        public double OHSR_2G = 90;
+        public double TCH_Cong_2G = 5;
+        public double TCH_ASFR_2G = 5;
+        public double SDCCH_SR_2G = 90;
+        public double SDCCH_Drop_2G = 5;
+        public double TCH_Availability_2G = 92;
+        public double SDCCH_Cong_2G = 5;
+        public double RX_DL_2G = 90;
+        public double RX_UL_2G = 90;
         public double TCH_Traffic_2G = 0;
        
     
 
-        public double CS_RAB_3G = 98;
-        public double CS_RRC_3G = 98;
-        public double CS_Drop_3G = 1;
-        public double PS_RAB_3G = 98;
-        public double PS_RRC_3G = 98;
-        public double PS_Drop_3G = 1;
+        public double CS_RAB_3G = 97;
+        public double CS_RRC_3G = 97;
+        public double CS_Drop_3G = 3;
+        public double PS_RAB_3G = 96;
+        public double PS_RRC_3G = 96;
+        public double PS_Drop_3G = 3;
         public double User_THR_3G = 1;
-        public double Cell_THR_3G = 2;
-        public double Soft_HO_3G = 98;
+        public double Cell_THR_3G = 1;
+        public double Soft_HO_3G = 97;
         public double Voice_Traffic_3G = 0;
         public double Data_Traffic_3G = 0;
 
@@ -97,6 +101,17 @@ namespace CWA
         public double Payload_4G = 98;
 
 
+        public double SgNB_SR_5G = 95;
+        public double THR_5G = 180;
+        public double Endc_drop = 3;
+        public double Availabilty_5G = 99;
+        public double Traffic_5G = 0;
+        //public double UE_UL_4G = 0.7;
+        //public double ERAB_Drop_4G = 1;
+        //public double ERAB_Setup_4G = 98;
+        //public double IntraFreq_HO_4G = 97;
+
+
 
 
         public int data_rows_count = 1;
@@ -104,35 +119,6 @@ namespace CWA
 
         private void button1_Click(object sender, EventArgs e)
         {
-
-
-    //        string userName = System.Security.Principal.WindowsIdentity.GetCurrent().Name;
-    //        string currentUser = userName.Substring(8, userName.Length - 8);
-
-
-    //        string[] authorizedUsers = new string[]
-    //{
-    //           "ahmad.alikhani",
-    //           "amir.amiri",
-    //           "golshan.hemati",
-    //           "mona.tajbakhsh",
-    //           "javad.abed",
-    //           "majedeh.seydi",
-    //           "neda.shafieesabet",
-    //           "arash.naghdehforoushha",
-    //           "parisa.pirnia"
-
-    //};
-
-    //        if (authorizedUsers.Contains(currentUser.ToLower()))
-    //        {
-    //            string Authorized = "OK";
-    //        }
-    //        else
-    //        {
-    //            MessageBox.Show("Limited Access! Need Authorization by Admin");
-    //            this.Close();
-    //        }
 
 
 
@@ -170,6 +156,14 @@ namespace CWA
 
             }
 
+
+
+
+
+
+
+
+
         }
 
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
@@ -182,7 +176,7 @@ namespace CWA
                 string Check_Type = Source_worksheet.Cell(k, 11).Value.ToString();
                 string Site = Source_worksheet.Cell(k, 1).Value.ToString();
                 string End_Date = Convert.ToString(Source_worksheet.Cell(k, 7).Value.ToString());
-                if (PE == "Golshan")
+                if (PE == "Mahyar")
                 {
                     listBox1.Items.Add(Site + " _ " + End_Date);
                 }
@@ -225,6 +219,76 @@ namespace CWA
 
 
 
+            // Last Updated Dates:
+            string Date_2G = @"select max(Date) from Ran_Checking_Daily where Tech='2G' and type='CC2 BH'";
+
+            SqlCommand Date_Quary_2G = new SqlCommand(Date_2G, connection);
+            Date_Quary_2G.CommandTimeout = 0;
+            Date_Quary_2G.ExecuteNonQuery();
+            DataTable Date_Table_2G = new DataTable();
+            SqlDataAdapter Date_Table_2G_1 = new SqlDataAdapter(Date_Quary_2G);
+            Date_Table_2G_1.Fill(Data_Table_2G);
+
+            label7.Text = Convert.ToString(((System.DateTime)Data_Table_2G.Rows[0].ItemArray[0]).Date.Year) + "-" + Convert.ToString(((System.DateTime)Data_Table_2G.Rows[0].ItemArray[0]).Date.Month) + "-" + Convert.ToString(((System.DateTime)Data_Table_2G.Rows[0].ItemArray[0]).Date.Day);
+
+
+            string Date_3G_CS = @"select max(Date) from Ran_Checking_Daily where Tech='3G' and type='CC3 BH'";
+
+            SqlCommand Date_Quary_3G_CS = new SqlCommand(Date_3G_CS, connection);
+            Date_Quary_3G_CS.CommandTimeout = 0;
+            Date_Quary_3G_CS.ExecuteNonQuery();
+            DataTable Date_Table_3G_CS = new DataTable();
+            SqlDataAdapter Date_Table_3G_CS_1 = new SqlDataAdapter(Date_Quary_3G_CS);
+            Date_Table_3G_CS_1.Fill(Data_Table_3G_CS);
+
+            label9.Text = Convert.ToString(((System.DateTime)Data_Table_3G_CS.Rows[0].ItemArray[0]).Date.Year) + " - " + Convert.ToString(((System.DateTime)Data_Table_3G_CS.Rows[0].ItemArray[0]).Date.Month) + "-" + Convert.ToString(((System.DateTime)Data_Table_3G_CS.Rows[0].ItemArray[0]).Date.Day);
+
+
+
+
+
+            string Date_3G_PS = @"select max(Date) from Ran_Checking_Daily where Tech='3G' and type='RD3 Daily'";
+
+            SqlCommand Date_Quary_3G_PS = new SqlCommand(Date_3G_PS, connection);
+            Date_Quary_3G_PS.CommandTimeout = 0;
+            Date_Quary_3G_PS.ExecuteNonQuery();
+            DataTable Date_Table_3G_PS = new DataTable();
+            SqlDataAdapter Date_Table_3G_PS_1 = new SqlDataAdapter(Date_Quary_3G_PS);
+            Date_Table_3G_PS_1.Fill(Data_Table_3G_PS);
+
+            label11.Text = Convert.ToString(((System.DateTime)Data_Table_3G_PS.Rows[0].ItemArray[0]).Date.Year) + " - " + Convert.ToString(((System.DateTime)Data_Table_3G_PS.Rows[0].ItemArray[0]).Date.Month) + "-" + Convert.ToString(((System.DateTime)Data_Table_3G_PS.Rows[0].ItemArray[0]).Date.Day);
+
+
+
+
+            string Date_4G = @"select max(Date) from Ran_Checking_Daily where Tech='4G' and type='RD4 Daily'";
+
+            SqlCommand Date_Quary_4G = new SqlCommand(Date_4G, connection);
+            Date_Quary_4G.CommandTimeout = 0;
+            Date_Quary_4G.ExecuteNonQuery();
+            DataTable Date_Table_4G = new DataTable();
+            SqlDataAdapter Date_Table_4G_1 = new SqlDataAdapter(Date_Quary_4G);
+            Date_Table_4G_1.Fill(Data_Table_4G);
+
+            label13.Text = Convert.ToString(((System.DateTime)Data_Table_4G.Rows[0].ItemArray[0]).Date.Year) + " - " + Convert.ToString(((System.DateTime)Data_Table_4G.Rows[0].ItemArray[0]).Date.Month) + "-" + Convert.ToString(((System.DateTime)Data_Table_4G.Rows[0].ItemArray[0]).Date.Day);
+
+
+            string Date_5G = @"select max(Date) from Ran_Checking_Daily where Tech='5G' and type='5G KPI Daily'";
+
+            SqlCommand Date_Quary_5G = new SqlCommand(Date_5G, connection);
+            Date_Quary_5G.CommandTimeout = 0;
+            Date_Quary_5G.ExecuteNonQuery();
+            DataTable Date_Table_5G = new DataTable();
+            SqlDataAdapter Date_Table_5G_1 = new SqlDataAdapter(Date_Quary_5G);
+            Date_Table_5G_1.Fill(Data_Table_5G);
+
+            label15.Text = Convert.ToString(((System.DateTime)Data_Table_5G.Rows[0].ItemArray[0]).Date.Year) + " - " + Convert.ToString(((System.DateTime)Data_Table_5G.Rows[0].ItemArray[0]).Date.Month) + "-" + Convert.ToString(((System.DateTime)Data_Table_5G.Rows[0].ItemArray[0]).Date.Day);
+
+
+
+
+
+
 
             //   CR_Output_Table1 = CR_Output_Table;
 
@@ -243,13 +307,19 @@ namespace CWA
             connection = new SqlConnection(ConnectionString);
             connection.Open();
 
+
+
+
+
+
+
             EH_sites_list_2G = "";
             H_sites_lis_2G = "";
             N_sites_list_2G = "";
             sites_list_3G = "";
             EH_sites_list_4G = "";
             N_sites_list_4G = "";
-
+            sites_list_5G = "";
 
             for (int i = 0; i < listBox1.SelectedItems.Count; i++)
             {
@@ -262,6 +332,7 @@ namespace CWA
                     sites_list_3G = sites_list_3G + "substring([ElementID1],1,2)+substring([ElementID1],5,4)='" + site_code + "' or ";
                     EH_sites_list_4G = EH_sites_list_4G + "substring([eNodeB],1,2)+substring([eNodeB],5,4)='" + site_code + "' or ";
                     N_sites_list_4G = N_sites_list_4G + "substring([ElementID1],1,2)+substring([ElementID1],5,4)='" + site_code + "' or ";
+                    sites_list_5G = sites_list_5G + "substring([ElementID1],1,2)+substring([ElementID1],5,4)='" + site_code + "' or ";
                 }
             }
 
@@ -271,17 +342,18 @@ namespace CWA
             sites_list_3G = sites_list_3G.Substring(0, sites_list_3G.Length - 4);
             EH_sites_list_4G = EH_sites_list_4G.Substring(0, EH_sites_list_4G.Length - 4);
             N_sites_list_4G = N_sites_list_4G.Substring(0, N_sites_list_4G.Length - 4);
-
+            sites_list_5G = sites_list_5G.Substring(0, sites_list_5G.Length - 4);
 
             string Data_Quary_2G = "";
             string Data_Quary_3G_CS = "";
             string Data_Quary_3G_PS = "";
             string Data_Quary_4G = "";
+            string Data_Quary_5G = "";
 
-            Data_Quary_2G = @"select [Date], [BSC],  substring([Cell],1,6) as 'Site' ,[Cell], [TCH_Traffic] as 'TCH_Traffic_Daily (Erlang)', [CSSR_MCI] as'CSSR', [CDR(not Affected by incoming Handovers from 3G)(Eric_CELL)] as 'Voice Drop Rate', [IHSR] as 'IHSR', [OHSR] as 'OHSR', [TCH_Congestion] as 'TCH Congestion Rate', [TCH_Assign_Fail_Rate(NAK)(Eric_CELL)] as 'TCH ASFR', [SDCCH_Access_Succ_Rate] as 'SDCCH SR', [SDCCH_Drop_Rate] as 'SDDH Drop Rate',  [TCH_Availability] as 'TCH Availability' , [SDCCH_Congestion] as 'SDCCH Cong' , [RxQual_DL] as 'RX_DL', [RxQual_UL] as 'RX_UL', 'Ericsson' as Vendor from [dbo].[CC2_Ericsson_Cell_Daily] where  (" + EH_sites_list_2G + ") and (" + "Date = '" + Check_Day + "' or Date='" + Check_Day_7 + "')" +
-                        @" union all select [Date], [BSC],   substring([Cell],1,6) as 'Site', [Cell], [TCH_Traffic] as 'TCH_Traffic_Daily (Erlang)', [CSSR3] as'CSSR', [CDR3] as 'Voice Drop Rate', [IHSR2] as 'IHSR', [OHSR2] as 'OHSR', [TCH_Cong] as 'TCH Congestion Rate', [TCH_Assignment_FR] as 'TCH ASFR', [SDCCH_Access_Success_Rate2] as 'SDCCH SR', [SDCCH_Drop_Rate] as 'SDDH Drop Rate',    [TCH_Availability] as 'TCH Availability'  , [SDCCH_Congestion_Rate] as 'SDCCH Cong' , [RX_QUALITTY_DL_NEW] as 'RX_DL', [RX_QUALITTY_UL_NEW] as 'RX_UL', 'Huawei' as Vendor from [dbo].[CC2_Huawei_Cell_Daily] where (" + EH_sites_list_2G + ") and (" + "Date = '" + Check_Day + "' or Date='" + Check_Day_7 + "')" +
-                        @" union all select [Date], [BSC] ,   substring([Cell],1,2)+substring([Cell],5,4) as 'Site', [Cell], [TCH_Traffic] as 'TCH_Traffic_Daily (Erlang)', [CSSR3] as'CSSR', [CDR3] as 'Voice Drop Rate', [IHSR2] as 'IHSR', [OHSR2] as 'OHSR', [TCH_Cong] as 'TCH Congestion Rate', [TCH_Assignment_FR] as 'TCH ASFR', [SDCCH_Access_Success_Rate2] as 'SDCCH SR', [SDCCH_Drop_Rate] as 'SDDH Drop Rate',    [TCH_Availability] as 'TCH Availability' , [SDCCH_Congestion_Rate] as 'SDCCH Cong' , [RX_QUALITTY_DL_NEW] as 'RX_DL', [RX_QUALITTY_UL_NEW] as 'RX_UL', 'Huawei' as Vendor from [dbo].[CC2_Huawei_Cell_Daily] where (" + H_sites_lis_2G + ") and (" + "Date = '" + Check_Day + "' or Date='" + Check_Day_7 + "')" +
-                        @" union all select [Date], [BSC],   substring([SEG],1,2)+substring([SEG],5,4) as 'Site', [SEG] as 'Cell', [TCH_Traffic] as 'TCH_Traffic_Daily (Erlang)', [CSSR_MCI] as'CSSR', [CDR(including_CS_IRAT_handovers_3G_to2G)(Nokia_SEG)] as 'Voicde  Drop Rate', [IHSR] as 'IHSR', [OHSR] AS 'OHSR', [TCH_Cong_Rate] as 'TCH Congestion Rate', [TCH_Assignment_FR] as 'TCH ASFR', [SDCCH_Access_Success_Rate] as 'SDCCH SR', [SDCCH_Drop_Rate] as 'SDDH Drop Rate',     [TCH_Availability] as 'TCH Availability' , [SDCCH_Congestion_Rate] as 'SDCCH Cong' , [RxQuality_DL] as 'RX_DL', [RxQuality_UL] as 'RX_UL', 'Nokia' as Vendor from [dbo].[CC2_Nokia_Cell_Daily] where (" + N_sites_list_2G + ") and (" + "Date = '" + Check_Day + "' or Date='" + Check_Day_7 + "')";
+            Data_Quary_2G = @"select [Date], [BSC],  substring([Cell],1,6) as 'Site' ,[Cell], [TCH_Traffic_BH] as 'TCH_Traffic_BH (Erlang)', [CSSR_MCI] as'CSSR', [CDR(not Affected by incoming Handovers from 3G)(Eric_CELL)] as 'Voice Drop Rate', [IHSR] as 'IHSR', [OHSR] as 'OHSR', [TCH_Congestion] as 'TCH Congestion Rate', [TCH_Assign_Fail_Rate(NAK)(Eric_CELL)] as 'TCH ASFR', [SDCCH_Access_Succ_Rate] as 'SDCCH SR', [SDCCH_Drop_Rate] as 'SDDH Drop Rate',  [TCH_Availability] as 'TCH Availability' , [SDCCH_Congestion] as 'SDCCH Cong' , [RxQual_DL] as 'RX_DL', [RxQual_UL] as 'RX_UL', 'Ericsson' as Vendor from [dbo].[CC2_Ericsson_Cell_BH] where  (" + EH_sites_list_2G + ") and (" + "cast(Date as date) = '" + Check_Day + "' or cast(Date as date)='" + Check_Day_7 + "')" +
+                        @" union all select [Date], [BSC],   substring([Cell],1,6) as 'Site', [Cell], [TCH_Traffic_BH] as 'TCH_Traffic_BH (Erlang)', [CSSR3] as'CSSR', [CDR3] as 'Voice Drop Rate', [IHSR2] as 'IHSR', [OHSR2] as 'OHSR', [TCH_Cong] as 'TCH Congestion Rate', [TCH_Assignment_FR] as 'TCH ASFR', [SDCCH_Access_Success_Rate2] as 'SDCCH SR', [SDCCH_Drop_Rate] as 'SDDH Drop Rate',    [TCH_Availability] as 'TCH Availability'  , [SDCCH_Congestion_Rate] as 'SDCCH Cong' , [RX_QUALITTY_DL_NEW] as 'RX_DL', [RX_QUALITTY_UL_NEW] as 'RX_UL', 'Huawei' as Vendor from [dbo].[CC2_Huawei_Cell_BH] where (" + EH_sites_list_2G + ") and (" + "cast(Date as date) = '" + Check_Day + "' or cast(Date as date)='" + Check_Day_7 + "')" +
+                        @" union all select [Date], [BSC] ,   substring([Cell],1,2)+substring([Cell],5,4) as 'Site', [Cell], [TCH_Traffic_BH] as 'TCH_Traffic_BH (Erlang)', [CSSR3] as'CSSR', [CDR3] as 'Voice Drop Rate', [IHSR2] as 'IHSR', [OHSR2] as 'OHSR', [TCH_Cong] as 'TCH Congestion Rate', [TCH_Assignment_FR] as 'TCH ASFR', [SDCCH_Access_Success_Rate2] as 'SDCCH SR', [SDCCH_Drop_Rate] as 'SDDH Drop Rate',    [TCH_Availability] as 'TCH Availability' , [SDCCH_Congestion_Rate] as 'SDCCH Cong' , [RX_QUALITTY_DL_NEW] as 'RX_DL', [RX_QUALITTY_UL_NEW] as 'RX_UL', 'Huawei' as Vendor from [dbo].[CC2_Huawei_Cell_BH] where (" + H_sites_lis_2G + ") and (" + "cast(Date as date) = '" + Check_Day + "' or cast(Date as date)='" + Check_Day_7 + "')" +
+                        @" union all select [Date], [BSC],   substring([SEG],1,2)+substring([SEG],5,4) as 'Site', [SEG] as 'Cell', [TCH_Traffic_BH] as 'TCH_Traffic_BH (Erlang)', [CSSR_MCI] as'CSSR', [CDR(including_CS_IRAT_handovers_3G_to2G)(Nokia_SEG)] as 'Voicde  Drop Rate', [IHSR] as 'IHSR', [OHSR] AS 'OHSR', [TCH_Cong_Rate] as 'TCH Congestion Rate', [TCH_Assignment_FR] as 'TCH ASFR', [SDCCH_Access_Success_Rate] as 'SDCCH SR', [SDCCH_Drop_Rate] as 'SDDH Drop Rate',     [TCH_Availability] as 'TCH Availability' , [SDCCH_Congestion_Rate] as 'SDCCH Cong' , [RxQuality_DL] as 'RX_DL', [RxQuality_UL] as 'RX_UL', 'Nokia' as Vendor from [dbo].[CC2_Nokia_Cell_BH] where (" + N_sites_list_2G + ") and (" + "cast(Date as date) = '" + Check_Day + "' or cast(Date as date)='" + Check_Day_7 + "')";
 
             SqlCommand Data_Quary1 = new SqlCommand(Data_Quary_2G, connection);
             Data_Quary1.CommandTimeout = 0;
@@ -291,9 +363,9 @@ namespace CWA
             Date_Table1.Fill(Data_Table_2G);
 
 
-            Data_Quary_3G_CS = @" select [Date], [ElementID] as 'RNC',  substring([ElementID1],1,8) as 'Site', [ElementID1] as 'Cell', [CS_Traffic] as 'CS_Traffic_Daily (Erlang)', [Cs_RAB_Establish_Success_Rate] as 'CS RAB Establish', [CS_RRC_Setup_Success_Rate] as'CS RRC SR', [CS_Drop_Call_Rate] as 'Voice Drop Rate', [Cell_Availability_Rate_Exclude_Blocking(UCELL_Eric)] as 'Cell Availability' , [Soft_Handover_Succ_Rate] as 'Soft HO SR', 'Ericsson' as Vendor from [dbo].[CC3_Ericsson_Cell_Daily] where  (" + sites_list_3G + ") and (" + "Date = '" + Check_Day + "' or Date='" + Check_Day_7 + "')" +
-   @" union all select [Date],  [ElementID] as 'RNC', substring([ElementID1],1,8) as 'Site', [ElementID1] as 'Cell', [CS_Erlang] as 'CS_Traffic_Daily (Erlang)', [CS_RAB_Setup_Success_Ratio] as 'CS RAB Establish', [CS_RRC_Connection_Establishment_SR] as'CS RRC SR',  [AMR_Call_Drop_Ratio_New(Hu_CELL)] as 'Voice Drop Rate',  [Radio_Network_Availability_Ratio(Hu_Cell)] as 'Cell Availability' , [Soft_Handover_Succ_Rate] as 'Soft HO SR', 'Huawei' as Vendor  from [dbo].[CC3_Huawei_Cell_Daily] where  (" + sites_list_3G + ") and (" + "Date = '" + Check_Day + "' or Date='" + Check_Day_7 + "')" +
-   @" union all select [Date], [ElementID] as 'RNC',  substring([ElementID1],1,8) as 'Site', [ElementID1] as 'Cell', [CS_Traffic] as 'CS_Traffic_Daily (Erlang)', [CS_RAB_Establish_Success_Rate] as 'CS RAB Establish', [CS_RRC_SETUP_SR_WITHOUT_REPEAT(CELL_NOKIA)] as 'CS RRC SR', [CS_Drop_Call_Rate] as 'Voice Drop Rate', [Cell_Availability_excluding_blocked_by_user_state] as 'Cell Availability' , [Soft_Handover_Succ_Rate] as 'Soft HO SR', 'Nokia' as Vendor  from [dbo].[CC3_Nokia_Cell_Daily] where  (" + sites_list_3G + ") and (" + "Date = '" + Check_Day + "' or Date='" + Check_Day_7 + "')";
+            Data_Quary_3G_CS = @" select [Date], [ElementID] as 'RNC',  substring([ElementID1],1,8) as 'Site', [ElementID1] as 'Cell', [CS_Traffic_BH] as 'CS_Traffic_BH (Erlang)', [Cs_RAB_Establish_Success_Rate] as 'CS RAB Establish', [CS_RRC_Setup_Success_Rate] as'CS RRC SR', [CS_Drop_Call_Rate] as 'Voice Drop Rate', [Cell_Availability_Rate_Exclude_Blocking(UCELL_Eric)] as 'Cell Availability' , [Soft_Handover_Succ_Rate] as 'Soft HO SR', 'Ericsson' as Vendor from [dbo].[CC3_Ericsson_Cell_BH] where  (" + sites_list_3G + ") and (" + "cast(Date as date) = '" + Check_Day + "' or cast(Date as date)='" + Check_Day_7 + "')" +
+   @" union all select [Date],  [ElementID] as 'RNC', substring([ElementID1],1,8) as 'Site', [ElementID1] as 'Cell', [CS_Erlang] as 'CS_Traffic_BH (Erlang)', [CS_RAB_Setup_Success_Ratio] as 'CS RAB Establish', [CS_RRC_Connection_Establishment_SR] as'CS RRC SR',  [AMR_Call_Drop_Ratio_New(Hu_CELL)] as 'Voice Drop Rate',  [Radio_Network_Availability_Ratio(Hu_Cell)] as 'Cell Availability' , [Soft_Handover_Succ_Rate] as 'Soft HO SR', 'Huawei' as Vendor  from [dbo].[CC3_Huawei_Cell_BH] where  (" + sites_list_3G + ") and (" + "cast(Date as date) = '" + Check_Day + "' or cast(Date as date)='" + Check_Day_7 + "')" +
+   @" union all select [Date], [ElementID] as 'RNC',  substring([ElementID1],1,8) as 'Site', [ElementID1] as 'Cell', [CS_TrafficBH] as 'CS_Traffic_BH (Erlang)', [CS_RAB_Establish_Success_Rate] as 'CS RAB Establish', [CS_RRC_SETUP_SR_WITHOUT_REPEAT(CELL_NOKIA)] as 'CS RRC SR', [CS_Drop_Call_Rate] as 'Voice Drop Rate', [Cell_Availability_excluding_blocked_by_user_state] as 'Cell Availability' , [Soft_Handover_Succ_Rate] as 'Soft HO SR', 'Nokia' as Vendor  from [dbo].[CC3_Nokia_Cell_BH] where  (" + sites_list_3G + ") and (" + "cast(Date as date) = '" + Check_Day + "' or cast(Date as date)='" + Check_Day_7 + "')";
 
             SqlCommand Data_Quary2 = new SqlCommand(Data_Quary_3G_CS, connection);
             Data_Quary2.CommandTimeout = 0;
@@ -329,6 +401,19 @@ namespace CWA
             SqlDataAdapter Date_Table4 = new SqlDataAdapter(Data_Quary4);
             Date_Table4.Fill(Data_Table_4G);
 
+
+
+
+            Data_Quary_5G = @" select [Date],  substring([ElementID1],1,8) as 'Site', [ElementID1] as 'Cell', [MAC_Total_Traffic_DRB+SRB_GByte] as 'Total_Traffic_Daily (GB)', [5G_Cell_Availability_Rate%]        as 'Cell Availability', [EN_DC_Setup_Sucess_Rate_Captured_in_gNodeb%] as 'SgNB SR', [Average_Downlink_MAC_User_Throughput_Mbps] as 'User Throughput', [MAX_Downlink_Resource_Block_Utilization%] as 'DL PRB Utilization', [Average_Of_Average_Number_of_RRC_Connected_ENDC_NSA]           as 'Average Number of Users', 'Ericsson' as Vendor from [Ericsson_5G_Daily] where  (" + sites_list_5G + ") and (" + "Date = '" + Check_Day + "' or Date='" + Check_Day_7 + "')" +
+                  @" union all select [Date],  substring([ElementID1],1,8) as 'Site', [ElementID1] as 'Cell', [Total_Traffic_GB_MAC_Layer]      as 'Total_Traffic_Daily (GB)', [Cell_Availability_Rate_Huawei_5G%] as 'Cell Availability', [SgNB_Addition_Success_Rate_gNodeb_side%]     as 'SgNB SR', [Downlink_User_Throughput_Mbps_RLC_Layer]   as 'User Throughput', [Downlink_Resource_Block_Utilizing_Rate%]  as 'DL PRB Utilization', [Average_Of_Average_Number_of_LTE_NR_NSA_DC_UEs_Huawei_Cell_5G] as 'Average Number of Users', 'Huawei'   as Vendor from [Huawei_5G_Daily]   where  (" + sites_list_5G + ") and (" + "Date = '" + Check_Day + "' or Date='" + Check_Day_7 + "')";
+
+
+            SqlCommand Data_Quary5 = new SqlCommand(Data_Quary_5G, connection);
+            Data_Quary5.CommandTimeout = 0;
+            Data_Quary5.ExecuteNonQuery();
+            Data_Table_5G = new DataTable();
+            SqlDataAdapter Date_Table5 = new SqlDataAdapter(Data_Quary5);
+            Date_Table5.Fill(Data_Table_5G);
 
 
             MessageBox.Show("Loaded");
@@ -388,6 +473,16 @@ namespace CWA
     Cell = s.Field<string>("Cell"),
 })
 .Distinct().ToList();
+
+
+
+            var distinctCells_5G = Data_Table_5G.AsEnumerable()
+.Select(s => new
+{
+    Cell = s.Field<string>("Cell"),
+})
+.Distinct().ToList();
+
 
 
             for (int j = 0; j < distinctCells_2G.Count; j++)
@@ -1619,6 +1714,149 @@ namespace CWA
 
                 }
             }
+
+
+
+            for (int j = 0; j < distinctCells_5G.Count; j++)
+            {
+                var cell_data = (from p in Data_Table_5G.AsEnumerable()
+                                 where p.Field<string>("Cell") == distinctCells_5G[j].Cell
+                                 select p).ToList();
+
+
+                if (cell_data.Count == 2)
+                {
+                    string site_code1 = cell_data[0].ItemArray[2].ToString();
+                    string site_code = site_code1.Substring(0, 2) + site_code1.Substring(4, 4);
+
+                    List<int> index_finder = new List<int>();
+                    index_finder = Site_list.Select((s, i) => new { i, s })
+    .Where(t => t.s == site_code)
+    .Select(t => t.i)
+    .ToList();
+                    if (index_finder.Count == 0)
+                    {
+                        continue;
+                    }
+                    int index = index_finder[0] + 2;
+                    string Eng = Source_worksheet.Cell(index, 4).Value.ToString();
+                    string CR = Source_worksheet.Cell(index, 5).Value.ToString();
+                    DateTime SD = Convert.ToDateTime(Source_worksheet.Cell(index, 6).Value);
+                    DateTime ED = Convert.ToDateTime(Source_worksheet.Cell(index, 7).Value);
+                    //SD = SD.Date;
+                    //ED = ED.Date;
+                    string Status = Source_worksheet.Cell(index, 8).Value.ToString();
+                    string Description = Source_worksheet.Cell(index, 9).Value.ToString();
+
+                    if (cell_data[1].ItemArray[5].ToString() != "" && cell_data[0].ItemArray[5].ToString() != "")
+                    {
+                        string Vendor = cell_data[1].ItemArray[9].ToString();
+                        string KPI_Name = "";
+                        if (Vendor == "Ericsson")
+                        {
+                            KPI_Name = "EN_DC_Setup_Sucess_Rate_Captured_in_gNodeb%";
+                        }
+                        if (Vendor == "Huawei")
+                        {
+                            KPI_Name = "SgNB_Addition_Success_Rate_gNodeb_side%";
+                        }
+
+
+                        double SgNB_SR_5G_Day2 = Convert.ToDouble(cell_data[1].ItemArray[5]);
+                        double SgNB_SR_5G_Day1 = Convert.ToDouble(cell_data[0].ItemArray[5]);
+                        if (SgNB_SR_5G_Day2 > 0 && SgNB_SR_5G_Day2 < SgNB_SR_5G)
+                        {
+                            if (SgNB_SR_5G_Day1 > 0)
+                            {
+                                if (100 * (SgNB_SR_5G_Day2 - SgNB_SR_5G_Day1) / SgNB_SR_5G_Day1 < -2)
+                                {
+                                    CR_Output_Table.Rows.Add(cell_data[1].ItemArray[1], cell_data[1].ItemArray[2], "", Vendor, "5G", KPI_Name, SgNB_SR_5G_Day2, SgNB_SR_5G_Day1, "", Eng, CR, SD, ED, Status, Description);
+                                }
+                            }
+                            if (SgNB_SR_5G_Day1 == 0)
+                            {
+                                CR_Output_Table.Rows.Add(cell_data[1].ItemArray[1], cell_data[1].ItemArray[2], "", Vendor, "5G", KPI_Name, SgNB_SR_5G_Day2, SgNB_SR_5G_Day1, "", Eng, CR, SD, ED, Status, Description);
+                            }
+                        }
+                    }
+
+
+
+                    if (cell_data[1].ItemArray[6].ToString() != "" && cell_data[0].ItemArray[6].ToString() != "")
+                    {
+                        string Vendor = cell_data[1].ItemArray[9].ToString();
+                        string KPI_Name = "";
+                        if (Vendor == "Ericsson")
+                        {
+                            KPI_Name = "Average_Downlink_MAC_User_Throughput_Mbps";
+                        }
+                        if (Vendor == "Huawei")
+                        {
+                            KPI_Name = "Downlink_User_Throughput_Mbps_RLC_Layer";
+                        }
+
+
+                        double THR_5G_Day2 = Convert.ToDouble(cell_data[1].ItemArray[6]);
+                        double THR_5G_Day1 = Convert.ToDouble(cell_data[0].ItemArray[6]);
+                        if (THR_5G_Day2 > 0 && THR_5G_Day2 < THR_5G)
+                        {
+                            if (THR_5G_Day1 > 0)
+                            {
+                                if (100 * (THR_5G_Day2 - THR_5G_Day1) / THR_5G_Day1 < -30)
+                                {
+                                    CR_Output_Table.Rows.Add(cell_data[1].ItemArray[1], cell_data[1].ItemArray[2], "", Vendor, "5G", KPI_Name, THR_5G_Day2, THR_5G_Day1, "", Eng, CR, SD, ED, Status, Description);
+                                }
+                            }
+                            if (THR_5G_Day1 == 0)
+                            {
+                                CR_Output_Table.Rows.Add(cell_data[1].ItemArray[1], cell_data[1].ItemArray[2], "", Vendor, "5G", KPI_Name, THR_5G_Day2, THR_5G_Day1, "", Eng, CR, SD, ED, Status, Description);
+                            }
+                        }
+                    }
+
+
+
+                    if (cell_data[1].ItemArray[6].ToString() != "" && cell_data[0].ItemArray[6].ToString() != "")
+                    {
+                        string Vendor = cell_data[1].ItemArray[9].ToString();
+                        string KPI_Name = "";
+                        if (Vendor == "Ericsson")
+                        {
+                            KPI_Name = "MAC_Total_Traffic_DRB+SRB_GByte";
+                        }
+                        if (Vendor == "Huawei")
+                        {
+                            KPI_Name = "Total_Traffic_GB_MAC_Layer";
+                        }
+
+
+                        double Traffic_5G_Day2 = Convert.ToDouble(cell_data[1].ItemArray[3]);
+                        double Traffic_5G_Day1 = Convert.ToDouble(cell_data[0].ItemArray[3]);
+                        double Availability_5G_Day2 = Convert.ToDouble(cell_data[1].ItemArray[4]);
+                        if (Availability_5G_Day2 > Availabilty_5G && Traffic_5G_Day2 == Traffic_5G && Traffic_5G_Day1 > Traffic_5G)
+                        {
+                            CR_Output_Table.Rows.Add(cell_data[1].ItemArray[1], cell_data[1].ItemArray[2], "", Vendor, "5G", KPI_Name, Traffic_5G_Day2, Traffic_5G_Day1, "", Eng, CR, SD, ED, Status, Description);
+                        }
+                    }
+
+
+
+
+
+
+
+                }
+            }
+
+
+
+
+
+
+
+
+
+
 
 
 

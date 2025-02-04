@@ -109,6 +109,7 @@
             this.label1.Size = new System.Drawing.Size(66, 15);
             this.label1.TabIndex = 1;
             this.label1.Text = "Province:";
+            this.label1.Click += new System.EventHandler(this.label1_Click);
             // 
             // comboBox1
             // 
@@ -532,7 +533,7 @@
             // 
             this.openFileDialog1.FileName = "openFileDialog1";
             // 
-            // Form5
+            // MAP
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
@@ -560,7 +561,7 @@
             this.Controls.Add(this.comboBox1);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.gMapControl1);
-            this.Name = "Form5";
+            this.Name = "MAP";
             this.Text = "Form5";
             this.Load += new System.EventHandler(this.Form5_Load);
             this.groupBox1.ResumeLayout(false);

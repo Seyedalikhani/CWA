@@ -40,7 +40,7 @@ namespace CWA
 
        // public string Server_Name = "172.26.7.159";
         public string DataBase_Name = "Performance_NAK";
-       public string Server_Name = "PERFORMANCEDB01";
+       public string Server_Name = "PERFORMANCEDB";
 
         public DataTable LTE_RNC_Data_Table = new DataTable();
         public string[,] Series_List = new string[30, 2];
