@@ -38,12 +38,12 @@ namespace CWA
         public string ConnectionString = "";
         public SqlConnection connection = new SqlConnection();
 
-        //public string Server_Name = @"AHMAD\" + "SQLEXPRESS";
-        //public string DataBase_Name = "NAK";
+        public string Server_Name = @"AHMAD\" + "SQLEXPRESS";
+        public string DataBase_Name = "NAK";
 
 
-        public string Server_Name = "PERFORMANCEDB";
-        public string DataBase_Name = "Performance_NAK";
+        //public string Server_Name = "PERFORMANCEDB";
+        //public string DataBase_Name = "Performance_NAK";
 
 
         public DataTable ARAS_DATA_Table = new DataTable();
@@ -504,9 +504,9 @@ namespace CWA
                             {
                                 GMapMarker marker1 = new GMarkerGoogle(new PointLatLng(Nodes[site_ind - 1].Lat, Nodes[site_ind - 1].Lon), GMarkerGoogleType.yellow);
                                 marker1.ToolTipText =
-                                    "Site= " + Site + '\n' +
-                                    "BSC= " + BSC_Name + '\n' +
-                                    "RNC= " + RNC_Name + '\n';
+                                    "Site= " + Site + '\n';
+                                    //"BSC= " + BSC_Name + '\n' +
+                                    //"RNC= " + RNC_Name + '\n';
 
                                 Layer9.Markers.Add(marker1);
                             }
@@ -514,9 +514,9 @@ namespace CWA
                             {
                                 GMapMarker marker1 = new GMarkerGoogle(new PointLatLng(Nodes[site_ind - 1].Lat, Nodes[site_ind - 1].Lon), GMarkerGoogleType.green);
                                 marker1.ToolTipText =
-                                       "Site= " + Site + '\n' +
-                                    "BSC= " + BSC_Name + '\n' +
-                                    "RNC= " + RNC_Name + '\n';
+                                       "Site= " + Site + '\n';
+                                    //"BSC= " + BSC_Name + '\n' +
+                                    //"RNC= " + RNC_Name + '\n';
 
 
                                 Layer9.Markers.Add(marker1);
@@ -525,9 +525,9 @@ namespace CWA
                             {
                                 GMapMarker marker1 = new GMarkerGoogle(new PointLatLng(Nodes[site_ind - 1].Lat, Nodes[site_ind - 1].Lon), GMarkerGoogleType.red);
                                 marker1.ToolTipText =
-                                        "Site= " + Site + '\n' +
-                                    "BSC= " + BSC_Name + '\n' +
-                                    "RNC= " + RNC_Name + '\n';
+                                        "Site= " + Site + '\n';
+                                    //"BSC= " + BSC_Name + '\n' +
+                                    //"RNC= " + RNC_Name + '\n';
 
 
                                 Layer9.Markers.Add(marker1);
@@ -1634,8 +1634,8 @@ namespace CWA
             gMapControl1.Overlays.Add(Layer20);
             Nodes = new List<TNode>();
 
-            //ConnectionString = @"Server=" + Server_Name + "; Database=" + DataBase_Name + "; Trusted_Connection=True;";
-            ConnectionString = @"Server=" + Server_Name + "; Database=" + DataBase_Name + "; User ID=cwpcApp;Password=cwpcApp@830625#Ahmad; Max Pool Size=10;";
+            ConnectionString = @"Server=" + Server_Name + "; Database=" + DataBase_Name + "; Trusted_Connection=True;";
+            //ConnectionString = @"Server=" + Server_Name + "; Database=" + DataBase_Name + "; User ID=cwpcApp;Password=cwpcApp@830625#Ahmad; Max Pool Size=10;";
             connection = new SqlConnection(ConnectionString);
             connection.Open();
 

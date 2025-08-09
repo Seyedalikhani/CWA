@@ -41,11 +41,11 @@ namespace CWA
         public double[,] TH_3G_PS = new double[6, 14];
         public double[,] TH_4G = new double[6, 11];
 
-        //public string Server_Name = @"AHMAD\" + "SQLEXPRESS";
-        //public string DataBase_Name = "NAK";
+        public string Server_Name = @"AHMAD\" + "SQLEXPRESS";
+        public string DataBase_Name = "NAK";
 
-        public string Server_Name = "PERFORMANCEDB";
-        public string DataBase_Name = "Performance_NAK";
+        //public string Server_Name = "PERFORMANCEDB";
+        //public string DataBase_Name = "Performance_NAK";
 
         public DataTable ARAS_Table = new DataTable();
         public DataTable ARAS_Data = new DataTable();
@@ -83,8 +83,8 @@ namespace CWA
 
         private void Form2_Load(object sender, EventArgs e)
         {
-            //ConnectionString = @"Server=" + Server_Name + "; Database=" + DataBase_Name + "; Trusted_Connection=True;";
-            ConnectionString = @"Server=" + Server_Name + "; Database=" + DataBase_Name + "; User ID=cwpcApp;Password=cwpcApp@830625#Ahmad";
+            ConnectionString = @"Server=" + Server_Name + "; Database=" + DataBase_Name + "; Trusted_Connection=True;";
+            //ConnectionString = @"Server=" + Server_Name + "; Database=" + DataBase_Name + "; User ID=cwpcApp;Password=cwpcApp@830625#Ahmad";
             connection = new SqlConnection(ConnectionString);
             connection.Open();
 

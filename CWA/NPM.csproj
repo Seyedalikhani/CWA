@@ -63,11 +63,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AutomaticReports.cs">
+    <Compile Include="DatabaseUpdate.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="AutomaticReports.Designer.cs">
-      <DependentUpon>AutomaticReports.cs</DependentUpon>
+    <Compile Include="DatabaseUpdate.Designer.cs">
+      <DependentUpon>DatabaseUpdate.cs</DependentUpon>
     </Compile>
     <Compile Include="DataClasses1.designer.cs">
       <AutoGen>True</AutoGen>
@@ -163,8 +163,8 @@
     <None Include="DataClasses3.dbml.layout">
       <DependentUpon>DataClasses3.dbml</DependentUpon>
     </None>
-    <EmbeddedResource Include="AutomaticReports.resx">
-      <DependentUpon>AutomaticReports.cs</DependentUpon>
+    <EmbeddedResource Include="DatabaseUpdate.resx">
+      <DependentUpon>DatabaseUpdate.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="KML.resx">
       <DependentUpon>KML.cs</DependentUpon>

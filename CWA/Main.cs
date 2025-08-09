@@ -29,13 +29,10 @@ namespace CWA
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            //ConnectionString = @"Server=" + Server_Name + "; Database=" + DataBase_Name + "; Trusted_Connection=True;";
-            ConnectionString = @"Server=" + Server_Name + "; Database=" + DataBase_Name + "; User ID=cwpcApp; Password=cwpcApp@830625#Ahmad";
+            ConnectionString = @"Server=" + Server_Name + "; Database=" + DataBase_Name + "; Trusted_Connection=True;";
+            //ConnectionString = @"Server=" + Server_Name + "; Database=" + DataBase_Name + "; User ID=cwpcApp; Password=cwpcApp@830625#Ahmad";
             connection = new SqlConnection(ConnectionString);
             connection.Open();
-
-
-
 
 
             string userName = System.Security.Principal.WindowsIdentity.GetCurrent().Name;
@@ -64,18 +61,16 @@ namespace CWA
 
         }
 
-
-
         public string ConnectionString = "";
         public SqlConnection connection = new SqlConnection();
 
 
-        //public string Server_Name = @"AHMAD\" + "SQLEXPRESS";
-        //public string DataBase_Name = "NAK";
+        public string Server_Name = @"AHMAD\" + "SQLEXPRESS";
+        public string DataBase_Name = "NAK";
 
 
-        public string Server_Name = "PERFORMANCEDB";
-        public string DataBase_Name = "Performance_NAK";
+        //public string Server_Name = "PERFORMANCEDB";
+        //public string DataBase_Name = "Performance_NAK";
 
         //public string Server_Name = "core";
         //public string DataBase_Name = "Core_Performance_Mohammad";
@@ -583,13 +578,13 @@ namespace CWA
         }
 
 
-        // Automatic Reports
+        // Database Update
         private void automaticReportsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            AutomaticReports newFrm = new AutomaticReports(this);                                  // Form1 for Setting
+            DatabaseUpdate newFrm = new DatabaseUpdate(this);                                  // Form1 for Setting
             newFrm.StartPosition = FormStartPosition.CenterScreen;
             //newFrm.Location = new FormStartPosition.CenterScreen;
-            newFrm.Size = new Size(664, 512);
+            newFrm.Size = new Size(200, 200);
             // newFrm.AutoScroll = true;
             // newFrm.AutoSize = true;
             newFrm.TopMost = true;
